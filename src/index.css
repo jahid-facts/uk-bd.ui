@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+}
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  border-radius: 25px !important;
+}
+.css-e47596-MuiDateRangeCalendar-root{
+  margin: auto;
+}
+
+svg{
+  margin: 0px !important;
+}
+ 
+a{
+  text-decoration: none !important;
+}
+
+@media (min-width: 600px){
+.css-w87zk7-MuiToolbar-root {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+}}
