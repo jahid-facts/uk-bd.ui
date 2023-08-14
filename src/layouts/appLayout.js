@@ -7,9 +7,9 @@ import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
 import { Box } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import { AdminLayout } from "./adminLayout";
 import ReservationDetails from "../pages/reservationDetails/ReservationDetails";
 import BottomBar from "../components/bottom_bar/BottomBar";
+import { Dashboard } from "../pages/dashboard";
 
 export const AppLayout = () => {
   const location = useLocation();
@@ -28,6 +28,7 @@ export const AppLayout = () => {
       <Routes>
         <Route>
           <Route path="/" element={<Home />} />
+          <Route path="/dashbord" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/reservation-details" element={<ReservationDetails />} />
         </Route>
@@ -36,11 +37,6 @@ export const AppLayout = () => {
       
       <BottomBar />
       <Footer />
-      <Routes>
-        <Route>
-          <Route path="/admin/*" element={<AdminLayout />} />
-        </Route>
-      </Routes>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"; 
 import {
   Card,
   CardMedia,
@@ -61,7 +61,7 @@ export default function ReservationCard(props) {
               variant="subtitle2"
               color="text.secondary"
               fontSize={"15px"}
-              justifyItems={"center"}
+              justifyItems={"center"}  
             >
               {review}
             </Typography>
