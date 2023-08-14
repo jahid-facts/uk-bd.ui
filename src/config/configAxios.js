@@ -1,10 +1,42 @@
-// import axios from 'axios';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 
-// let AUTH_TOKEN = localStorage.getItem('token');
+axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8'; 
 
-// axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
-// axios.defaults.headers.common['Authorization'] = `Bearer ${AUTH_TOKEN}`;
-// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
-// axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+// Set Authorization header if token cookie is available
+const token = Cookies.get('accessToken');
+if (token) {
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+}
 
-// export default axios;
+// Handle API request and response
+const handleRequest = async (requestFunction) => {
+  try {
+    const response = await requestFunction();
+    return response.data;
+  } catch (error) {
+    // Enhance error handling to provide more context
+    throw error;
+  }
+};
+
+// GET request
+export const getApi = async (url) => {
+  return handleRequest(() => axios.get(url));
+};
+
+// POST request
+export const postApi = async (url, data) => {
+  return handleRequest(() => axios.post(url, data));
+};
+
+// PUT request
+export const putApi = async (url, data) => {
+  return handleRequest(() => axios.put(url, data));
+};
+
+// DELETE request
+export const deleteApi = async (url) => {
+  return handleRequest(() => axios.delete(url));
+};

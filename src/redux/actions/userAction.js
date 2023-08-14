@@ -1,4 +1,4 @@
-import { getApi, postApi } from "../../config/CallAPI"; 
+import { getApi, postApi } from "../../config/configAxios"; 
 import { removeCookie, setCookie } from "../../utils/cookie";
 import { loginFailure, loginStart, loginSuccess, logout } from "../reducer/userSlice";
 
