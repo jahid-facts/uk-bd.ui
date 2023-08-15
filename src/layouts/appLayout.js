@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import ReservationDetails from "../pages/reservationDetails/ReservationDetails";
 import BottomBar from "../components/bottom_bar/BottomBar";
 import { Dashboard } from "../pages/dashboard";
+import AddPropertise from "../pages/addPropertise";
 
 export const AppLayout = () => {
   const location = useLocation();
@@ -31,6 +32,7 @@ export const AppLayout = () => {
           <Route path="/dashbord" element={<Dashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/reservation-details" element={<ReservationDetails />} />
+          <Route path="/add-propertise" element={<AddPropertise />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes> 

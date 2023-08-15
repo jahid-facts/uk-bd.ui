@@ -8,6 +8,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import {
+  AddHome,
   Logout,
   PersonAdd,
   Settings,
@@ -97,6 +98,17 @@ export const Avater = () => {
             sx={{ textDecoration: "none" }}
           >
             <Avatar /> Profile
+          </MenuItem>
+        </Link>
+        <Link
+          to={"/add-propertise"}
+          style={{ textDecoration: "none", color: "MenuText" }}
+        >
+          <MenuItem
+            onClick={() => setAnchorEl(null)}
+            sx={{ textDecoration: "none" }}
+          >
+            <AddHome /> Property listing
           </MenuItem>
         </Link>
         <MenuItem>

@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getAuthAction, logoutAction, getUserAction, registerAction } from '../actions/userAction'; // Import your action creators
 
 const initialState = {
   user: {},
@@ -33,6 +34,47 @@ const userSlice = createSlice({
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } = userSlice.actions;
-
+export const { loginStart, loginSuccess, loginFailure, logout } = userSlice.actions;   
+// Export the reducer from the userSlice
 export default userSlice.reducer;
+
+
+// Authenticate user
+export const loginUser = createAsyncThunk('user/login', async (credentials, { dispatch }) => {
+  try {
+    dispatch(userSlice.actions.loginStart());
+    const user = await dispatch(getAuthAction({ credentials })); // Call your action creator
+    return user;
+  } catch (error) {
+    throw error;
+  }
+});
+
+// Log out user
+export const logoutUser = createAsyncThunk('user/logout', async (_, { dispatch }) => {
+  try {
+    await dispatch(logoutAction()); // Call your action creator
+  } catch (error) {
+    throw error;
+  }
+});
+
+// Get authenticated user data
+export const fetchUserData = createAsyncThunk('user/fetchUserData', async (_, { dispatch }) => {
+  try {
+    const user = await dispatch(getUserAction()); // Call your action creator
+    return user;
+  } catch (error) {
+    throw error;
+  }
+});
+
+// Register a new user
+export const registerUser = createAsyncThunk('user/register', async (credentials, { dispatch }) => {
+  try {
+    const user = await dispatch(registerAction({ credentials })); // Call your action creator
+    return user;
+  } catch (error) {
+    throw error;
+  }
+});
