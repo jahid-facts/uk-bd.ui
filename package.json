@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@iconify/icons-mdi": "^1.2.47",
     "@mui/icons-material": "^5.14.1",
     "@mui/lab": "^5.0.0-alpha.137",
     "@mui/material": "^5.14.1",
@@ -58,5 +59,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@iconify/react": "^4.1.1"
   }
 }
