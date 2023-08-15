@@ -106,9 +106,11 @@ export const Avater = () => {
         >
           <MenuItem
             onClick={() => setAnchorEl(null)}
-            sx={{ textDecoration: "none" }}
           >
-            <AddHome /> Property listing
+          <ListItemIcon>
+            <AddHome fontSize="small" />
+          </ListItemIcon>
+            Property listing 
           </MenuItem>
         </Link>
         <MenuItem>
