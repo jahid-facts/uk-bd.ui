@@ -1,22 +1,15 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
+// Set base URL for Axios
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8'; 
-
-// Set Authorization header if token cookie is available
-const token = Cookies.get('accessToken');
-if (token) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-}
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=utf-8';
 
 // Handle API request and response
 const handleRequest = async (requestFunction) => {
   try {
     const response = await requestFunction();
-    return response.data;
+    return response; 
   } catch (error) {
-    // Enhance error handling to provide more context
     throw error;
   }
 };

@@ -10,12 +10,14 @@ import {
 import {
   AddHome,
   Logout,
-  PersonAdd,
+  PersonAdd, 
   Settings,
 } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import assets from "../../assets";
+import { logoutUser } from "../../redux/actions/authAction";
+import { useDispatch } from "react-redux";
 
 
 export const Avater = () => {
@@ -24,6 +26,15 @@ export const Avater = () => {
 
   const location = useLocation();
   const isHomePage = location.pathname === "/";
+
+  //logout
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    navigate('/login');
+  };
 
   return (
     <>
@@ -129,7 +140,7 @@ export const Avater = () => {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

@@ -6,9 +6,10 @@ import { theme } from "./theme";
 import { PageNotFound } from "./pages/404";
 import { AppLayout } from "./layouts/appLayout";
 import { AdminLayout } from "./layouts/adminLayout";
-import LoginScreen from "./pages/auth/login";
 import RegisterScreen from "./pages/auth/register";
 import store from './redux/store';
+import AuthCheck from './helpers/AuthCheck';
+import LoginScreen from './pages/auth/Login';
 
 export default function App() {
   return (
@@ -16,11 +17,13 @@ export default function App() {
       <ThemeProvider theme={theme}> 
         <BrowserRouter>
           <Routes>
-            <Route path="/admin" element={<AdminLayout />} />
-            <Route path="/*" element={<AppLayout />} />
-            <Route path="*" element={<PageNotFound />} />
             <Route path="/login" element={<LoginScreen />} />
             <Route path="/register" element={<RegisterScreen />} /> 
+            <Route element={<AuthCheck />}>
+              <Route path="/admin" element={<AdminLayout />} />
+              <Route path="/*" element={<AppLayout />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Route>
           </Routes>
         </BrowserRouter>
       </ThemeProvider> 
