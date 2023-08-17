@@ -16,8 +16,8 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import assets from "../../assets";
-import { logoutUser } from "../../redux/actions/authAction";
 import { useDispatch } from "react-redux";
+import { logoutUser } from "../../redux/features/AuthSilce";
 
 
 export const Avater = () => {

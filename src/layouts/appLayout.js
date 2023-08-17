@@ -11,6 +11,8 @@ import ReservationDetails from "../pages/reservationDetails/ReservationDetails";
 import BottomBar from "../components/bottom_bar/BottomBar";
 import { Dashboard } from "../pages/dashboard";
 import AddPropertise from "../pages/addPropertise";
+import AuthCheck from "../helpers/AuthCheck";
+import OtpScreen from "../pages/OTP";
 
 export const AppLayout = () => {
   const location = useLocation();
@@ -28,11 +30,14 @@ export const AppLayout = () => {
       <Box marginTop={heightTop}></Box>
       <Routes>
         <Route>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashbord" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/reservation-details" element={<ReservationDetails />} />
-          <Route path="/add-propertise" element={<AddPropertise />} />
+          <Route element={<AuthCheck />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/dashbord" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/reservation-details" element={<ReservationDetails />} />
+            <Route path="/add-propertise" element={<AddPropertise />} />
+            <Route path="/opt-verify" element={<OtpScreen />} />
+          </Route>
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes> 

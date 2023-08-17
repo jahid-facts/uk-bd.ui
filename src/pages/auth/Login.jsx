@@ -10,25 +10,22 @@ import {
   InputAdornment,
   FormControl,
   TextField,
-//   Alert,
 } from "@mui/material";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Yup from "yup";
-
 import assets from "../../assets";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../../redux/actions/authAction";
 import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { loginUser } from "../../redux/features/AuthSilce";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const initialValues = {
     email: "",
@@ -41,7 +38,7 @@ const LoginScreen = () => {
       .required("Email is required"),
     password: Yup.string()
       .required("Password is required")
-      .min(5, "Password must have at least 5 characters"),
+      .min(6, "Password must have at least 6 characters"),
   });
 
   const {
@@ -59,32 +56,28 @@ const LoginScreen = () => {
 
     onSubmit: async (values, action) => {
       try {
-        setSubmitting(true); // Set submitting to true
-    
-        // Dispatch the login action
-        await dispatch(loginUser({ email: values.email, password: values.password }));
-    
-        // Reset form and navigate on success
-        action.resetForm(); 
-        setSubmitting(false); 
+        setSubmitting(true);
+        await dispatch(
+          loginUser({ email: values.email, password: values.password })
+        );
+
+        setSubmitting(false);
         navigate("/");
-        toast.success('Logged in successfully');
-      } catch (error) {
-        setSubmitting(false); 
-        toast.error('Email or password invalid'); 
+        action.resetForm();
+      } catch {
+        setSubmitting(false);
       }
     },
   });
+  
+
+
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
-  if (isAuthenticated) {
-    navigate("/");
-  }
 
   return (
     <Box
@@ -128,15 +121,6 @@ const LoginScreen = () => {
               borderRadius={"20px"}
             >
               <h1>Sign In</h1>
-              {/* {loginError && (
-                <Alert
-                  severity="error"
-                  sx={{ mt: 1 }}
-                  style={{ marginTop: "10px" }}
-                >
-                  {loginError}
-                </Alert>
-              )} */}
               <form noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <Box pt={5}>
                   <TextField
@@ -144,13 +128,13 @@ const LoginScreen = () => {
                     label="Email"
                     fullWidth
                     name="email"
-                    error={errors.email && touched.email ? errors : null}
+                    error={!!errors.email && touched.email}
                     autoComplete="current-email"
                     value={values.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
-                  {errors.email && touched.email ? (
+                  {errors.email && touched.email && (
                     <p
                       style={{
                         color: "#d32f2f",
@@ -162,7 +146,7 @@ const LoginScreen = () => {
                     >
                       {errors.email}
                     </p>
-                  ) : null}
+                  )}
                 </Box>
                 <Box pt={3}>
                   <FormControl sx={{ width: "100%" }} variant="outlined">
@@ -170,7 +154,7 @@ const LoginScreen = () => {
                       Password
                     </InputLabel>
                     <OutlinedInput
-                      error={!!errors.password && touched.password} // Set error prop based on error condition
+                      error={!!errors.password && touched.password}
                       name="password"
                       autoComplete="current-password"
                       value={values.password}
@@ -186,7 +170,11 @@ const LoginScreen = () => {
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? (
+                              <VisibilityOff />
+                            ) : (
+                              <Visibility />
+                            )}
                           </IconButton>
                         </InputAdornment>
                       }
@@ -221,6 +209,7 @@ const LoginScreen = () => {
                     disabled={isSubmitting}
                     variant="contained"
                     color="primary"
+                    sx={{ textTransform: "capitalize" }}
                   >
                     Login
                   </Button>
