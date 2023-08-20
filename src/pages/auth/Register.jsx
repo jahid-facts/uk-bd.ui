@@ -90,7 +90,7 @@ const RegisterScreen = () => {
         // Reset form and navigate on success
         action.resetForm();
         setSubmitting(false);
-        navigate("login");
+        navigate("/otp-verify");
         toast.success("Registration in successfully");
       } catch (error) {
         setSubmitting(false);

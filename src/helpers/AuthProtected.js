@@ -9,8 +9,9 @@ const AuthProtected = ({ children }) => {
 
   if (isAuthenticatedRedux || isAuthenticatedLocalStorage) {
     return <Navigate to="/" />;
+  }else{
+    return <Outlet />;
   }
-  return <Outlet />;
 
 };
 

@@ -6,7 +6,14 @@ import { postApi } from "../../config/configAxios";
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData) => {
-    const response = await postApi("/register", userData);
+    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/register`, {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+  });
+    // const response = await postApi("/register", userData);
     const data = response.data;
     if (!response.ok) {
       throw new Error(data.message || "Registration failed");
@@ -60,10 +67,10 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.user = action.payload;
-        state.isLoggedIn = true;
-        localStorage.setItem("user", JSON.stringify(action.payload));
-        localStorage.setItem("isLoggedIn", "true");
+        state.user = action.meta.arg.email;
+        state.isLoggedIn = false;
+        // localStorage.setItem("user", JSON.stringify(action.payload));
+        // localStorage.setItem("isLoggedIn", "true");
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = "failed";

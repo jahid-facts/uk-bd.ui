@@ -10,6 +10,7 @@ import RegisterScreen from "./pages/auth/Register";
 import store from "./redux/store";
 import LoginScreen from "./pages/auth/Login";
 import AuthProtected from "./helpers/AuthProtected";
+import OtpScreen from "./pages/OTP";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
             <Route element={<AuthProtected />}>
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
+              <Route path="/otp-verify" element={<OtpScreen />} />
             </Route>
               <Route path="/admin" element={<AdminLayout />} />
               <Route path="/*" element={<AppLayout />} />

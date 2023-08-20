@@ -9,7 +9,7 @@ import {
   Toolbar,
   styled,
 } from "@mui/material";
-import { FavoriteBorder } from "@mui/icons-material";
+import { EmailOutlined, FavoriteBorder } from "@mui/icons-material";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import Category from "../category/Category";
@@ -65,7 +65,8 @@ export default function Navbar(props) {
     showSearchMobile = <SearchMobile />;
     containerWidth = "xl";
   } else {
-    containerWidth = "lg";
+    containerWidth = "xl";
+    // containerWidth = "lg";
   }
  
   return (
@@ -124,6 +125,8 @@ export default function Navbar(props) {
                     Switch to hosting
                   </Button>
                 </Link>
+                
+                <Link to={"/profile"}>
                 <Badge
                   max={9}
                   badgeContent={10}
@@ -136,8 +139,9 @@ export default function Navbar(props) {
                     },
                   }}
                 >
-                  <FavoriteBorder color="action" />
+                  <EmailOutlined color="action" /> 
                 </Badge>
+                </Link>
 
                 <Avater />
               </Stack>

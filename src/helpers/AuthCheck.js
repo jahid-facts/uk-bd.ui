@@ -9,9 +9,11 @@ const AuthCheck = ({ children }) => {
 
   if (isAuthenticatedRedux || isAuthenticatedLocalStorage) {
     return <Outlet />;
+  }else{
+    return <Navigate to="/login" />;
   }
 
-  return <Navigate to="/login" />;
+  
 };
 
 export default AuthCheck;
