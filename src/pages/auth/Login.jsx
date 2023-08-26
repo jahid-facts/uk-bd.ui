@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import {
   InputAdornment,
   FormControl,
   TextField,
+  Alert,
 } from "@mui/material";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -20,12 +21,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { loginUser } from "../../redux/features/AuthSilce";
+import { clearMessage, loginUser, verifyOTP } from "../../redux/features/AuthSilce";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const {error, success} = useSelector((state) => state.auth);
 
   const initialValues = {
     email: "",
@@ -40,7 +42,7 @@ const LoginScreen = () => {
       .required("Password is required")
       .min(6, "Password must have at least 6 characters"),
   });
-
+  const loginState = useSelector((state) => state.auth.isLoggedIn);
   const {
     values,
     touched,
@@ -57,20 +59,29 @@ const LoginScreen = () => {
     onSubmit: async (values, action) => {
       try {
         setSubmitting(true);
-        await dispatch(
-          loginUser({ email: values.email, password: values.password })
-        );
-
+        dispatch(verifyOTP({email:values.email, otp: '12345678'}));
+        
+        const loginData = { email: values.email, password: values.password };
+        // Dispatch the loginUser action
+        await dispatch(loginUser(loginData));
+      
         setSubmitting(false);
-        navigate("/");
-        action.resetForm();
       } catch {
         setSubmitting(false);
       }
     },
   });
-  
 
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearMessage());
+    }
+    if (success) {
+      toast.success(success);
+      dispatch(clearMessage());
+    }
+  }, [error, success, dispatch]);
 
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -85,6 +96,7 @@ const LoginScreen = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
+      bgcolor={'#e7e7e7'}
     >
       <Box p={4}>
         <Grid container spacing={4}>
@@ -96,6 +108,7 @@ const LoginScreen = () => {
               minHeight="100%"
             >
               <Box p={2}>
+                <Link to={'/'}>
                 <img
                   src={assets.images.logo}
                   alt="Airbnb Logo"
@@ -105,6 +118,7 @@ const LoginScreen = () => {
                     border: "1px solid #f3f3f3",
                   }}
                 />
+                </Link>
                 <Box p={2}></Box>
                 <p>Explore the ideas throughtout the world</p>
               </Box>
@@ -119,6 +133,7 @@ const LoginScreen = () => {
                 width: "100%",
               }}
               borderRadius={"20px"}
+              bgcolor={'#fafcfe'}
             >
               <h1>Sign In</h1>
               <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -148,7 +163,7 @@ const LoginScreen = () => {
                     </p>
                   )}
                 </Box>
-                <Box pt={3}>
+                <Box py={3}>
                   <FormControl sx={{ width: "100%" }} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">
                       Password
@@ -195,8 +210,10 @@ const LoginScreen = () => {
                     </p>
                   )}
                 </Box>
+                
+              {/* {error && <Alert severity="error">{error}</Alert>} */}
                 <Box
-                  pt={4}
+                  pt={3}
                   display="flex"
                   justifyContent="space-between"
                   alignItems="center"
@@ -219,7 +236,6 @@ const LoginScreen = () => {
           </Grid>
         </Grid>
       </Box>
-      <ToastContainer position="top-right" autoClose={3000} />
     </Box>
   );
 };

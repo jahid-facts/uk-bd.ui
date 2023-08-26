@@ -1,21 +1,35 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./otp.css";
 import { Box, Button, Grid } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { clearMessage, verifyOTP } from "../../redux/features/AuthSilce";
+import jwtDecode from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { postApi } from "../../config/configAxios";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const OtpComponent = () => {
+  const navigate = useNavigate();
+  const {error, success} = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const inputRefs = useRef([]);
   const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
-  const userEmail = useSelector((state) => state.auth.user);
 
+  const userString = localStorage.getItem("user");
+
+  const user = userString ? JSON.parse(userString) : null;
+  const token = user.token;
+  const decodedToken = jwtDecode(token);
+  const userEmail = decodedToken.userInfo.email;
   const focusNext = (index) => {
     if (inputRefs.current[index + 1]) {
       inputRefs.current[index + 1].focus();
     }
   };
 
-  const focusPrev = (index) => {
+  const focusPrev = (index) => { 
     if (inputRefs.current[index - 1]) {
       inputRefs.current[index - 1].focus();
     }
@@ -43,28 +57,106 @@ export const OtpComponent = () => {
     }
   };
 
+  // verify otp
   const handleApiCall = async () => {
-    const concatenatedOTP = otpValues.join("");
-
     try {
+      const concatenatedOTP = otpValues.join("");
       const data = {
         otp: concatenatedOTP,
         email: userEmail,
       };
-      const response = await axios
-        .post(`${process.env.REACT_APP_BASE_URL}/verify-otp`, data)
-        .then((response) => {
-          console.log("API Response:", response.data);
-        })
-        .catch((error) => {
-          console.error("API Error:", error);
-        });
-
-      console.log("API Response:", response.data);
-      // Perform any further actions based on the response here
-    } catch (error) {
-      console.error("API Error:", error.AxiosError.name.response.data);
+      setDisableButton(true);
+      const response = await dispatch(verifyOTP(data));
+      if (response.payload.status){
+        navigate("/");
+      }
+      setDisableButton(false);
+    } catch {
+      setDisableButton(false);
     }
+  };
+
+  useEffect(() => {
+    if (error){
+      toast.error(error);
+      dispatch(clearMessage());
+    }
+    if (success){
+      toast.success(success);
+      dispatch(clearMessage());
+    }
+  }, [error, success, dispatch]);
+
+  // resend otp
+  const [disableButton, setDisableButton] = useState(false);
+  const handleResendOTP = async () => {
+    try {
+      setDisableButton(true);
+      // Call axios with the resend OTP API
+      const response = await postApi("/resend-otp", { email: userEmail });
+
+      // You can display a success toast message here if needed
+      toast.success("OTP has been resent successfully");
+      setDisableButton(false);
+    } catch (error) {
+      // Handle the error here
+      console.error("Error while resending OTP:", error);
+
+      setDisableButton(false);
+      // Display an error toast message
+      toast.error("Failed to resend OTP. Please try again.");
+    }
+  };
+
+  // time calculate
+  const [oldTime, setOldTime] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [timeRemaining, setTimeRemaining] = useState(0);
+  const [isTimeOver, setIsTimeOver] = useState(false);
+  const userId = decodedToken.userInfo._id;
+
+  useEffect(() => {
+    // Fetch the oldTime value from the database using the user ID as a parameter
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}/user/${userId}`)
+      .then((response) => {
+        setOldTime(new Date(response.data.user.otpExpiration));
+      })
+      .catch((error) => {
+        console.error("Error fetching oldTime:", error);
+      });
+  }, [userId, disableButton]);
+
+  useEffect(() => {
+    if (oldTime) {
+      const interval = setInterval(() => {
+        const newTime = new Date();
+        const diff = oldTime - newTime;
+
+        if (diff <= 0) {
+          clearInterval(interval);
+          setTimeRemaining(0);
+          setIsTimeOver(true);
+        } else {
+          setCurrentTime(newTime);
+          setTimeRemaining(diff);
+          setIsTimeOver(false);
+        }
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [oldTime]);
+
+  const formatTimeRemaining = (timeDiff) => {
+    const totalSeconds = Math.floor(timeDiff / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, "0")}:${seconds
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   return (
@@ -84,12 +176,22 @@ export const OtpComponent = () => {
                 borderRadius={"20px"}
               >
                 <Box p={3} textAlign={"center"}>
-                  <h1>OTP Varyfication</h1>
+                  <h2>OTP Verification</h2>
                   <p className="eamilSend">
                     An OTP has been sent to {userEmail}
                   </p>
                 </Box>
-                <h5>Please enter your OTP to verify</h5>
+                <Box>
+                  <h5>Please enter your OTP to verify</h5>
+                  {isTimeOver ? (
+                    <h6>Time is over</h6>
+                  ) : (
+                    <h6>
+                      Time Remaining: {formatTimeRemaining(timeRemaining)}
+                    </h6>
+                  )}
+                </Box>
+
                 <div className="otp-field">
                   {[0, 1, 2, 3, 4, 5].map((index) => (
                     <input
@@ -103,8 +205,10 @@ export const OtpComponent = () => {
                     />
                   ))}
                 </div>
-                <Box pt={3} display={"flex"} justifyContent={"center"}>
+                <Box pt={3} display={"flex"}>
                   <Button
+                    onClick={handleResendOTP}
+                    disabled={disableButton}
                     variant="contained"
                     color={"secondary"}
                     sx={{ textTransform: "capitalize", fontWeight: "700" }}
@@ -115,6 +219,7 @@ export const OtpComponent = () => {
                   <Button
                     variant="contained"
                     color={"primary"}
+                    disabled={disableButton}
                     onClick={handleApiCall}
                     sx={{ textTransform: "capitalize", fontWeight: "700" }}
                   >
@@ -125,6 +230,7 @@ export const OtpComponent = () => {
             </Grid>
           </Grid>
         </Box>
+        <ToastContainer position="top-right" autoClose={3000} />
       </Box>
     </>
   );

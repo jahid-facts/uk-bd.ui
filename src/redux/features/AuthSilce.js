@@ -1,63 +1,71 @@
-// authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 import { postApi } from "../../config/configAxios";
 
-// Define the async thunk for user registration
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
-  async (userData) => {
-    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/register`, {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(userData),
-  });
-    // const response = await postApi("/register", userData);
-    const data = response.data;
-    if (!response.ok) {
-      throw new Error(data.message || "Registration failed");
+  async (userData, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await postApi("/register", userData);
+      return fulfillWithValue(response.data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
-    return data;
   }
 );
 
-// Define the async thunk for user login
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
-  async (loginData) => {
-    const response = await fetch(`${process.env.REACT_APP_BASE_URL}/login`, {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginData),
-    });
-    // const response = await postApi("/login", loginData); 
-    if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-    return response.data;
+  async (loginData, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await postApi("/login", loginData);
+      return fulfillWithValue(response.data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const verifyOTP = createAsyncThunk(
+  "auth/verifyOTP",
+  async (otpData, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await postApi("/verify-otp", otpData);
+      return fulfillWithValue(response.data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 
 const initialState = {
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
   isLoggedIn: localStorage.getItem("isLoggedIn") === "true" || false,
-  status: "idle", // 'idle' | 'loading' | 'succeeded' | 'failed'
+  isEmailVerified: localStorage.getItem("isEmailVerified") === "true" || false,
+  status: "idle",
   error: null,
+  success: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState, 
   reducers: {
     logoutUser(state) {
+      state.status = "idle";
       state.user = null;
       state.isLoggedIn = false;
+      state.isEmailVerified = false;
+      state.error = null;
+      state.success = null;
       localStorage.removeItem("user");
       localStorage.removeItem("authToken");
       localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("isEmailVerified");
+    },
+    clearMessage(state) {
+      state.error = null;
+      state.success = null;
     },
   },
   extraReducers: (builder) => {
@@ -67,14 +75,15 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.user = action.meta.arg.email;
+        state.user = action.payload;
         state.isLoggedIn = false;
-        // localStorage.setItem("user", JSON.stringify(action.payload));
-        // localStorage.setItem("isLoggedIn", "true");
+        state.success = action.payload.message;
+        state.error = null;
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload.error;
+        state.success = null;
       })
       .addCase(loginUser.pending, (state) => {
         state.status = "loading";
@@ -83,15 +92,34 @@ const authSlice = createSlice({
         state.status = "succeeded";
         state.user = action.payload;
         state.isLoggedIn = true;
+        // state.success = action.payload.message;
         localStorage.setItem("user", JSON.stringify(action.payload));
         localStorage.setItem("isLoggedIn", "true");
+        state.error = null;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.error.message;
+        state.error = action.payload.error;
+        state.success = null;
+      })
+      .addCase(verifyOTP.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(verifyOTP.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.isEmailVerified = true;
+        state.success = action.payload.message;
+        localStorage.setItem("isEmailVerified", "true");
+        state.error = null;
+      })
+      .addCase(verifyOTP.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload.error;
+        state.success = null;
       });
   },
 });
 
-export const { logoutUser } = authSlice.actions;
+export const { logoutUser,clearMessage } = authSlice.actions;
+
 export default authSlice.reducer;

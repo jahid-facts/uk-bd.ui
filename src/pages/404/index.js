@@ -6,6 +6,7 @@ import {
 } from "@mui/material";
 
 import assets from "../../assets";
+import { Link } from "react-router-dom";
 
 export const PageNotFound = () => {
 
@@ -27,6 +28,7 @@ export const PageNotFound = () => {
             <Grid item xs={12}>
               <Box textAlign={'center'} >
                 <Box p={2} textAlign={'center'}>
+                <Link to={'/'}>
                 <img
                   src={assets.images.logo}
                   alt="Logo"
@@ -36,6 +38,7 @@ export const PageNotFound = () => {
                     border: "1px solid #f3f3f3",
                   }}
                 />
+                </Link>
                 <Box p={2}></Box>
                 <h1>404</h1>
                 <p>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -24,18 +24,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { registerUser } from "../../redux/features/AuthSilce";
+import { clearMessage, registerUser } from "../../redux/features/AuthSilce";
 
 const RegisterScreen = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const { error, success } = useSelector((state) => state.auth);
 
   const initialValues = {
     name: "",
     email: "",
-    userRole: "",
     password: "",
   };
 
@@ -47,15 +47,13 @@ const RegisterScreen = () => {
     email: Yup.string()
       .email("Email must be a valid email address")
       .required("Email is required"),
-    userRole: Yup.string().required("Role is required"),
     password: Yup.string()
       .required("Password is required")
-      .min(6, "Password must have at least 6 characters")
-      // .matches(/[0-9]/, "Must have a number")
-      // .matches(/[a-z]/, "Must have at least one lowercase")
-      // .matches(/[A-Z]/, "Must have at least one uppercase")
-      // .matches(/[!@#%^&*]/, "Must have at least one special character")
-      ,
+      .min(6, "Password must have at least 6 characters"),
+    // .matches(/[0-9]/, "Must have a number")
+    // .matches(/[a-z]/, "Must have at least one lowercase")
+    // .matches(/[A-Z]/, "Must have at least one uppercase")
+    // .matches(/[!@#%^&*]/, "Must have at least one special character")
     confirmPassword: Yup.string()
       .required("Must have a confirm password")
       .oneOf([Yup.ref("password"), null], "Password does not match"),
@@ -76,28 +74,37 @@ const RegisterScreen = () => {
 
     onSubmit: async (values, action) => {
       try {
-        console.log(setSubmitting(true));
+        setSubmitting(true);
         // Dispatch the login action
-        await dispatch(
-          registerUser({ 
-            name: values.name, 
-            email: values.email, 
-            role: values.userRole, 
-            password: values.password 
+        const response = await dispatch(
+          registerUser({
+            name: values.name,
+            email: values.email,
+            password: values.password,
           })
         );
 
-        // Reset form and navigate on success
+       if(response.payload.status){
+        navigate("/login");
         action.resetForm();
+       }
         setSubmitting(false);
-        navigate("/otp-verify");
-        toast.success("Registration in successfully");
       } catch (error) {
         setSubmitting(false);
-        toast.error("Something is eorng");
       }
     },
   });
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearMessage());
+    }
+    if (success) {
+      toast.success(success); 
+      dispatch(clearMessage());
+    }
+  },[error, success, dispatch ]);
 
   const handleClickShowPassword = (field) => {
     if (field === "password") {
@@ -117,6 +124,7 @@ const RegisterScreen = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
+      bgcolor={'#e7e7e7'}
     >
       <Box p={4}>
         <Grid container spacing={4}>
@@ -128,15 +136,17 @@ const RegisterScreen = () => {
               minHeight="100%"
             >
               <Box p={2}>
-                <img
-                  src={assets.images.logo}
-                  alt="Airbnb Logo"
-                  style={{
-                    height: "80px",
-                    cursor: "pointer",
-                    border: "1px solid #f3f3f3",
-                  }}
-                />
+                <Link to={"/"}>
+                  <img
+                    src={assets.images.logo}
+                    alt="Airbnb Logo"
+                    style={{
+                      height: "80px",
+                      cursor: "pointer",
+                      border: "1px solid #f3f3f3",
+                    }}
+                  />
+                </Link>
                 <Box p={2}></Box>
                 <p>Explore the ideas throughtout the world</p>
               </Box>
@@ -151,12 +161,13 @@ const RegisterScreen = () => {
                 width: "100%",
               }}
               borderRadius={"20px"}
+              bgcolor={'#fff'}
             >
               <h1>Sign Up</h1>
               <form noValidate autoComplete="off" onSubmit={handleSubmit}>
                 <Box pt={5}>
                   <TextField
-                    type="name"
+                    type="text"
                     label="Name"
                     fullWidth
                     name="name"
@@ -206,7 +217,7 @@ const RegisterScreen = () => {
                     </p>
                   ) : null}
                 </Box>
-                <Box pt={3}>
+                {/* <Box pt={3}>
                   <FormControl sx={{ width: "100%" }}>
                     <InputLabel htmlFor="user-role">User Role</InputLabel>
                     <Select
@@ -222,7 +233,7 @@ const RegisterScreen = () => {
                       <MenuItem value="host">Host</MenuItem>
                     </Select>
                   </FormControl>
-                </Box>
+                </Box> */}
                 <Box pt={3}>
                   <FormControl sx={{ width: "100%" }} variant="outlined">
                     <InputLabel htmlFor="outlined-adornment-password">

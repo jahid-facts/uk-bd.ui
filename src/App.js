@@ -11,23 +11,31 @@ import store from "./redux/store";
 import LoginScreen from "./pages/auth/Login";
 import AuthProtected from "./helpers/AuthProtected";
 import OtpScreen from "./pages/OTP";
+import "react-toastify/dist/ReactToastify.css";
+import OtpCheck from "./helpers/OtpCheck";
+import { ToastContainer } from "react-toastify";
+
 
 export default function App() {
   return (
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <Routes>
+          <Routes> 
             <Route element={<AuthProtected />}>
               <Route path="/login" element={<LoginScreen />} />
               <Route path="/register" element={<RegisterScreen />} />
-              <Route path="/otp-verify" element={<OtpScreen />} />
             </Route>
-              <Route path="/admin" element={<AdminLayout />} />
+            <Route element={<OtpCheck />}>
+              <Route path="/otp-verify" element={<OtpScreen />} /> 
+            </Route>
+              <Route path="/admin" element={<AdminLayout />} /> 
               <Route path="/*" element={<AppLayout />} />
               <Route path="*" element={<PageNotFound />} />
+              
           </Routes>
         </BrowserRouter>
+          <ToastContainer position="top-right" autoClose={3000} />
       </ThemeProvider>
     </Provider>
   );

@@ -22,3 +22,11 @@ a{
     padding-left: 0px !important;
     padding-right: 0px !important;
 }}
+
+/* stapper */
+.css-obcze2-MuiLinearProgress-root-MuiMobileStepper-progress {
+  height: 10px !important;
+  width: 70% !important;
+  border-radius: 20px;
+}
+
