@@ -1,45 +1,45 @@
-import { Icon } from "@iconify/react";
 import {
   Box,
-  Card,
-  CardActionArea,
-  CardContent,
   Container,
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import osm from "../leaftLet/OsmProvider";
-import "leaflet/dist/leaflet.css";
-import assets from "../../assets";
-import L from "leaflet";
+import React, { useEffect, useState } from "react";
+import SearchBar from "../leaftLet/SearchBar";
+import Maps from "../leaftLet/Maps";
 
-const LocatedPlace = () => {
-    const initialCenter = { lat: 23.7104, lng: 90.4071 };
-    const ZOOM_LEVEL = 10;
-    const mapRef = useRef();
-    
-    const [center, setCenter] = useState(initialCenter);
+const LocatedPlace = ({ setStepValue, values }) => {
+  const [selectPosition, setSelectPosition] = useState(null);
 
-    const markerIcon = new L.Icon({
-        iconUrl: assets.images.location,
-        iconSize: [25,35],
-        iconAnchor: [17, 46],
-        popupAnchor: [0,-46],
-    });
+  useEffect(()=>{
+    if (values.locatedPlace !== null) {
+      const localLocation = {
+        lat: values.locatedPlace.lat,
+        lon: values.locatedPlace.lon,
+      };
+      setSelectPosition(localLocation);
+    }
+  },[])
+  const handleListItemClick = (data) => {
+    const location = {
+      lat: data.lat,
+      lon: data.lon,
+    };
+    setSelectPosition(location);
+    setStepValue("locatedPlace", data);
+  };
 
   return (
     <>
       <Container>
         <Box
           sx={{
-            width: { 
+            width: {
               xs: "100%",
               md: "650px",
             },
             margin: "auto",
-            marginBottom: "120px",
+            marginBottom: "130px",
           }}
         >
           <Grid container spacing={2}>
@@ -51,20 +51,29 @@ const LocatedPlace = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} p={"0px"}>
-            <div style={{ width: "100%", height: "400px" }}>
-                <MapContainer center={center} zoom={ZOOM_LEVEL} ref={mapRef} style={{ width: "100%", height: "100%" }}>
-                <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker position={center} icon={markerIcon}>
-                    <Popup>
-                        <b>Dhaka</b>
-                    </Popup>
-                </Marker>
-                </MapContainer>
+              <div
+                style={{
+                  width: "100%",
+                  height: "400px",
+                  position: "relative",
+                  marginTop: "70px",
+                }}
+              >
+                <Maps selectPosition={selectPosition} />
 
-            </div>
+                <Box
+                  sx={{
+                    position: "absolute",
+                    top: "-58px",
+                    left: "0px",
+                    right: "0px",
+                    textAlign: "center",
+                    zIndex: 1000,
+                  }}
+                >
+                  <SearchBar handleListItemClick={handleListItemClick} />
+                </Box>
+              </div>
             </Grid>
           </Grid>
         </Box>

@@ -10,13 +10,59 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-const AddAddress = () => {
+const AddAddress = ({ setStepValue, values }) => {
   const [selectedCountry, setSelectedCountry] = useState("");
+  const [address, setAddress] = useState(values.addAddress || {
+    country: "",
+    addressLine1: "",
+    addressLine2: "",
+    addressLine3: "",
+    city: "",
+    state: "", 
+    postalCode: "",
+    street: "", 
+  });
+
+  useEffect(() => {
+    if (values.addAddress) {
+      setAddress(values.addAddress);
+      setSelectedCountry(values.addAddress.country);
+    }
+  }, []); 
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setAddress((prevAddress) => ({ 
+      ...prevAddress,
+      [name]: value,
+    }));
+  };
+
+  useEffect(() => {
+    setStepValue("addAddress", address);
+  }, [address,]);
 
   const handleCountryChange = (event) => {
-    setSelectedCountry(event.target.value);
+    const { value } = event.target;
+    setSelectedCountry(value);
+    handleFormData(value);
+  };
+
+  const handleFormData = (selectedCountryValue) => {
+    const updatedStreet =
+      address.addressLine1 +
+      ", " +
+      address.addressLine2 +
+      ", " +
+      address.addressLine3;
+
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      country: selectedCountryValue,
+      street: updatedStreet,
+    }));
   };
 
   return (
@@ -29,7 +75,7 @@ const AddAddress = () => {
               md: "650px",
             },
             margin: "auto",
-            marginBottom: "120px",
+            marginBottom: "130px",
           }}
         >
           <Grid container spacing={2} paddingRight={2}>
@@ -40,7 +86,7 @@ const AddAddress = () => {
                 reservation.
               </Typography>
             </Grid>
-            <Grid item xs={12} p={"0px"}>
+            <Grid item xs={12}>
               <Box pt={3}>
                 <FormControl sx={{ width: "100%" }}>
                   <InputLabel htmlFor="country">Country / Region</InputLabel>
@@ -48,7 +94,7 @@ const AddAddress = () => {
                     id="country"
                     name="country"
                     label="Country / Region"
-                    value={selectedCountry} // Bind the value to state
+                    value={address.country} 
                     onChange={handleCountryChange} // Handle value change
                   >
                     <MenuItem value="Bangladesh">Bangladesh</MenuItem>
@@ -62,6 +108,8 @@ const AddAddress = () => {
                   label="Address line 1"
                   fullWidth
                   name="addressLine1"
+                  value={address.addressLine1}
+                  onChange={handleInputChange}
                 />
               </Box>
               <Box pt={2}>
@@ -70,6 +118,8 @@ const AddAddress = () => {
                   label="Address line 2"
                   fullWidth
                   name="addressLine2"
+                  value={address.addressLine2}
+                  onChange={handleInputChange}
                 />
               </Box>
               <Box pt={2}>
@@ -78,6 +128,8 @@ const AddAddress = () => {
                   label="Address line 3"
                   fullWidth
                   name="addressLine3"
+                  value={address.addressLine3}
+                  onChange={handleInputChange}
                 />
               </Box>
               <Box pt={2}>
@@ -86,6 +138,8 @@ const AddAddress = () => {
                   label="City / village (if applicable)"
                   fullWidth
                   name="city"
+                  value={address.city}
+                  onChange={handleInputChange}
                 />
               </Box>
               <Box pt={2}>
@@ -94,6 +148,8 @@ const AddAddress = () => {
                   label="State / province / territory (if applicable)"
                   fullWidth
                   name="state"
+                  value={address.state}
+                  onChange={handleInputChange}
                 />
               </Box>
               <Box pt={2}>
@@ -102,12 +158,14 @@ const AddAddress = () => {
                   label="Postal code (if applicable)"
                   fullWidth
                   name="postalCode"
+                  value={address.postalCode}
+                  onChange={handleInputChange}
                 />
               </Box>
             </Grid>
           </Grid>
         </Box>
-      </Container>
+      </Container> 
     </>
   );
 };

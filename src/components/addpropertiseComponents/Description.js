@@ -1,14 +1,19 @@
 import { Box, Container, Grid, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const Description = () => {
-  const [text, setText] = useState("");
-  const maxLength = 300;
+const Description = ({ setStepValue, values }) => {
+  const [text, setText] = useState(values.description || "");
+  const maxLength = 500;
+
+  useEffect(() => {
+    setStepValue("description", text);
+  }, [text]);
 
   const handleChange = (event) => {
     const newText = event.target.value;
     if (newText.length <= maxLength) {
       setText(newText);
+      setStepValue("description", text);
     }
   };
 
@@ -22,7 +27,7 @@ const Description = () => {
               md: "650px",
             },
             margin: "auto",
-            marginBottom: "120px",
+            marginBottom: "130px",
           }}
         >
           <Grid container spacing={2}>

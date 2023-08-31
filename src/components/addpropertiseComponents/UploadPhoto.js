@@ -1,9 +1,9 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ImageUpload from "../imageUpload";
 
-const UploadPhoto = () => {
- return(
+const UploadPhoto = ({ setStepValue, values }) => {
+  return ( 
     <>
       <Container>
         <Box
@@ -20,12 +20,13 @@ const UploadPhoto = () => {
             <Grid item xs={12} md={12} mb={2}>
               <h1>SnapUpload - Instant Image Sharing</h1>
               <Typography variant="text" mt={2}>
-              Share images quickly using drag-and-drop or browsing, with automatic duplicate filtering.
+                Share images quickly using drag-and-drop or browsing, with
+                automatic duplicate filtering.
               </Typography>
             </Grid>
             <Grid item xs={12} p={"0px"}>
               {/* // content here */}
-              <ImageUpload />
+              <ImageUpload setStepValue={setStepValue} values={values} />
             </Grid>
           </Grid>
         </Box>

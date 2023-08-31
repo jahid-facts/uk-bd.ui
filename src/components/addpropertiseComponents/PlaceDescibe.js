@@ -8,14 +8,32 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { getApi } from "../../config/configAxios";
 
-const PlaceDescibe = () => {
-  const [activeBox, setActiveBox] = useState(null);
+const PlaceDescibe = ({ setStepValue, values }) => {
+  
+  const [activeBox, setActiveBox] = useState(values.placeDescibe || null);
+  const [amenities, setAmenities] = useState([]);
+
+  useEffect(() => {
+    getApi("/amenities")
+      .then((response) => setAmenities(response.data.amenities))
+      .catch((error) => console.log("error", error.message));
+  }, []);
 
   const handleBoxClick = (boxId) => {
-    setActiveBox(boxId === activeBox ? null : boxId);
+    if (activeBox === boxId) {
+      setActiveBox(null); 
+    } else {
+      setActiveBox(boxId); 
+    }
   };
+
+  useEffect(() => {
+    setStepValue("placeDescibe", activeBox);
+  }, [activeBox, setStepValue]);
+
 
   const boxStyles = {
     width: "100%",
@@ -42,139 +60,45 @@ const PlaceDescibe = () => {
               md: "650px",
             },
             margin: "auto",
-            marginBottom: '120px'
+            marginBottom: "130px",
           }}
         >
           <Grid container spacing={2}>
-            <Grid item xs={12} md={12}  mb={2}>
+            <Grid item xs={12} md={12} mb={2}>
               <h1>Which of these best describes your place?</h1>
             </Grid>
-            <Grid item xs={6} md={4} p={'0px'}>
-                <Card
-                  sx={{
-                    border: '1px solid #999',
-                    ...boxStyles,
-                    ...(activeBox === 1 ? activeBoxStyles : {}),
-                    boxShadow:'none',
-                  }}
-                  onClick={() => handleBoxClick(1)}
-                >
-                  <CardActionArea>
-                    <CardContent>
-                      <Icon
-                        icon="ant-design:home-outlined"
-                        style={{ fontSize: "24px" }}
-                      />
-                      <Typography variant="h6" fontSize={'16px'} fontWeight={'700'}>House</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={4}>
-                <Card
-                  sx={{
-                    border: '1px solid #999',
-                    ...boxStyles,
-                    ...(activeBox === 2 ? activeBoxStyles : {}),
-                    boxShadow:'none',
-                  }}
-                  onClick={() => handleBoxClick(2)}
-                >
-                  <CardActionArea>
-                    <CardContent>
-                      <Icon
-                        icon="emojione-monotone:house"
-                        style={{ fontSize: "24px" }}
-                      />
-                      <Typography variant="h6" fontSize={'16px'} fontWeight={'700'}>Appartment</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={4}>
-                <Card 
-                  sx={{
-                    border: '1px solid #999',
-                    ...boxStyles,
-                    ...(activeBox === 3 ? activeBoxStyles : {}),
-                    boxShadow:'none',
-                  }}
-                  onClick={() => handleBoxClick(3)} 
-                >
-                  <CardActionArea>
-                    <CardContent>
-                      <Icon
-                        icon="pepicons-pop:fire"
-                        style={{ fontSize: "24px" }}
-                      />
-                      <Typography variant="h6" fontSize={'16px'} fontWeight={'700'}>Barn</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={4}>
-                <Card 
-                 sx={{
-                  border: '1px solid #999',
-                  ...boxStyles,
-                  ...(activeBox === 4 ? activeBoxStyles : {}),
-                  boxShadow:'none',
-                }}
-                  onClick={() => handleBoxClick(4)} 
-                >
-                  <CardActionArea>
-                    <CardContent>
-                      <Icon
-                        icon="map:boat-tour"
-                        style={{ fontSize: "24px" }}
-                      />
-                      <Typography variant="h6" fontSize={'16px'} fontWeight={'700'}>Boat</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={4}>
-                <Card 
-                  sx={{
-                    border: '1px solid #999',
-                    ...boxStyles,
-                    ...(activeBox === 5 ? activeBoxStyles : {}),
-                    boxShadow:'none',
-                  }}
-                  onClick={() => handleBoxClick(5)} 
-                >
-                  <CardActionArea>
-                    <CardContent>
-                      <Icon
-                        icon="ic:baseline-cabin"
-                        style={{ fontSize: "24px" }}
-                      />
-                      <Typography variant="h6" fontSize={'16px'} fontWeight={'700'}>Cabin</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-            </Grid>
-            <Grid item xs={6} md={4}>
-                <Card 
-                  sx={{
-                    border: '1px solid #999',
-                    ...boxStyles,
-                    ...(activeBox === 6 ? activeBoxStyles : {}),
-                    boxShadow:'none',
-                  }}
-                  onClick={() => handleBoxClick(6)} 
-                >
-                  <CardActionArea>
-                    <CardContent>
-                      <Icon
-                        icon="carbon:cabin-care-alt"
-                        style={{ fontSize: "24px" }}
-                      />
-                      <Typography variant="h6" fontSize={'16px'} fontWeight={'700'}>Ramper/RV</Typography>
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-            </Grid>
+            {amenities.map(
+              (data) =>
+                data.type === "describe" && (
+                  <Grid item xs={6} md={4} key={data._id}>
+                    <Card
+                      sx={{
+                        border: "1px solid #999",
+                        ...boxStyles,
+                        ...(activeBox === data._id ||
+                        values.placeDescibe === data._id
+                          ? activeBoxStyles
+                          : {}),
+                        boxShadow: "none",
+                      }}
+                      onClick={() => handleBoxClick(data._id)}
+                    >
+                      <CardActionArea>
+                        <CardContent>
+                          <Icon icon={data.icon} style={{ fontSize: "24px" }} />
+                          <Typography
+                            variant="h6"
+                            fontSize={"16px"}
+                            fontWeight={"700"}
+                          >
+                            {data.title}
+                          </Typography>
+                        </CardContent>
+                      </CardActionArea>
+                    </Card>
+                  </Grid>
+                )
+            )}
           </Grid>
         </Box>
       </Container>

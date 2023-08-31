@@ -1,9 +1,13 @@
 import { Box, Container, Grid, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const ShortTitle = () => {
-  const [text, setText] = useState("");
-  const maxLength = 50;
+const ShortTitle = ({ setStepValue, values }) => {
+  const [text, setText] = useState(values.shortTitle || "");
+  const maxLength = 80;
+
+  useEffect(() => {
+    setStepValue("shortTitle", text);
+  }, [text]);
 
   const handleChange = (event) => {
     const newText = event.target.value;
@@ -22,7 +26,7 @@ const ShortTitle = () => {
               md: "650px",
             },
             margin: "auto",
-            marginBottom: "120px",
+            marginBottom: "130px",
           }}
         >
           <Grid container spacing={2}>

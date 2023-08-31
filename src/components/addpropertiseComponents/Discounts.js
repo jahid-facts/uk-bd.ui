@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -9,17 +9,56 @@ import {
   Grid,
   Input,
   InputAdornment,
-  TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
 
-const Discounts = () => {
-  const [activeBox, setActiveBox] = useState(null);
+const Discounts = ({ setStepValue, values }) => {
+  const [activeBoxes, setActiveBoxes] = useState([]);
+  const [listingValue, setListingValue] = useState("");
+  const [weeklyValue, setWeeklyValue] = useState("");
+  const [monthlyValue, setMonthlyValue] = useState("");
+
+  useEffect(() => {
+    const updatedActiveBoxes = [];
+    if (values && values.discounts) {
+      if (values.discounts.listing) {
+        updatedActiveBoxes.push(null);
+        setListingValue(values.discounts.listing);
+      }
+      if (values.discounts.weekly) {
+        updatedActiveBoxes.push(null);
+        setWeeklyValue(values.discounts.weekly);
+      }
+      if (values.discounts.monthly) {
+        updatedActiveBoxes.push(null);
+        setMonthlyValue(values.discounts.monthly);
+      }
+    }
+    setActiveBoxes(updatedActiveBoxes);
+  }, []);
 
   const handleBoxClick = (boxId) => {
-    setActiveBox(boxId === activeBox ? null : boxId);
+    let updatedActiveBoxes;
+    if (activeBoxes.includes(boxId)) {
+      updatedActiveBoxes = activeBoxes.filter((id) => id !== boxId);
+    } else {
+      updatedActiveBoxes = [...activeBoxes, boxId];
+    }
+
+    setActiveBoxes(updatedActiveBoxes);
   };
+
+  const isBoxActive = (boxId) => activeBoxes.includes(boxId);
+
+  useEffect(() => {
+    setStepValue("discounts", {
+      listing: activeBoxes.includes("listing") ? listingValue : null,
+      weekly: activeBoxes.includes("weekly") ? weeklyValue : null,
+      monthly: activeBoxes.includes("monthly") ? monthlyValue : null,
+    });
+  }, [activeBoxes, listingValue, weeklyValue, monthlyValue, setStepValue]);
+
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   const boxStyles = {
     width: "100%",
@@ -38,8 +77,6 @@ const Discounts = () => {
     border: "2px solid #111 !important",
   };
 
-  // check box
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
   return (
     <>
       <Container>
@@ -50,7 +87,7 @@ const Discounts = () => {
               md: "650px",
             },
             margin: "auto",
-            marginBottom: "120px",
+            marginBottom: "130px",
           }}
         >
           <Grid container spacing={2}>
@@ -61,12 +98,13 @@ const Discounts = () => {
                 first reviews.
               </Typography>
             </Grid>
+            {/* Listing Discount */}
             <Grid item xs={12}>
               <Card
                 sx={{
                   border: "1px solid #999",
                   ...boxStyles,
-                    ...(activeBox === 1 ? activeBoxStyles : {}),
+                  ...(isBoxActive("listing") ? activeBoxStyles : {}),
                   boxShadow: "none",
                 }}
               >
@@ -83,19 +121,26 @@ const Discounts = () => {
                           sx={{
                             border: "1px solid #999",
                             borderRadius: "10px",
-                            display: "flex", 
-                            alignItems: "center", 
-                            height: '45px',
+                            display: "flex",
+                            alignItems: "center",
+                            height: "45px",
                           }}
                         >
                           <Input
+                            value={listingValue}
+                            type="number"
+                            onChange={(e) => setListingValue(e.target.value)}
                             inputProps={{
+                              min:0,
+                              max:70,
                               maxLength: 2,
                               style: {
-                                width: "25px",
+                                width: "45px", 
                                 fontWeight: "bold",
                                 fontSize: "20px",
                                 paddingLeft: "10px",
+                                WebkitAppearance: "none",
+                                MozAppearance: "textfield",
                               },
                             }}
                             endAdornment={
@@ -105,10 +150,14 @@ const Discounts = () => {
                                 }}
                                 position="end"
                               >
-                               <span  style={{
-                                  fontWeight: "bold",
-                                  fontSize: "20px",
-                                }}>$</span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    fontSize: "20px",
+                                  }}
+                                >
+                                  $
+                                </span>
                               </InputAdornment>
                             }
                             disableUnderline
@@ -129,8 +178,8 @@ const Discounts = () => {
                       </Box>
                       <Checkbox
                         {...label}
-                        // defaultChecked
-                        onClick={() => handleBoxClick(1)}
+                        checked={isBoxActive("listing")}
+                        onClick={() => handleBoxClick("listing")}
                         sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                       />
                     </Box>
@@ -138,12 +187,13 @@ const Discounts = () => {
                 </CardActionArea>
               </Card>
             </Grid>
+            {/* Weekly Discount */}
             <Grid item xs={12}>
               <Card
                 sx={{
                   border: "1px solid #999",
                   ...boxStyles,
-                    ...(activeBox === 2 ? activeBoxStyles : {}),
+                  ...(isBoxActive("weekly") ? activeBoxStyles : {}),
                   boxShadow: "none",
                 }}
               >
@@ -160,17 +210,21 @@ const Discounts = () => {
                           sx={{
                             border: "1px solid #999",
                             borderRadius: "10px",
-                            display: "flex", 
-                            alignItems: "center", 
-                            height: '45px',
+                            display: "flex",
+                            alignItems: "center",
+                            height: "45px",
                           }}
                         >
                           <Input
-                          value='20'
+                            type="number"
+                            value={weeklyValue}
+                            onChange={(e) => setWeeklyValue(e.target.value)}
                             inputProps={{
+                              min:0,
+                              max:70,
                               maxLength: 2,
                               style: {
-                                width: "25px",
+                                width: "45px",
                                 fontWeight: "bold",
                                 fontSize: "20px",
                                 paddingLeft: "10px",
@@ -183,10 +237,14 @@ const Discounts = () => {
                                 }}
                                 position="end"
                               >
-                               <span  style={{
-                                  fontWeight: "bold",
-                                  fontSize: "20px",
-                                }}>$</span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    fontSize: "20px",
+                                  }}
+                                >
+                                  $
+                                </span>
                               </InputAdornment>
                             }
                             disableUnderline
@@ -207,8 +265,8 @@ const Discounts = () => {
                       </Box>
                       <Checkbox
                         {...label}
-                        // defaultChecked
-                        onClick={() => handleBoxClick(2)}
+                        checked={isBoxActive("weekly")}
+                        onClick={() => handleBoxClick("weekly")}
                         sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                       />
                     </Box>
@@ -216,12 +274,13 @@ const Discounts = () => {
                 </CardActionArea>
               </Card>
             </Grid>
+            {/* Monthly Discount */}
             <Grid item xs={12}>
               <Card
                 sx={{
                   border: "1px solid #999",
                   ...boxStyles,
-                    ...(activeBox === 3 ? activeBoxStyles : {}),
+                  ...(isBoxActive("monthly") ? activeBoxStyles : {}),
                   boxShadow: "none",
                 }}
               >
@@ -238,16 +297,20 @@ const Discounts = () => {
                           sx={{
                             border: "1px solid #999",
                             borderRadius: "10px",
-                            display: "flex", 
-                            alignItems: "center", 
-                            height: '45px',
+                            display: "flex",
+                            alignItems: "center",
+                            height: "45px",
                           }}
                         >
                           <Input
+                            type="number"
+                            value={monthlyValue}
+                            onChange={(e) => setMonthlyValue(e.target.value)}
                             inputProps={{
-                              maxLength: 2,
+                              min:0,
+                              max:70,
                               style: {
-                                width: "25px",
+                                width: "45px",
                                 fontWeight: "bold",
                                 fontSize: "20px",
                                 paddingLeft: "10px",
@@ -260,10 +323,14 @@ const Discounts = () => {
                                 }}
                                 position="end"
                               >
-                               <span  style={{
-                                  fontWeight: "bold",
-                                  fontSize: "20px",
-                                }}>$</span>
+                                <span
+                                  style={{
+                                    fontWeight: "bold",
+                                    fontSize: "20px",
+                                  }}
+                                >
+                                  $
+                                </span>
                               </InputAdornment>
                             }
                             disableUnderline
@@ -278,14 +345,14 @@ const Discounts = () => {
                             Monthly discount
                           </Typography>
                           <Typography variant="h6" fontSize={"16px"}>
-                          For stays of 28 nights or more
+                            For stays of 28 nights or more
                           </Typography>
                         </Box>
                       </Box>
                       <Checkbox
                         {...label}
-                        // defaultChecked
-                        onClick={() => handleBoxClick(3)}
+                        checked={isBoxActive("monthly")}
+                        onClick={() => handleBoxClick("monthly")}
                         sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
                       />
                     </Box>

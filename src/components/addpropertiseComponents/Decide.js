@@ -8,10 +8,14 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Decide = () => {
-  const [activeBox, setActiveBox] = useState(null);
+const Decide = ({ setStepValue, values }) => {
+  const [activeBox, setActiveBox] = useState(values.decide || null);
+
+  useEffect(() => {
+    setStepValue("decide", activeBox);
+  }, [activeBox, setStepValue]);
 
   const handleBoxClick = (boxId) => {
     setActiveBox(boxId === activeBox ? null : boxId);
@@ -44,7 +48,7 @@ const Decide = () => {
               md: "650px",
             },
             margin: "auto",
-            marginBottom: '120px'
+            marginBottom: '130px'
           }}
         >
           <Grid container spacing={2}>

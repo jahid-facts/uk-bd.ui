@@ -1,4 +1,3 @@
-import { Icon } from "@iconify/react";
 import {
   Box,
   Container,
@@ -7,9 +6,21 @@ import {
   InputAdornment,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Prices = () => {
+const Prices = ({ setStepValue, values }) => {
+  const [price, setPrice] = useState(values.prices || "");
+
+  useEffect(() => {
+    setStepValue("prices", price);
+  }, [price]);
+
+  const handlePrice = (e) => {
+    const value = parseFloat(e.target.value);
+    if (!isNaN(value) && value >= 0) {
+      setPrice(value);
+    }
+  };
   return (
     <>
       <Container>
@@ -20,7 +31,7 @@ const Prices = () => {
               md: "650px",
             },
             margin: "auto",
-            marginBottom: "120px",
+            marginBottom: "130px",
           }}
         >
           <Grid container spacing={2}>
@@ -35,15 +46,19 @@ const Prices = () => {
                 textAlign={"center"}
                 mr={2}
                 sx={{
-                  border: '1px solid #c3c3c3',
-                  borderRadius: '10px',
+                  border: "1px solid #c3c3c3",
+                  borderRadius: "10px",
                   display: "flex",
                   alignItems: "center",
-                  margin:'auto', 
+                  margin: "auto",
                 }}
               >
                 <Input
+                  type="number"
+                  value={price}
+                  onChange={handlePrice}
                   inputProps={{
+                    min: 0,
                     maxLength: 10,
                     style: {
                       // width: "25px",
