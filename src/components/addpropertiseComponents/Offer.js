@@ -25,7 +25,6 @@ const Offer = ({ setStepValue, values }) => {
     const updatedActiveBoxes = activeBoxes.includes(boxId)
       ? activeBoxes.filter((id) => id !== boxId)
       : [...activeBoxes, boxId];
-
     setActiveBoxes(updatedActiveBoxes);
     setStepValue("offer", updatedActiveBoxes);
   };

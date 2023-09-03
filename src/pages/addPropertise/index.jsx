@@ -16,8 +16,11 @@ import UploadPhoto from "../../components/addpropertiseComponents/UploadPhoto";
 import Prices from "../../components/addpropertiseComponents/Prices";
 import Decide from "../../components/addpropertiseComponents/Decide";
 import Discounts from "../../components/addpropertiseComponents/Discounts";
+import { postApi } from "../../config/configAxios";
+import { useNavigate } from "react-router-dom";
 
 export default function AddPropertise() {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [localStorageKey] = useState("propertyValues");
   const [stepValues, setStepValues] = useState(
@@ -38,38 +41,52 @@ export default function AddPropertise() {
     }
   );
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
-  // const currentStepValue = stepValues[Object.keys(stepValues)[activeStep]];
+
+  const dataSubmitServer = async () => {
+    
+    const data = {
+      userId: "616e57d8c72a1f3cecc5a2a0",
+      placeDescribesId: stepValues.placeDescibe,
+      typeOfPlaceId: stepValues.typeOfPlace,
+      located: stepValues.locatedPlace,
+      address: stepValues.addAddress,
+      guests: stepValues.guests,
+      amenitiesIds: stepValues.offer,
+      images: stepValues.uploadPhoto,
+      title: stepValues.shortTitle,
+      description: stepValues.description,
+      decideReservations: stepValues.decide,
+      price: stepValues.prices,
+      discounts: stepValues.discounts,
+    };
+    try {
+      const response = await postApi("/add-property", data);
+      localStorage.removeItem(localStorageKey);
+      navigate("/profile");
+    } catch (error) {
+      console.error("Error submitting data:", error);
+    }
+  };
+
   const handleNext = () => {
+    if (activeStep === 12) {
+      dataSubmitServer();
+    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   useEffect(() => {
     localStorage.setItem(localStorageKey, JSON.stringify(stepValues));
-  
+
     const currentStepValue = stepValues[Object.keys(stepValues)[activeStep]];
-  
-    if (activeStep === 6 && !Array.isArray(currentStepValue)) {
-      // setIsNextButtonDisabled(true);
-      return;
-    }
-    if (
-      activeStep === 7 &&
-      (!Array.isArray(currentStepValue) || currentStepValue.length < 5)
-    ) {
-      setIsNextButtonDisabled(true);
-      return;
-    } 
-  
+
     if (currentStepValue === null || currentStepValue === "") {
       setIsNextButtonDisabled(true);
       return;
     }
-  
+
     setIsNextButtonDisabled(false);
   }, [stepValues, activeStep]);
-  
-
-  // localStorage.removeItem(localStorageKey);
 
   const handleBack = () => {
     setIsNextButtonDisabled(false);
@@ -112,6 +129,7 @@ export default function AddPropertise() {
           <AddAdrress
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
+            handleNext={handleNext}
           />
         );
       case 5:
@@ -187,7 +205,7 @@ export default function AddPropertise() {
       {getStepContent(activeStep, handleStepChange, parsedSavedStepValues)}
       <MobileStepper
         variant="progress"
-        steps={14} // Number of steps (excluding progress bar)
+        steps={13} // Number of steps (excluding progress bar)
         position="static"
         activeStep={activeStep}
         sx={{
@@ -211,14 +229,9 @@ export default function AddPropertise() {
             variant="contained"
             color={"secondary"}
             onClick={handleNext}
-            disabled={activeStep === 14 || isNextButtonDisabled}
+            disabled={activeStep === 13 || isNextButtonDisabled}
           >
-            Next
-            {/* {theme.direction === "rtl" ? (
-              <KeyboardArrowLeft /> 
-            ) : (
-              <KeyboardArrowRight />
-            )} */}
+            {activeStep === 12 ? "Finish" : "Next"}
           </Button>
         }
         backButton={
@@ -235,11 +248,6 @@ export default function AddPropertise() {
             onClick={handleBack}
             disabled={activeStep === 0}
           >
-            {/* {theme.direction === "rtl" ? (
-              <KeyboardArrowRight />
-            ) : (
-              <KeyboardArrowLeft />
-            )} */}
             Back
           </Button>
         }

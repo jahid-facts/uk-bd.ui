@@ -17,7 +17,7 @@ const NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/search?";
 const SearchBar = (props) => {
   const { handleListItemClick } = props;
   const [searchText, setSearchText] = useState("");
-  const [placeList, setPlaceList] = useState([]);
+  const [placeList, setPlaceList] = useState([]); // Initialize as an empty array
 
   useEffect(() => {
     if (searchText) {
@@ -35,9 +35,13 @@ const SearchBar = (props) => {
       fetch(`${NOMINATIM_BASE_URL}${queryString}`, requestOption)
         .then((response) => response.json())
         .then((result) => {
+          console.log("API Response:", result); // Log the API response
           setPlaceList(result);
         })
-        .catch((error) => console.log("error: ", error));
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setPlaceList([]); // Handle the error by clearing the list
+        });
     } else {
       setPlaceList([]);
     }
@@ -55,39 +59,47 @@ const SearchBar = (props) => {
             placeholder="Search locations"
           />
           <button type="submit" className="searchbar__button">
-            <Icon icon={'mdi:search'} />
+            <Icon icon={"mdi:search"} />
           </button>
         </div>
       </Box>
-      <Box 
-      sx={{
-        mt:2,
-        p:'0px',
-        background: 'rgb(57 57 57 / 90%);'
-      }}
+      <Box
+        sx={{
+          mt: 2,
+          p: "0px",
+          background: "rgb(57 57 57 / 90%);",
+        }}
       >
         <List>
-          {placeList.map((data) => (
-            <div key={data?.place_id}>
-              <ListItemButton
-                onClick={() => {
-                  handleListItemClick(data);
-                  setPlaceList([]);
-                }}
-              > 
-                <ListItemIcon>
-                  <img
-                    style={{ width: "15px" }}
-                    src={assets.images.location}
-                    alt=""
+          {Array.isArray(placeList) ? (
+            placeList.map((data) => (
+              <div key={data?.place_id}>
+                <ListItemButton
+                  onClick={() => {
+                    handleListItemClick(data);
+                    setPlaceList([]);
+                  }}
+                >
+                  <ListItemIcon>
+                    <img
+                      style={{ width: "15px" }}
+                      src={assets.images.location}
+                      alt=""
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={data?.display_name}
+                    sx={{ color: "#d6d6d6" }}
                   />
-                </ListItemIcon>
-                <ListItemText primary={data?.display_name} sx={{color:"#d6d6d6"}} />
-              </ListItemButton>
-              <Divider sx={{ backgroundColor: "#808080" }} />
-
-            </div>
-          ))}
+                </ListItemButton>
+                <Divider sx={{ backgroundColor: "#808080" }} />
+              </div>
+            ))
+          ) : (
+            <ListItemButton>
+              <ListItemText primary="No results found" sx={{ color: "#d6d6d6" }} />
+            </ListItemButton>
+          )}
         </List>
       </Box>
     </>

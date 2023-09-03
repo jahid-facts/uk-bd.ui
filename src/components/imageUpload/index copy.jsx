@@ -1,38 +1,43 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./style.css";
 import { Icon } from "@iconify/react";
-import { Alert, Box } from "@mui/material";
+import { Box } from "@mui/material";
 
 const ImageUpload = ({ setStepValue, values }) => {
-  const [image, setImage] = useState(values.uploadPhoto || null); // Store a single image
+  const [images, setImages] = useState(values.uploadPhoto || []);
   const [isDroping, setIsDroping] = useState(false);
   const inputRef = useRef();
 
   const setStepValueCallback = useCallback(setStepValue, []);
 
   useEffect(() => {
-    setStepValueCallback("uploadPhoto", image); // Store the single image
-  }, [image, setStepValueCallback]);
+    setStepValueCallback("uploadPhoto", images);
+  }, [images, setStepValueCallback]);
 
-  function selectFiles() { 
+  function selectFiles() {
     inputRef.current.click();
   }
 
+ 
   function onFileSelect(e) {
     const files = e.target.files;
     if (files.length === 0) return;
 
-    const file = files[0]; // Get the first selected file
-    if (file.type.split("/")[0] !== "image") return; // Check if it's an image
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].type.split("/")[0] !== "image") continue;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      setImage({
-        name: file.name,
-        url: event.target.result,
-      });
-    };
-    reader.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImages((prevImages) => [
+          ...prevImages,
+          {
+            name: files[i].name,
+            url: event.target.result,
+          },
+        ]);
+      };
+      reader.readAsDataURL(files[i]);
+    }
   }
 
   function onDragOver(e) {
@@ -53,24 +58,23 @@ const ImageUpload = ({ setStepValue, values }) => {
     onFileSelect({ target: { files } });
   }
 
-  function deleteImage() {
-    setImage(null);
+  function deleteImage(index) {
+    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   }
 
   return (
     <div className="card">
       <div className="top">
         <p>
-          Upload and showcase your image with uniqueness ensured - no
+          Upload and showcase your images with uniqueness ensured - no
           duplicates allowed.
         </p>
-        <Alert sx={{mt:2}} severity="warning">Only one image allowed here. you can upload multiple images after property listing</Alert>
       </div>
       <div
         className={`drag-area ${isDroping ? "active" : ""}`}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
-        onDrop={onDrop}
+        onDrop={onDrop} // Changed from onDrag to onDrop
       >
         <Box textAlign={"center"}>
           <Icon icon={"ion:image-outline"} style={{ fontSize: "50px" }} />
@@ -90,7 +94,7 @@ const ImageUpload = ({ setStepValue, values }) => {
                   className="file"
                   ref={inputRef}
                   onChange={onFileSelect}
-                  accept="image/*" // Add this to restrict file types to images
+                  accept="image/*" 
                 />
               </>
             )}
@@ -98,14 +102,17 @@ const ImageUpload = ({ setStepValue, values }) => {
         </Box>
       </div>
       <div className="container">
-        {image && (
-          <div className="image">
-            <span className="delete" onClick={deleteImage}>
+        {images.map((img, index) => (
+          <div className="image" key={index}>
+            <span className="delete" onClick={() => deleteImage(index)}>
               &times;
             </span>
-            <img src={image.url} alt={image.name} />
+            <img
+              src={img.url}
+              alt={img.name}
+            />
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

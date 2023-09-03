@@ -1,9 +1,4 @@
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import SearchBar from "../leaftLet/SearchBar";
 import Maps from "../leaftLet/Maps";
@@ -11,7 +6,7 @@ import Maps from "../leaftLet/Maps";
 const LocatedPlace = ({ setStepValue, values }) => {
   const [selectPosition, setSelectPosition] = useState(null);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (values.locatedPlace !== null) {
       const localLocation = {
         lat: values.locatedPlace.lat,
@@ -19,7 +14,7 @@ const LocatedPlace = ({ setStepValue, values }) => {
       };
       setSelectPosition(localLocation);
     }
-  },[])
+  }, []);
   const handleListItemClick = (data) => {
     const location = {
       lat: data.lat,

@@ -1,4 +1,6 @@
-import { Icon } from "@iconify/react";
+import React, { useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import {
   Box,
   Container,
@@ -10,60 +12,39 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
 
-const AddAddress = ({ setStepValue, values }) => {
-  const [selectedCountry, setSelectedCountry] = useState("");
-  const [address, setAddress] = useState(values.addAddress || {
-    country: "",
-    addressLine1: "",
-    addressLine2: "",
-    addressLine3: "",
-    city: "",
-    state: "", 
-    postalCode: "",
-    street: "", 
+// Define validation schema using Yup
+const validationSchema = Yup.object().shape({
+  country: Yup.string().required("Country is required"),
+  addressLine1: Yup.string().required("Address line 1 is required"),
+  postalCode: Yup.string().required("Postal code is required"),
+  // Add validation rules for other fields here
+});
+
+const AddAddress = ({ setStepValue, values, handleNext }) => {
+  const initialValues = {
+    country: values.locatedPlace.address.country,
+    addressLine1: values.addAddress ? values.addAddress.addressLine1 : "",
+    addressLine2: values.addAddress ? values.addAddress.addressLine2 : "",
+    addressLine3: values.addAddress ? values.addAddress.addressLine3 : "",
+    city: values.addAddress ? values.addAddress.city : "",
+    state: values.addAddress ? values.addAddress.state : "",
+    postalCode: values.addAddress ? values.addAddress.postalCode : "",
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    validationSchema,
+    onSubmit: (values) => {
+      setStepValue("addAddress", values);
+      console.log("addAddress", values);
+      handleNext();
+    },
   });
 
   useEffect(() => {
-    if (values.addAddress) {
-      setAddress(values.addAddress);
-      setSelectedCountry(values.addAddress.country);
-    }
-  }, []); 
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setAddress((prevAddress) => ({ 
-      ...prevAddress,
-      [name]: value,
-    }));
-  };
-
-  useEffect(() => {
-    setStepValue("addAddress", address);
-  }, [address,]);
-
-  const handleCountryChange = (event) => {
-    const { value } = event.target;
-    setSelectedCountry(value);
-    handleFormData(value);
-  };
-
-  const handleFormData = (selectedCountryValue) => {
-    const updatedStreet =
-      address.addressLine1 +
-      ", " +
-      address.addressLine2 +
-      ", " +
-      address.addressLine3;
-
-    setAddress((prevAddress) => ({
-      ...prevAddress,
-      country: selectedCountryValue,
-      street: updatedStreet,
-    }));
-  };
+    setStepValue("addAddress", formik.values);
+  }, [formik.values, setStepValue]);
 
   return (
     <>
@@ -87,85 +68,121 @@ const AddAddress = ({ setStepValue, values }) => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Box pt={3}>
-                <FormControl sx={{ width: "100%" }}>
-                  <InputLabel htmlFor="country">Country / Region</InputLabel>
-                  <Select
-                    id="country"
-                    name="country"
-                    label="Country / Region"
-                    value={address.country} 
-                    onChange={handleCountryChange} // Handle value change
-                  >
-                    <MenuItem value="Bangladesh">Bangladesh</MenuItem>
-                    <MenuItem value="United Kingdom">United Kingdom</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box pt={3}>
-                <TextField
-                  type="text"
-                  label="Address line 1"
-                  fullWidth
-                  name="addressLine1"
-                  value={address.addressLine1}
-                  onChange={handleInputChange}
-                />
-              </Box>
-              <Box pt={2}>
-                <TextField
-                  type="text"
-                  label="Address line 2"
-                  fullWidth
-                  name="addressLine2"
-                  value={address.addressLine2}
-                  onChange={handleInputChange}
-                />
-              </Box>
-              <Box pt={2}>
-                <TextField
-                  type="text"
-                  label="Address line 3"
-                  fullWidth
-                  name="addressLine3"
-                  value={address.addressLine3}
-                  onChange={handleInputChange}
-                />
-              </Box>
-              <Box pt={2}>
-                <TextField
-                  type="text"
-                  label="City / village (if applicable)"
-                  fullWidth
-                  name="city"
-                  value={address.city}
-                  onChange={handleInputChange}
-                />
-              </Box>
-              <Box pt={2}>
-                <TextField
-                  type="text"
-                  label="State / province / territory (if applicable)"
-                  fullWidth
-                  name="state"
-                  value={address.state}
-                  onChange={handleInputChange}
-                />
-              </Box>
-              <Box pt={2}>
-                <TextField
-                  type="text"
-                  label="Postal code (if applicable)"
-                  fullWidth
-                  name="postalCode"
-                  value={address.postalCode}
-                  onChange={handleInputChange}
-                />
-              </Box>
+              <form onSubmit={formik.handleSubmit}>
+                <Box pt={3}>
+                  <FormControl sx={{ width: "100%" }}>
+                    <InputLabel htmlFor="country">Country / Region</InputLabel>
+                    <Select
+                      id="country"
+                      name="country"
+                      label="Country / Region"
+                      value={formik.values.country}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    >
+                      <MenuItem value={values.locatedPlace.address.country}>
+                        {values.locatedPlace.address.country}
+                      </MenuItem>
+                      {/* <MenuItem value="United Kingdom">United Kingdom</MenuItem> */}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box pt={3}>
+                  <TextField
+                    type="text"
+                    label="Address line 1"
+                    fullWidth
+                    name="addressLine1"
+                    value={formik.values.addressLine1}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.addressLine1 &&
+                      Boolean(formik.errors.addressLine1)
+                    }
+                  />
+                  {formik.touched.addressLine1 &&
+                    formik.errors.addressLine1 && (
+                      <Typography variant="caption" color="error">
+                        {formik.errors.addressLine1}
+                      </Typography>
+                    )}
+                </Box>
+                <Box pt={2}>
+                  <TextField
+                    type="text"
+                    label="Address line 2"
+                    fullWidth
+                    name="addressLine2"
+                    value={formik.values.addressLine2}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
+                <Box pt={2}>
+                  <TextField
+                    type="text"
+                    label="Address line 3"
+                    fullWidth
+                    name="addressLine3"
+                    value={formik.values.addressLine3}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
+                <Box pt={2}>
+                  <TextField
+                    type="text"
+                    label="City / village (if applicable)"
+                    fullWidth
+                    name="city"
+                    value={formik.values.city}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.city && Boolean(formik.errors.city)}
+                  />
+                  {formik.touched.city && formik.errors.city && (
+                    <Typography variant="caption" color="error">
+                      {formik.errors.city}
+                    </Typography>
+                  )}
+                </Box>
+                <Box pt={2}>
+                  <TextField
+                    type="text"
+                    label="State / province / territory (if applicable)"
+                    fullWidth
+                    name="state"
+                    value={formik.values.state}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
+                <Box pt={2}>
+                  <TextField
+                    type="text"
+                    label="Postal code (if applicable)"
+                    fullWidth
+                    name="postalCode"
+                    value={formik.values.postalCode}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.postalCode &&
+                      Boolean(formik.errors.postalCode)
+                    }
+                  />
+                  {formik.touched.postalCode && formik.errors.postalCode && (
+                    <Typography variant="caption" color="error">
+                      {formik.errors.postalCode}
+                    </Typography>
+                  )}
+                </Box>
+              </form>
             </Grid>
           </Grid>
         </Box>
-      </Container> 
+      </Container>
     </>
   );
 };

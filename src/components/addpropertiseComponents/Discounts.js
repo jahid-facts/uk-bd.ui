@@ -14,28 +14,34 @@ import {
 
 const Discounts = ({ setStepValue, values }) => {
   const [activeBoxes, setActiveBoxes] = useState([]);
-  const [listingValue, setListingValue] = useState("");
-  const [weeklyValue, setWeeklyValue] = useState("");
-  const [monthlyValue, setMonthlyValue] = useState("");
+  const [listingValue, setListingValue] = useState(
+    values.discounts ? values.discounts.listingValue : ""
+  );
+  const [weeklyValue, setWeeklyValue] = useState(
+    values.discounts ? values.discounts.weeklyValue : ""
+  );
+  const [monthlyValue, setMonthlyValue] = useState(
+    values.discounts ? values.discounts.monthlyValue : ""
+  );
 
   useEffect(() => {
     const updatedActiveBoxes = [];
-    if (values && values.discounts) {
-      if (values.discounts.listing) {
-        updatedActiveBoxes.push(null);
-        setListingValue(values.discounts.listing);
+
+    // Check if values exist and set the corresponding activeBoxes
+    if (values.discounts) {
+      if (values.discounts.listingValue) {
+        updatedActiveBoxes.push("listing");
       }
-      if (values.discounts.weekly) {
-        updatedActiveBoxes.push(null);
-        setWeeklyValue(values.discounts.weekly);
+      if (values.discounts.weeklyValue) {
+        updatedActiveBoxes.push("weekly");
       }
-      if (values.discounts.monthly) {
-        updatedActiveBoxes.push(null);
-        setMonthlyValue(values.discounts.monthly);
+      if (values.discounts.monthlyValue) {
+        updatedActiveBoxes.push("monthly");
       }
     }
+
     setActiveBoxes(updatedActiveBoxes);
-  }, []);
+  }, [values.discounts]);
 
   const handleBoxClick = (boxId) => {
     let updatedActiveBoxes;
@@ -46,17 +52,16 @@ const Discounts = ({ setStepValue, values }) => {
     }
 
     setActiveBoxes(updatedActiveBoxes);
+
+    // Update setStepValue based on the updated active boxes
+    setStepValue("discounts", {
+      listingValue: updatedActiveBoxes.includes("listing") ? listingValue : null,
+      weeklyValue: updatedActiveBoxes.includes("weekly") ? weeklyValue : null,
+      monthlyValue: updatedActiveBoxes.includes("monthly") ? monthlyValue : null,
+    });
   };
 
   const isBoxActive = (boxId) => activeBoxes.includes(boxId);
-
-  useEffect(() => {
-    setStepValue("discounts", {
-      listing: activeBoxes.includes("listing") ? listingValue : null,
-      weekly: activeBoxes.includes("weekly") ? weeklyValue : null,
-      monthly: activeBoxes.includes("monthly") ? monthlyValue : null,
-    });
-  }, [activeBoxes, listingValue, weeklyValue, monthlyValue, setStepValue]);
 
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -131,11 +136,11 @@ const Discounts = ({ setStepValue, values }) => {
                             type="number"
                             onChange={(e) => setListingValue(e.target.value)}
                             inputProps={{
-                              min:0,
-                              max:70,
+                              min: 0,
+                              max: 70,
                               maxLength: 2,
                               style: {
-                                width: "45px", 
+                                width: "45px",
                                 fontWeight: "bold",
                                 fontSize: "20px",
                                 paddingLeft: "10px",
@@ -220,8 +225,8 @@ const Discounts = ({ setStepValue, values }) => {
                             value={weeklyValue}
                             onChange={(e) => setWeeklyValue(e.target.value)}
                             inputProps={{
-                              min:0,
-                              max:70,
+                              min: 0,
+                              max: 70,
                               maxLength: 2,
                               style: {
                                 width: "45px",
@@ -307,8 +312,8 @@ const Discounts = ({ setStepValue, values }) => {
                             value={monthlyValue}
                             onChange={(e) => setMonthlyValue(e.target.value)}
                             inputProps={{
-                              min:0,
-                              max:70,
+                              min: 0,
+                              max: 70,
                               style: {
                                 width: "45px",
                                 fontWeight: "bold",
