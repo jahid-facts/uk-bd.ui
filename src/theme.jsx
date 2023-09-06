@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from "@mui/material"; 
 
 export const theme = createTheme({
   palette: {
@@ -16,5 +16,6 @@ export const theme = createTheme({
       light: "#f1f1f1",
     },
     activeColor: '#fff',
+    boxShadow:'14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
   },
 });

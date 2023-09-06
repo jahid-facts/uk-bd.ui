@@ -14,6 +14,8 @@ import OtpScreen from "./pages/OTP";
 import "react-toastify/dist/ReactToastify.css";
 import OtpCheck from "./helpers/OtpCheck";
 import { ToastContainer } from "react-toastify";
+import Hosting from "./pages/hosting";
+import PropertyList from "./pages/propertyList";
 
 
 export default function App() {
@@ -32,6 +34,8 @@ export default function App() {
               <Route path="/admin" element={<AdminLayout />} /> 
               <Route path="/*" element={<AppLayout />} />
               <Route path="*" element={<PageNotFound />} />
+              <Route path="/hosting" element={<Hosting />} />
+              <Route path="/property/list" element={<PropertyList />} />
               
           </Routes>
         </BrowserRouter>

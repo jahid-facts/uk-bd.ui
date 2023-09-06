@@ -1,12 +1,5 @@
-import React from "react"; 
-import {
-  Card,
-  CardMedia,
-  Typography,
-  Box,
-  Checkbox,
-} from "@mui/material";
-
+import React from "react";
+import { Card, CardMedia, Typography, Box, Checkbox } from "@mui/material";
 import { Star, FavoriteBorder, Favorite } from "@mui/icons-material";
 import SlideImage from "../slide";
 import { Link } from "react-router-dom";
@@ -17,12 +10,13 @@ export default function ReservationCard(props) {
   return (
     <Card
       sx={{
-        maxWidth: "100%",
         boxShadow: "none",
-        backgroundColor: "#fff",
+        backgroundColor: "transparent",
         "&:hover": {
-          background: "#ffffff",
+          background: "transparent",
         },
+        position: "relative",
+       maxWidth: 345, 
       }}
     >
       <CardMedia>
@@ -52,7 +46,6 @@ export default function ReservationCard(props) {
             fontSize={"16px"}
             color="otherColor.main"
           >
-            {/* Chaing Rai, Thailand */}
             {title}
           </Typography>
           <Box display={"flex"} alignItems={"center"}>
@@ -61,7 +54,7 @@ export default function ReservationCard(props) {
               variant="subtitle2"
               color="text.secondary"
               fontSize={"15px"}
-              justifyItems={"center"}  
+              justifyItems={"center"}
             >
               {review}
             </Typography>
@@ -73,7 +66,6 @@ export default function ReservationCard(props) {
           fontSize={"15px"}
           justifyItems={"center"}
         >
-          {/* 29 km to Lam Nam Kok National Park Aug 19 - 24 */}
           {subtitle}
         </Typography>
         <Typography

@@ -9,7 +9,7 @@ import {
   Toolbar,
   styled,
 } from "@mui/material";
-import { EmailOutlined, FavoriteBorder } from "@mui/icons-material";
+import { EmailOutlined, NotificationsOutlined } from "@mui/icons-material";
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 import Category from "../category/Category";
@@ -106,7 +106,7 @@ export default function Navbar(props) {
               </Box>
 
               <Stack direction={"row"} alignItems={"center"}>
-                <Link to={"/profile"}>
+                <Link to={"/hosting"}> 
                   <Button
                     variant="text"
                     size="small"
@@ -126,6 +126,22 @@ export default function Navbar(props) {
                   </Button>
                 </Link>
                 
+                {/* <Link to={"/notifications"}> */}
+                <Badge
+                  max={9}
+                  badgeContent={10}
+                  color="secondary"
+                  sx={{
+                    marginRight: "30px",
+                    display: {
+                      xs: "none",
+                      md: "block",
+                    },
+                  }}
+                >
+                  <NotificationsOutlined color="action" /> 
+                </Badge>
+                {/* </Link> */}
                 <Link to={"/profile"}>
                 <Badge
                   max={9}

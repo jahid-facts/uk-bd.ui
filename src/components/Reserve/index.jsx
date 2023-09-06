@@ -11,14 +11,13 @@ import {
   Paper,
   ClickAwayListener,
 } from "@mui/material";
-import { KeyboardArrowDown, Star } from "@mui/icons-material";
+import { Close, KeyboardArrowDown, Star } from "@mui/icons-material";
 import WhenDate from "../searchFilter/WhenDate";
 import Who from "../searchFilter/Who";
 
 const Reserve = () => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
-
 
   const prevOpen = React.useRef(open);
   React.useEffect(() => {
@@ -53,11 +52,10 @@ const Reserve = () => {
     setSelectedRange(newRange);
   };
 
-  
   const disabledDates = [
-    new Date('2023-08-23'),
-    new Date('2023-08-24'), 
-    new Date('2023-08-25'), 
+    new Date("2023-08-23"),
+    new Date("2023-08-24"),
+    new Date("2023-08-25"),
   ];
 
   // who
@@ -65,7 +63,11 @@ const Reserve = () => {
   const [childrenCount, setChildrenCount] = useState(0);
   const [infantsCount, setInfantsCount] = useState(0);
   const [petsCount, setPetsCount] = useState(0);
-  const allCountsTrue = adultsCount === 0 && childrenCount === 0 && infantsCount === 0 && petsCount === 0;
+  const allCountsTrue =
+    adultsCount === 0 &&
+    childrenCount === 0 &&
+    infantsCount === 0 &&
+    petsCount === 0;
 
   return (
     <div>
@@ -133,7 +135,7 @@ const Reserve = () => {
               placement="bottom-start"
               transition
               disablePortal
-              sx={{ zIndex:10, }}
+              sx={{ zIndex: 10 }}
             >
               {({ TransitionProps, placement }) => (
                 <Grow
@@ -157,7 +159,18 @@ const Reserve = () => {
                       }
                     >
                       <Box p={"15px"}>
-                        <WhenDate onSelect={handleDateSelect} disabledDates={disabledDates} />
+                        <Button
+                          onClick={() =>
+                            setOpenPopper((prev) => ({ ...prev, 1: false }))
+                          }
+                          sx={{ textTransform: "capitalize", mb: 1 }}
+                        >
+                          <Close sx={{ color: "#ff0000", fontSize: "16px" }} />
+                        </Button>
+                        <WhenDate
+                          onSelect={handleDateSelect}
+                          disabledDates={disabledDates}
+                        />
                       </Box>
                     </ClickAwayListener>
                   </Paper>
@@ -188,15 +201,12 @@ const Reserve = () => {
                 </Typography>
                 <Typography variant="h4" fontSize={"13px"} mt={"5px"}>
                   {adultsCount > 0 && <span> {adultsCount} Adults </span>}
-                  {childrenCount > 0 && <span>, {childrenCount} Children </span>}
+                  {childrenCount > 0 && (
+                    <span>, {childrenCount} Children </span>
+                  )}
                   {infantsCount > 0 && <span>, {infantsCount} Infants </span>}
                   {petsCount > 0 && <span>, {petsCount} Pets</span>}
-                  {allCountsTrue ? (
-                    <p>Add guests</p>
-                    ) : (
-                      ''
-                    )}
-                  
+                  {allCountsTrue ? <p>Add guests</p> : ""}
                 </Typography>
               </Box>
               <IconButton>
@@ -211,7 +221,7 @@ const Reserve = () => {
             placement="bottom-start"
             transition
             disablePortal
-            sx={{ zIndex:10, }}
+            sx={{ zIndex: 10 }}
           >
             {({ TransitionProps, placement }) => (
               <Grow
@@ -236,6 +246,14 @@ const Reserve = () => {
                     }
                   >
                     <Box>
+                        <Button
+                          onClick={() =>
+                            setOpenPopper((prev) => ({ ...prev, 2: false }))
+                          }
+                          sx={{ textTransform: "capitalize", }}
+                        >
+                          <Close sx={{ color: "#ff0000", fontSize: "16px" }} />
+                        </Button>
                       <Who
                         adultsCount={adultsCount}
                         setAdultsCount={setAdultsCount}
@@ -258,7 +276,7 @@ const Reserve = () => {
           fullWidth
           color="secondary"
           size="large"
-          sx={{ fontWeight: "600", cursor:'pointer' }}
+          sx={{ fontWeight: "600", cursor: "pointer" }}
         >
           Reserve
         </Button>

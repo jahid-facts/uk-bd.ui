@@ -14,8 +14,9 @@ import assets from "../../assets";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/features/AuthSilce";
 import { useIsAuthenticated } from "../../helpers/Authenticated";
+import { Icon } from '@iconify/react';
 
-export const Avater = () => {
+export const Avater = () => { 
   const [anchorEl, setAnchorEl] = useState(null);
   const isAuthenticated = useIsAuthenticated();
 
@@ -52,8 +53,9 @@ export const Avater = () => {
           px={"17px"}
           py={"5px"}
           borderRadius={"50px"}
-        >
-          <MenuIcon color={"otherColor"} />
+        > 
+          {/* <MenuIcon color={"otherColor"} /> */}
+          <Icon icon="bxs:down-arrow" />
           <Avatar
             alt="Remy Sharp"
             src={assets.images.avatar}
