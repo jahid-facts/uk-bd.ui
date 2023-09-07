@@ -303,7 +303,7 @@ const Reserve = () => {
           my={2}
         >
           <Typography variant="h4" fontSize={"15px"}>
-            Airbnb service fee
+            UK-BD service fee
           </Typography>
           <Typography variant="h4" fontSize={"15px"}>
             $ 17

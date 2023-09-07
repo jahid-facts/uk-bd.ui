@@ -13,6 +13,7 @@ export const BottomBar = () => {
           left: 0,
           right: 0,
           display: { xs: "block", md: "none" }, 
+          zIndex: 9999,
         }}
         elevation={3}
       >

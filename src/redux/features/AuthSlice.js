@@ -1,5 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { toast } from "react-toastify";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"; 
 import { postApi } from "../../config/configAxios";
 
 export const registerUser = createAsyncThunk(

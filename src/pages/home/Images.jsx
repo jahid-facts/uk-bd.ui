@@ -1,6 +1,5 @@
 import assets from "../../assets";
 
-
 const images = [
   {
     id: 1,
@@ -8,6 +7,7 @@ const images = [
     image2: assets.images.hotelImage.hotel2,
     image3: assets.images.hotelImage.hotel3,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 2,
@@ -15,6 +15,7 @@ const images = [
     image2: assets.images.hotelImage.hotel5,
     image3: assets.images.hotelImage.hotel6,
     price: getRandomPrice(),
+    status: "De-Active",
   },
   {
     id: 3,
@@ -22,6 +23,7 @@ const images = [
     image2: assets.images.hotelImage.hotel8,
     image3: assets.images.hotelImage.hotel9,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 4,
@@ -29,6 +31,7 @@ const images = [
     image2: assets.images.hotelImage.hotel12,
     image3: assets.images.hotelImage.hotel13,
     price: getRandomPrice(),
+    status: "De-Active",
   },
   {
     id: 5,
@@ -36,6 +39,7 @@ const images = [
     image2: assets.images.hotelImage.hotel15,
     image3: assets.images.hotelImage.hotel16,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 6,
@@ -43,6 +47,7 @@ const images = [
     image2: assets.images.hotelImage.hotel1,
     image3: assets.images.hotelImage.hotel2,
     price: getRandomPrice(),
+    status: "De-Active",
   },
   {
     id: 7,
@@ -50,6 +55,7 @@ const images = [
     image2: assets.images.hotelImage.hotel5,
     image3: assets.images.hotelImage.hotel4,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 8,
@@ -57,6 +63,7 @@ const images = [
     image2: assets.images.hotelImage.hotel1,
     image3: assets.images.hotelImage.hotel13,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 9,
@@ -64,6 +71,7 @@ const images = [
     image2: assets.images.hotelImage.hotel9,
     image3: assets.images.hotelImage.hotel17,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 10,
@@ -71,6 +79,7 @@ const images = [
     image2: assets.images.hotelImage.hotel12,
     image3: assets.images.hotelImage.hotel14,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 11,
@@ -78,6 +87,7 @@ const images = [
     image2: assets.images.hotelImage.hotel7,
     image3: assets.images.hotelImage.hotel10,
     price: getRandomPrice(),
+    status: "De-Active",
   },
   {
     id: 12,
@@ -85,6 +95,7 @@ const images = [
     image2: assets.images.hotelImage.hotel1,
     image3: assets.images.hotelImage.hotel11,
     price: getRandomPrice(),
+    status: "De-Active",
   },
   {
     id: 13,
@@ -92,6 +103,7 @@ const images = [
     image2: assets.images.hotelImage.hotel2,
     image3: assets.images.hotelImage.hotel12,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 14,
@@ -99,6 +111,7 @@ const images = [
     image2: assets.images.hotelImage.hotel1,
     image3: assets.images.hotelImage.hotel11,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 15,
@@ -106,6 +119,7 @@ const images = [
     image2: assets.images.hotelImage.hotel8,
     image3: assets.images.hotelImage.hotel13,
     price: getRandomPrice(),
+    status: "Active",
   },
   {
     id: 16,
@@ -113,6 +127,7 @@ const images = [
     image2: assets.images.hotelImage.hotel11,
     image3: assets.images.hotelImage.hotel10,
     price: getRandomPrice(),
+    status: "Active",
   },
 ];
 

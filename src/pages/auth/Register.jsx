@@ -10,9 +10,6 @@ import {
   InputAdornment,
   FormControl,
   TextField,
-  MenuItem,
-  Select,
-  //   Alert,
 } from "@mui/material";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -24,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { clearMessage, registerUser } from "../../redux/features/AuthSilce";
+import { clearMessage, registerUser } from "../../redux/features/AuthSlice";
 
 const RegisterScreen = () => {
   const dispatch = useDispatch();

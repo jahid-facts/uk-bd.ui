@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./otp.css";
 import { Box, Button, Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { clearMessage, verifyOTP } from "../../redux/features/AuthSilce";
+import { clearMessage, verifyOTP } from "../../redux/features/AuthSlice";
 import jwtDecode from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

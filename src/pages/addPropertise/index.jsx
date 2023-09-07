@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MobileStepper from "@mui/material/MobileStepper";
 import { Button } from "@mui/material";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import StartPropertise from "../../components/addpropertiseComponents/StartPropertise";
 import PlaceDescibe from "../../components/addpropertiseComponents/PlaceDescibe";
 import AddAdrress from "../../components/addpropertiseComponents/AddAddress";
@@ -17,7 +15,8 @@ import Prices from "../../components/addpropertiseComponents/Prices";
 import Decide from "../../components/addpropertiseComponents/Decide";
 import Discounts from "../../components/addpropertiseComponents/Discounts";
 import { postApi } from "../../config/configAxios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; 
+import jwtDecode from "jwt-decode"; 
 
 export default function AddPropertise() {
   const navigate = useNavigate();
@@ -43,9 +42,15 @@ export default function AddPropertise() {
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
 
   const dataSubmitServer = async () => {
-    
+    const authUserInfo = localStorage.getItem('user')
+    const user = authUserInfo ? JSON.parse(authUserInfo) : null;
+    const token = user.token;
+    const decodedToken = jwtDecode(token);
+    const userId = decodedToken.userInfo._id;
+
+
     const data = {
-      userId: "616e57d8c72a1f3cecc5a2a0",
+      userId: userId,
       placeDescribesId: stepValues.placeDescibe,
       typeOfPlaceId: stepValues.typeOfPlace,
       located: stepValues.locatedPlace,
@@ -60,7 +65,7 @@ export default function AddPropertise() {
       discounts: stepValues.discounts,
     };
     try {
-      const response = await postApi("/add-property", data);
+      await postApi("/add-property", data);  
       localStorage.removeItem(localStorageKey);
       navigate("/hosting");
     } catch (error) {
@@ -86,7 +91,7 @@ export default function AddPropertise() {
     }
 
     setIsNextButtonDisabled(false);
-  }, [stepValues, activeStep]);
+  }, [stepValues, activeStep, localStorageKey]);
 
   const handleBack = () => {
     setIsNextButtonDisabled(false);

@@ -1,15 +1,12 @@
 // Layout.js
 
 import React, { useState } from "react";
-import {
-  Box,
-  IconButton,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, IconButton, useMediaQuery } from "@mui/material";
 import SideBar from "./SideBar";
 import TopBar from "./TopBar";
 import { theme } from "../../theme";
 import MenuIcon from "@mui/icons-material/Menu";
+import BottomBar from "../../components/bottom_bar/BottomBar";
 
 const Layout = ({ children, title }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -49,6 +46,7 @@ const Layout = ({ children, title }) => {
         <TopBar setOpen={setDrawerOpen} open={drawerOpen} title={title} />
         {children}
       </Box>
+      <BottomBar />
     </Box>
   );
 };

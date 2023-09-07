@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardMedia, Typography, Box, Checkbox } from "@mui/material";
-import { Star, FavoriteBorder, Favorite } from "@mui/icons-material";
+import { Star, Favorite, FavoriteTwoTone } from "@mui/icons-material";
 import SlideImage from "../slide";
 import { Link } from "react-router-dom";
 
@@ -22,9 +22,9 @@ export default function ReservationCard(props) {
       <CardMedia>
         <SlideImage image1={image1} image2={image2} image3={image3} />
       </CardMedia>
-      <Box position={"absolute"} top={"10px"} right={"10px"}>
+      <Box position={"absolute"} top={"10px"} right={"10px"}> 
         <Checkbox
-          icon={<FavoriteBorder sx={{ fontSize: "29px", color: "#fff" }} />}
+          icon={<FavoriteTwoTone sx={{ fontSize: "29px", color: "#fff" }} />}
           checkedIcon={
             <Favorite sx={{ fontSize: "29px", color: "secondary.main" }} />
           }

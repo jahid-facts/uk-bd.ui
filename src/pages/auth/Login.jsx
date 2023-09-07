@@ -10,23 +10,21 @@ import {
   InputAdornment,
   FormControl,
   TextField,
-  Alert,
 } from "@mui/material";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Yup from "yup";
 import assets from "../../assets";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { clearMessage, loginUser, verifyOTP } from "../../redux/features/AuthSilce";
+import { clearMessage, loginUser, verifyOTP } from "../../redux/features/AuthSlice";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
   const {error, success} = useSelector((state) => state.auth);
 
   const initialValues = {
@@ -42,7 +40,7 @@ const LoginScreen = () => {
       .required("Password is required")
       .min(6, "Password must have at least 6 characters"),
   });
-  const loginState = useSelector((state) => state.auth.isLoggedIn);
+  
   const {
     values,
     touched,
