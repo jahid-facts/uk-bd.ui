@@ -8,6 +8,7 @@ import {
   Container,
   Divider,
   Grid,
+  Rating,
   Typography,
 } from "@mui/material";
 import {
@@ -19,10 +20,16 @@ import {
   Tv,
   DriveEtaOutlined,
   Camera,
+  Star,
+  VerifiedUser,
 } from "@mui/icons-material";
 import assets from "../../assets";
 // import WhenDate from "../../components/searchFilter/WhenDate";
 import Reserve from "../../components/Reserve";
+import { Link } from "react-router-dom";
+import Maps from "../../components/leaftLet/Maps";
+import OpenImageList from "./ImageList";
+// import Maps from "../../components/leaftLet/Maps";
 
 function srcset(image, size, rows = 1, cols = 1) {
   return {
@@ -34,6 +41,21 @@ function srcset(image, size, rows = 1, cols = 1) {
 }
 
 export default function ReservationDetails() {
+  const [selectPosition, setSelectPosition] = React.useState(null);
+  const [openImageList, setOpenImageList] = React.useState(false);
+
+  const handleImageLIst = () => {
+    setOpenImageList(!openImageList);
+  };
+
+  React.useEffect(() => {
+    const location = {
+      lat: 13.7535,
+      lon: 100.4921,
+    };
+    setSelectPosition(location);
+  }, []);
+
   return (
     <Container maxWidth="lg">
       <Grid container spacing={4}>
@@ -76,11 +98,16 @@ export default function ReservationDetails() {
         </Grid>
         <Grid item xs={12}>
           <ImageList
-            sx={{ width: "100%", borderRadius: "20px" }}
+            sx={{
+              width: "100%",
+              borderRadius: "20px",
+              "&:hover": { cursor: "pointer" },
+            }}
             variant="quilted"
             cols={4}
-            rowHeight={141}
-          >
+            rowHeight={110}
+            onClick={handleImageLIst}
+          >  
             {itemData.map((item, index) => (
               <ImageListItem
                 key={index}
@@ -123,11 +150,13 @@ export default function ReservationDetails() {
                     16+ guests . 5 bedrooms . 9 beds . 6 baths
                   </Typography>
                 </Box>
-                <Avatar
-                  alt="Remy Sharp"
-                  src={assets.images.avatar}
-                  sx={{ width: 60, height: 60 }}
-                />
+                <Link to={"#avater"}>
+                  <Avatar
+                    alt="Remy Sharp"
+                    src={assets.images.avatar}
+                    sx={{ width: 60, height: 60 }}
+                  />
+                </Link>
               </Box>
               <Divider />
               <Box display={"flex"} my={4} flexDirection={"row"}>
@@ -223,7 +252,7 @@ export default function ReservationDetails() {
                   What this place offers
                 </Typography>
                 <Grid container spacing={2}>
-                  <Grid item xs={6}>
+                  <Grid item xs={12} sm={6}>
                     <Box display={"flex"} flexDirection={"row"}>
                       <Box mr={3}>
                         <Wifi color={"primary.main"} />
@@ -239,7 +268,7 @@ export default function ReservationDetails() {
                       </Box>
                     </Box>
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={12} sm={6}>
                     <Box display={"flex"} flexDirection={"row"}>
                       <Box mr={3}>
                         <Tv color={"primary.main"} />
@@ -255,7 +284,7 @@ export default function ReservationDetails() {
                       </Box>
                     </Box>
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={12} sm={6}>
                     <Box display={"flex"} flexDirection={"row"}>
                       <Box mr={3}>
                         <DriveEtaOutlined color={"primary.main"} />
@@ -271,7 +300,7 @@ export default function ReservationDetails() {
                       </Box>
                     </Box>
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={12} sm={6}>
                     <Box display={"flex"} flexDirection={"row"}>
                       <Box mr={3}>
                         <Camera color={"primary.main"} />
@@ -296,6 +325,301 @@ export default function ReservationDetails() {
               </Box>
 
               <Divider />
+              <Grid container spacing={3}>
+                <Grid item xs={12} mt={4}>
+                  <div id="avater"></div>
+                  <Box display={"flex"} alignItems={"center"}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={assets.images.avatar}
+                      sx={{ width: 60, height: 60, mr: 3 }}
+                    />
+                    <Box>
+                      <Typography fontWeight={"bold"} fontSize={"20px"}>
+                        Hosted by Nature
+                      </Typography>
+                      <Typography variant="text" fontSize={"14px"}>
+                        Joined in December 2022
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box display={"flex"} alignItems={"center"}>
+                    <Star />
+                    <Typography variant="text" m={2}>
+                      Review
+                    </Typography>
+                    <VerifiedUser />
+                    <Typography variant="text" m={2}>
+                      Identity Verified
+                    </Typography>
+                  </Box>
+                  <Box mt={1}>
+                    <Typography variant="text" mt={1}>
+                      Response time : within an hour
+                    </Typography>
+                    <br></br>
+                    <Typography variant="text" mt={1}>
+                      Last active : tow hour ago
+                    </Typography>
+                  </Box>
+                  <Button
+                    sx={{ my: 3, textTransform: "capitalize" }}
+                    variant={"contained"}
+                    size={"large"}
+                  >
+                    Contact Host
+                  </Button>
+                </Grid>
+              </Grid>
+              <Divider sx={{ my: 4 }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Typography variant="h6" fontSize={"18px"} fontWeight={"600"}>
+                    Where you’ll be
+                  </Typography>
+                  <Typography variant="text" mt={1} fontSize={"14px"}>
+                    Dhanmondi, Dhaka, Bangladesh
+                  </Typography>
+                  <Box mt={2} mb={3} height={"300px"}>
+                    <Maps selectPosition={selectPosition} />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Divider sx={{ my: 4 }} />
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Typography variant="h6" fontSize={"18px"} fontWeight={"600"}>
+                    Reviews
+                  </Typography>
+                  <Typography
+                    variant="text"
+                    fontSize={"15px"}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    824 reviews for this property
+                    <Rating
+                      name="half-rating-read"
+                      value={3.5}
+                      precision={0.5}
+                      readOnly
+                      sx={{ mx: 1 }}
+                    />
+                    4.5
+                  </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography
+                    variant="h6"
+                    mt={2}
+                    mb={1}
+                    fontSize={"16px"}
+                    fontWeight={"600"}
+                  >
+                    Rating Breakdown
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
+                  <Typography
+                    variant="text"
+                    fontSize={"14px"}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    Communication
+                    <Rating name="read-only" value={"4"} readOnly />
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
+                  <Typography
+                    variant="text"
+                    fontSize={"14px"}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    Recommend
+                    <Rating name="read-only" value={"5"} readOnly />
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
+                  <Typography
+                    variant="text"
+                    fontSize={"14px"}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    Services
+                    <Rating name="read-only" value={"2"} readOnly />
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
+                  <Typography
+                    variant="text"
+                    fontSize={"14px"}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    Cleanliness
+                    <Rating name="read-only" value={"3"} readOnly />
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
+                  <Typography
+                    variant="text"
+                    fontSize={"14px"}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    Location
+                    <Rating name="read-only" value={"5"} readOnly />
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} my={1}>
+                  <Box display={"flex"} alignItems={"start"}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      sx={{ width: 40, height: 40, mr: 3 }}
+                    />
+                    <Box>
+                      <Typography fontWeight={"bold"}>Taylor</Typography>
+                      <Box>
+                        <Typography
+                          variant="text"
+                          fontSize={"14px"}
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <Rating
+                            name="Taylor"
+                            sx={{ fontSize: "18px" }}
+                            value={5}
+                            precision={0.5}
+                            readOnly
+                          />{" "}
+                          5
+                          <Divider
+                            sx={{ mx: 1 }}
+                            orientation="vertical"
+                            variant="fullWidth"
+                            flexItem
+                          />{" "}
+                          14th December 2022
+                        </Typography>
+                        <Box mt={1}>
+                          <Typography variant="text" fontSize={"14px"}>
+                            Absolutely highly recommend! It’s the total
+                            experience from the beginning all the way through.
+                            The hosts are the professional, engaging and the
+                            kindest I’ve ever encountered
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} my={1}>
+                  <Box display={"flex"} alignItems={"start"}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      sx={{ width: 40, height: 40, mr: 3 }}
+                    />
+                    <Box>
+                      <Typography fontWeight={"bold"}>Miller</Typography>
+                      <Box>
+                        <Typography
+                          variant="text"
+                          fontSize={"14px"}
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <Rating
+                            name="half-rating-read"
+                            sx={{ fontSize: "18px" }}
+                            value={3.5}
+                            precision={0.5}
+                            readOnly
+                          />{" "}
+                          3.5
+                          <Divider
+                            sx={{ mx: 1 }}
+                            orientation="vertical"
+                            variant="fullWidth"
+                            flexItem
+                          />{" "}
+                          14th December 2022
+                        </Typography>
+                        <Box mt={1}>
+                          <Typography variant="text" fontSize={"14px"}>
+                            Absolutely highly recommend! It’s the total
+                            experience from the beginning all the way through.
+                            The hosts are the professional, engaging and the
+                            kindest I’ve ever encountered
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} my={1}>
+                  <Box display={"flex"} alignItems={"start"}>
+                    <Avatar
+                      alt="Remy Sharp"
+                      sx={{ width: 40, height: 40, mr: 3 }}
+                    />
+                    <Box>
+                      <Typography fontWeight={"bold"}>Devid</Typography>
+                      <Box>
+                        <Typography
+                          variant="text"
+                          fontSize={"14px"}
+                          sx={{ display: "flex", alignItems: "center" }}
+                        >
+                          <Rating
+                            name="half-rating-read"
+                            sx={{ fontSize: "18px" }}
+                            value={4}
+                            precision={0.5}
+                            readOnly
+                          />{" "}
+                          4
+                          <Divider
+                            sx={{ mx: 1 }}
+                            orientation="vertical"
+                            variant="fullWidth"
+                            flexItem
+                          />{" "}
+                          14th December 2022
+                        </Typography>
+                        <Box mt={1}>
+                          <Typography variant="text" fontSize={"14px"}>
+                            Absolutely highly recommend! It’s the total
+                            experience from the beginning all the way through.
+                            The hosts are the professional, engaging and the
+                            kindest I’ve ever encountered
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+              <Divider sx={{ my: 4 }} />
+
               {/* <Box sx={{ my: "40px" }}>
                 <Typography
                   variant="h6"
@@ -320,11 +644,26 @@ export default function ReservationDetails() {
               </Box> */}
             </Grid>
             <Grid item xs={4}>
-              <Reserve />
+              <Box
+                sx={{
+                  display: {
+                    xs: "none",
+                    md: "block",
+                    position: "sticky",
+                    top: "110px",
+                  },
+                }}
+              >
+                <Reserve />
+              </Box>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+      <OpenImageList
+        open={openImageList}
+        onClose={() => setOpenImageList(false)}
+      />
     </Container>
   );
 }

@@ -7,13 +7,12 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import { AddHome, Logout, PersonAdd, Settings } from "@mui/icons-material";
+import { AddHome, ArrowDropDownCircle, Logout, PersonAdd, Settings } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import assets from "../../assets";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/features/AuthSlice";
 import { useIsAuthenticated } from "../../helpers/Authenticated";
-import { Icon } from "@iconify/react";
 
 export const Avater = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -53,9 +52,8 @@ export const Avater = () => {
           py={"5px"}
           borderRadius={"50px"}
         >
-          {/* <MenuIcon color={"otherColor"} /> */}
-          <Icon icon="bxs:down-arrow" style={{ fontSize: "12px" }} />
-          <Avatar
+          <ArrowDropDownCircle  />
+          <Avatar 
             alt="Remy Sharp"
             src={assets.images.avatar}
             sx={{ width: 30, height: 30, marginLeft: "10px" }}

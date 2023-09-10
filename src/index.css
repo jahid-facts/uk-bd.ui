@@ -30,3 +30,9 @@ a{
   border-radius: 20px;
 }
 
+/* // for slider */
+.carousel .thumb   {
+  width: 70px;
+  height: 45px;
+}
+

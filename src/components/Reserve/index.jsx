@@ -14,6 +14,7 @@ import {
 import { Close, KeyboardArrowDown, Star } from "@mui/icons-material";
 import WhenDate from "../searchFilter/WhenDate";
 import Who from "../searchFilter/Who";
+import { Link } from "react-router-dom";
 
 const Reserve = () => {
   const [open, setOpen] = React.useState(false);
@@ -246,14 +247,14 @@ const Reserve = () => {
                     }
                   >
                     <Box>
-                        <Button
-                          onClick={() =>
-                            setOpenPopper((prev) => ({ ...prev, 2: false }))
-                          }
-                          sx={{ textTransform: "capitalize", }}
-                        >
-                          <Close sx={{ color: "#ff0000", fontSize: "16px" }} />
-                        </Button>
+                      <Button
+                        onClick={() =>
+                          setOpenPopper((prev) => ({ ...prev, 2: false }))
+                        }
+                        sx={{ textTransform: "capitalize" }}
+                      >
+                        <Close sx={{ color: "#ff0000", fontSize: "16px" }} />
+                      </Button>
                       <Who
                         adultsCount={adultsCount}
                         setAdultsCount={setAdultsCount}
@@ -271,15 +272,18 @@ const Reserve = () => {
             )}
           </Popper>
         </Box>
-        <Button
-          variant="contained"
-          fullWidth
-          color="secondary"
-          size="large"
-          sx={{ fontWeight: "600", cursor: "pointer" }}
-        >
-          Reserve
-        </Button>
+
+        <Link to={"/payments"}>
+          <Button
+            variant="contained"
+            fullWidth
+            color="secondary"
+            size="large"
+            sx={{ fontWeight: "600", cursor: "pointer" }}
+          >
+            Reserve
+          </Button>
+        </Link>
         <Box textAlign={"center"} fontSize={"13px"} my={2}>
           <Typography variant="text">You won't be charged yet</Typography>
         </Box>
