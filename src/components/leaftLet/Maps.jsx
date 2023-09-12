@@ -40,7 +40,7 @@ export default function Maps(props) {
       <MapContainer
         center={position}
         zoom={12}
-        style={{ width: "100%", height: "100%" }}
+        style={{ width: "100%", height: "100%" }} 
       >
         <TileLayer
           attribution={osm.maptiler.attribution}

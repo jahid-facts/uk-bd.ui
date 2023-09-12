@@ -17,6 +17,7 @@ import Discounts from "../../components/addpropertiseComponents/Discounts";
 import { postApi } from "../../config/configAxios";
 import { useNavigate } from "react-router-dom"; 
 import jwtDecode from "jwt-decode"; 
+import ExacteLocation from "../../components/addpropertiseComponents/ExacteLocation";
 
 export default function AddPropertise() {
   const navigate = useNavigate();
@@ -139,54 +140,62 @@ export default function AddPropertise() {
         );
       case 5:
         return (
-          <Guests
+          <ExacteLocation
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
+            handleNext={handleNext}
           />
         );
       case 6:
         return (
-          <Offer
+          <Guests
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
       case 7:
         return (
-          <UploadPhoto
+          <Offer
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
       case 8:
         return (
-          <ShortTitle
+          <UploadPhoto
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
       case 9:
         return (
-          <Description
+          <ShortTitle
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
       case 10:
         return (
-          <Decide
+          <Description
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
       case 11:
         return (
-          <Prices
+          <Decide
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
       case 12:
+        return (
+          <Prices
+            setStepValue={handleStepChange}
+            values={parsedSavedStepValues}
+          />
+        );
+      case 13:
         return (
           <Discounts
             setStepValue={handleStepChange}
