@@ -1,9 +1,7 @@
 import {
   Box,
   Grid,
-  IconButton,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import React from "react";
 import {
@@ -13,7 +11,7 @@ import {
   MonetizationOnOutlined,
 } from "@mui/icons-material";
 import { theme } from "../../theme";
-import Layout from "../userDashboardLayout";
+import DashboardLayout from "../../layouts/dashboard";
 
 const Hosting = () => {
   return (

@@ -1,5 +1,4 @@
 import React from "react";
-import Layout from "../userDashboardLayout";
 import {
   Button,
   Card,
@@ -55,7 +54,7 @@ const PropertyList = () => {
   const handleFilterClose = () => {
     setFilter(null);
   };
-
+ 
   return (
     <DashboardLayout title={"Property list"}>
       <Grid container spacing={3}>
