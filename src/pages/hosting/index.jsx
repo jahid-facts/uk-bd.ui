@@ -17,7 +17,7 @@ import Layout from "../userDashboardLayout";
 
 const Hosting = () => {
   return (
-    <Layout title={'Hosting'}>
+    <DashboardLayout title={'Hosting'}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <Box
@@ -186,7 +186,7 @@ const Hosting = () => {
           </Box>
         </Grid>
       </Grid>
-    </Layout>
+    </DashboardLayout>
   );
 };
 

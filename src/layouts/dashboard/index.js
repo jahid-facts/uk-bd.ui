@@ -1,5 +1,3 @@
-// Layout.js
-
 import React, { useState } from "react";
 import { Box, IconButton, useMediaQuery } from "@mui/material";
 import SideBar from "./SideBar";
@@ -8,7 +6,7 @@ import { theme } from "../../theme";
 import MenuIcon from "@mui/icons-material/Menu";
 import BottomBar from "../../components/bottom_bar/BottomBar";
 
-const Layout = ({ children, title }) => {
+const DashboardLayout = ({ children, title }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const isMdScreen = useMediaQuery((theme) => theme.breakpoints.up("md"));
@@ -51,4 +49,4 @@ const Layout = ({ children, title }) => {
   );
 };
 
-export default Layout;
+export default DashboardLayout;

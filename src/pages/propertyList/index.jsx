@@ -29,6 +29,7 @@ import {
   Search,
 } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import DashboardLayout from "../../layouts/dashboard";
 
 const PropertyList = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -56,7 +57,7 @@ const PropertyList = () => {
   };
 
   return (
-    <Layout title={"Property list"}>
+    <DashboardLayout title={"Property list"}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Grid container spacing={2}>
@@ -260,7 +261,7 @@ const PropertyList = () => {
           </Button>
         </Box>
       </Popover>
-    </Layout>
+    </DashboardLayout>
   );
 };
 
