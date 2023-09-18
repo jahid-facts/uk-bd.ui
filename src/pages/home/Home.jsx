@@ -3,10 +3,11 @@ import { Box, Container, Grid } from "@mui/material";
 
 import images from "./Images";
 import ReservationCard from "../../components/reservationCard";
+import { AppLayout } from "../../layouts/appLayout";
 
 export default function Home() {
   return (
-    <>
+    <AppLayout>
       <Container maxWidth="xl">
         <Grid container spacing={4}>
           {images
@@ -27,6 +28,6 @@ export default function Home() {
         </Grid>
         <Box sx={{ display: { md: "none" } }}></Box>
       </Container>
-    </>
+    </AppLayout>
   );
 }

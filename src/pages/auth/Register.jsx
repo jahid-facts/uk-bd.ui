@@ -81,10 +81,10 @@ const RegisterScreen = () => {
           })
         );
 
-       if(response.payload.status){
-        navigate("/login");
-        action.resetForm();
-       }
+        if (response.payload.status) {
+          navigate("/login");
+          action.resetForm();
+        }
         setSubmitting(false);
       } catch (error) {
         setSubmitting(false);
@@ -98,10 +98,11 @@ const RegisterScreen = () => {
       dispatch(clearMessage());
     }
     if (success) {
-      toast.success(success); 
+      toast.success(success);
+      navigate("/");
       dispatch(clearMessage());
     }
-  },[error, success, dispatch ]);
+  }, [error, success, dispatch, navigate]);
 
   const handleClickShowPassword = (field) => {
     if (field === "password") {
@@ -121,7 +122,7 @@ const RegisterScreen = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
-      bgcolor={'#e7e7e7'}
+      bgcolor={"#e7e7e7"}
     >
       <Box p={4}>
         <Grid container spacing={4}>
@@ -158,7 +159,7 @@ const RegisterScreen = () => {
                 width: "100%",
               }}
               borderRadius={"20px"}
-              bgcolor={'#fff'}
+              bgcolor={"#fff"}
             >
               <h1>Sign Up</h1>
               <form noValidate autoComplete="off" onSubmit={handleSubmit}>

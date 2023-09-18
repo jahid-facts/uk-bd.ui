@@ -1,46 +1,63 @@
 import React from "react";
 import { ThemeProvider } from "@mui/material";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Provider } from "react-redux"; // Import the Provider
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { theme } from "./theme";
 import { PageNotFound } from "./pages/404";
-import { AppLayout } from "./layouts/appLayout";
-import { AdminLayout } from "./layouts/adminLayout";
 import RegisterScreen from "./pages/auth/Register";
-import store from "./redux/store";
 import LoginScreen from "./pages/auth/Login";
-import AuthProtected from "./helpers/AuthProtected";
 import OtpScreen from "./pages/OTP";
 import "react-toastify/dist/ReactToastify.css";
-import OtpCheck from "./helpers/OtpCheck";
 import { ToastContainer } from "react-toastify";
-import Hosting from "./pages/hosting";
-import PropertyList from "./pages/propertyList";
-
+import { AppRoutes } from "./routes/AppRoutes";
+import { AdminRoutes } from "./routes/AdminRoutes";
 
 export default function App() {
+  const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
+  const isEmailVerified = useSelector((state) => state.auth.isEmailVerified);
+
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Routes> 
-            <Route element={<AuthProtected />}>
-              <Route path="/login" element={<LoginScreen />} />
-              <Route path="/register" element={<RegisterScreen />} />
-            </Route>
-            <Route element={<OtpCheck />}>
-              <Route path="/otp-verify" element={<OtpScreen />} /> 
-            </Route>
-              <Route path="/admin" element={<AdminLayout />} /> 
-              <Route path="/*" element={<AppLayout />} />
-              <Route path="*" element={<PageNotFound />} />
-              <Route path="/hosting" element={<Hosting />} />
-              <Route path="/property/list" element={<PropertyList />} />
-              
-          </Routes>
-        </BrowserRouter>
-          <ToastContainer position="top-right" autoClose={3000} />
-      </ThemeProvider>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? <Navigate to="/" replace /> : <LoginScreen />
+            }
+          />
+
+          <Route
+            path="/register"
+            element={
+              isAuthenticated ? <Navigate to="/" replace /> : <RegisterScreen />
+            }
+          />
+          <Route
+            path="/otp-verify"
+            element={
+              isAuthenticated ? (
+                isEmailVerified ? (
+                  <Navigate to="/" replace />
+                ) : (
+                  <OtpScreen />
+                )
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
+          {/* app all routes  */}
+          <Route path="/*" element={<AppRoutes />} />
+
+          {/* admin all routes  */}
+          <Route path="/admin" element={<AdminRoutes />} />
+
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </BrowserRouter>
+      <ToastContainer position="top-right" autoClose={3000} />
+    </ThemeProvider>
   );
 }

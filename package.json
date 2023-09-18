@@ -1,5 +1,6 @@
 {
-  "name": "airbnb",
+  "name": "uk-bd",
+  "homepage": "http://uk-bd.ipsitacomputersltd.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

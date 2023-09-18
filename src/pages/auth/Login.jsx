@@ -15,17 +15,23 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import * as Yup from "yup";
 import assets from "../../assets";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { clearMessage, loginUser, verifyOTP } from "../../redux/features/AuthSlice";
+import {
+  clearMessage,
+  loginUser,
+  verifyOTP,
+} from "../../redux/features/AuthSlice";
 
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const {error, success} = useSelector((state) => state.auth);
+  const { error, success } = useSelector((state) => state.auth);
+
+  const navigate = useNavigate();
 
   const initialValues = {
     email: "",
@@ -40,7 +46,7 @@ const LoginScreen = () => {
       .required("Password is required")
       .min(6, "Password must have at least 6 characters"),
   });
-  
+
   const {
     values,
     touched,
@@ -57,12 +63,11 @@ const LoginScreen = () => {
     onSubmit: async (values, action) => {
       try {
         setSubmitting(true);
-        dispatch(verifyOTP({email:values.email, otp: '12345678'}));
-        
+        dispatch(verifyOTP({ email: values.email, otp: "12345678" }));
+
         const loginData = { email: values.email, password: values.password };
         // Dispatch the loginUser action
         await dispatch(loginUser(loginData));
-      
         setSubmitting(false);
       } catch {
         setSubmitting(false);
@@ -77,10 +82,10 @@ const LoginScreen = () => {
     }
     if (success) {
       toast.success(success);
+      navigate("/");
       dispatch(clearMessage());
     }
-  }, [error, success, dispatch]);
-
+  }, [error, success, dispatch, navigate]);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -94,7 +99,7 @@ const LoginScreen = () => {
       justifyContent="center"
       alignItems="center"
       minHeight="100vh"
-      bgcolor={'#e7e7e7'}
+      bgcolor={"#e7e7e7"}
     >
       <Box p={4}>
         <Grid container spacing={4}>
@@ -106,16 +111,16 @@ const LoginScreen = () => {
               minHeight="100%"
             >
               <Box p={2}>
-                <Link to={'/'}>
-                <img
-                  src={assets.images.logo}
-                  alt="Airbnb Logo"
-                  style={{
-                    height: "80px",
-                    cursor: "pointer",
-                    border: "1px solid #f3f3f3",
-                  }}
-                />
+                <Link to={"/"}>
+                  <img
+                    src={assets.images.logo}
+                    alt="Airbnb Logo"
+                    style={{
+                      height: "80px",
+                      cursor: "pointer",
+                      border: "1px solid #f3f3f3",
+                    }}
+                  />
                 </Link>
                 <Box p={2}></Box>
                 <p>Explore the ideas throughtout the world</p>
@@ -131,7 +136,7 @@ const LoginScreen = () => {
                 width: "100%",
               }}
               borderRadius={"20px"}
-              bgcolor={'#fafcfe'}
+              bgcolor={"#fafcfe"}
             >
               <h1>Sign In</h1>
               <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -183,11 +188,7 @@ const LoginScreen = () => {
                             onMouseDown={handleMouseDownPassword}
                             edge="end"
                           >
-                            {showPassword ? (
-                              <VisibilityOff />
-                            ) : (
-                              <Visibility />
-                            )}
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                         </InputAdornment>
                       }
@@ -208,8 +209,8 @@ const LoginScreen = () => {
                     </p>
                   )}
                 </Box>
-                
-              {/* {error && <Alert severity="error">{error}</Alert>} */}
+
+                {/* {error && <Alert severity="error">{error}</Alert>} */}
                 <Box
                   pt={3}
                   display="flex"

@@ -7,12 +7,13 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { AppLayout } from "../../layouts/appLayout";
 
 const PaymentForm = (prop) => {
   const { basePrice, totalNights, extra } = prop;
 
   return (
-    <>
+    <AppLayout>
       <Container maxWidth="lg">
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -291,7 +292,7 @@ const PaymentForm = (prop) => {
           </Grid>
         </Grid>
       </Container >
-    </>
+    </AppLayout>
   );
 };
 

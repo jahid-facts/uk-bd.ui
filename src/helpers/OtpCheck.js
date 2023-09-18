@@ -5,8 +5,9 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 const OtpCheck = ({ children }) => {
   const isEmailVerifiedRedux = localStorage.getItem("isEmailVerified");
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
 
-  if (isEmailVerifiedRedux){
+  if (isEmailVerifiedRedux || isLoggedIn){
     return <Navigate to="/" />;
   }else{
     return <Outlet />;

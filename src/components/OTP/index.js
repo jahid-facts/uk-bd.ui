@@ -12,24 +12,24 @@ import { useNavigate } from "react-router-dom";
 
 export const OtpComponent = () => {
   const navigate = useNavigate();
-  const {error, success} = useSelector((state) => state.auth);
+  const { error, success, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const inputRefs = useRef([]);
   const [otpValues, setOtpValues] = useState(["", "", "", "", "", ""]);
 
-  const userString = localStorage.getItem("user");
+  // const user = userString ? JSON.parse(userString) : null;
 
-  const user = userString ? JSON.parse(userString) : null;
   const token = user.token;
-  const decodedToken = jwtDecode(token);
-  const userEmail = decodedToken.userInfo.email;
+  const decodedToken = token ? jwtDecode(token) : null;
+  const userEmail = decodedToken.userInfo?.email || '';
+
   const focusNext = (index) => {
     if (inputRefs.current[index + 1]) {
       inputRefs.current[index + 1].focus();
     }
   };
 
-  const focusPrev = (index) => { 
+  const focusPrev = (index) => {
     if (inputRefs.current[index - 1]) {
       inputRefs.current[index - 1].focus();
     }
@@ -67,7 +67,7 @@ export const OtpComponent = () => {
       };
       setDisableButton(true);
       const response = await dispatch(verifyOTP(data));
-      if (response.payload.status){
+      if (response.payload.status) {
         navigate("/");
       }
       setDisableButton(false);
@@ -77,11 +77,11 @@ export const OtpComponent = () => {
   };
 
   useEffect(() => {
-    if (error){
+    if (error) {
       toast.error(error);
       dispatch(clearMessage());
     }
-    if (success){
+    if (success) {
       toast.success(success);
       dispatch(clearMessage());
     }
@@ -93,7 +93,7 @@ export const OtpComponent = () => {
     try {
       setDisableButton(true);
       // Call axios with the resend OTP API
-      const response = await postApi("/resend-otp", { email: userEmail });
+      await postApi("/resend-otp", { email: userEmail });
 
       // You can display a success toast message here if needed
       toast.success("OTP has been resent successfully");
@@ -167,7 +167,7 @@ export const OtpComponent = () => {
         alignItems="center"
         minHeight="100%"
       >
-        <Box p={4} sx={{}}>
+        <Box p={4}>
           <Grid container spacing={4}>
             <Grid item xs={12}>
               <Box

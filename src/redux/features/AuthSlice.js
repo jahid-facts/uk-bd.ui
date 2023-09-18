@@ -91,7 +91,6 @@ const authSlice = createSlice({
         state.status = "succeeded";
         state.user = action.payload;
         state.isLoggedIn = true;
-        // state.success = action.payload.message;
         localStorage.setItem("user", JSON.stringify(action.payload));
         localStorage.setItem("isLoggedIn", "true");
         state.error = null;

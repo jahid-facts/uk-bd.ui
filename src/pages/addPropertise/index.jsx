@@ -18,6 +18,7 @@ import { postApi } from "../../config/configAxios";
 import { useNavigate } from "react-router-dom"; 
 import jwtDecode from "jwt-decode"; 
 import ExacteLocation from "../../components/addpropertiseComponents/ExacteLocation";
+import { AppLayout } from "../../layouts/appLayout";
 
 export default function AddPropertise() {
   const navigate = useNavigate();
@@ -138,64 +139,64 @@ export default function AddPropertise() {
             handleNext={handleNext}
           />
         );
+      // case 5:
+      //   return (
+      //     <ExacteLocation
+      //       setStepValue={handleStepChange}
+      //       values={parsedSavedStepValues}
+      //       handleNext={handleNext}
+      //     />
+      //   );
       case 5:
-        return (
-          <ExacteLocation
-            setStepValue={handleStepChange}
-            values={parsedSavedStepValues}
-            handleNext={handleNext}
-          />
-        );
-      case 6:
         return (
           <Guests
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
-      case 7:
+      case 6:
         return (
           <Offer
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
-      case 8:
+      case 7:
         return (
           <UploadPhoto
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
-      case 9:
+      case 8:
         return (
           <ShortTitle
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
-      case 10:
+      case 9:
         return (
           <Description
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
-      case 11:
+      case 10:
         return (
           <Decide
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
-      case 12:
+      case 11:
         return (
           <Prices
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
           />
         );
-      case 13:
+      case 12:
         return (
           <Discounts
             setStepValue={handleStepChange}
@@ -215,7 +216,7 @@ export default function AddPropertise() {
   };
 
   return (
-    <>
+    <AppLayout>
       {getStepContent(activeStep, handleStepChange, parsedSavedStepValues)}
       <MobileStepper
         variant="progress"
@@ -266,6 +267,6 @@ export default function AddPropertise() {
           </Button>
         }
       />
-    </>
+    </AppLayout>
   );
 }
