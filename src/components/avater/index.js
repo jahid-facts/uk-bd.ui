@@ -108,20 +108,6 @@ export const Avater = () => {
                 <Avatar /> Profile
               </MenuItem>
             </Link>
-            <Link
-              to={"/add-propertise"}
-              style={{ textDecoration: "none", color: "MenuText" }}
-            >
-              <MenuItem
-                onClick={() => setAnchorEl(null)}
-                sx={{ minWidth: "250px" }}
-              >
-                <ListItemIcon>
-                  <AddHome fontSize="small" />
-                </ListItemIcon>
-                Property listing
-              </MenuItem>
-            </Link>
             <MenuItem sx={{ minWidth: "250px" }}>
               <Avatar /> My account
             </MenuItem>
@@ -129,7 +115,7 @@ export const Avater = () => {
             <MenuItem sx={{ minWidth: "250px" }}>
               <ListItemIcon>
                 <PersonAdd fontSize="small" />
-              </ListItemIcon>
+              </ListItemIcon> 
               Add another account
             </MenuItem>
             <MenuItem sx={{ minWidth: "250px" }}>

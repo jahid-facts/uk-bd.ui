@@ -69,7 +69,7 @@ export default function AddPropertise() {
     try {
       await postApi("/add-property", data);
       localStorage.removeItem(localStorageKey);
-      navigate("/hosting");
+      navigate("/property/list");
     } catch (error) {
       console.error("Error submitting data:", error);
     }
