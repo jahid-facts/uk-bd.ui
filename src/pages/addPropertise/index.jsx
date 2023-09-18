@@ -15,10 +15,11 @@ import Prices from "../../components/addpropertiseComponents/Prices";
 import Decide from "../../components/addpropertiseComponents/Decide";
 import Discounts from "../../components/addpropertiseComponents/Discounts";
 import { postApi } from "../../config/configAxios";
-import { useNavigate } from "react-router-dom"; 
-import jwtDecode from "jwt-decode"; 
+import { useNavigate } from "react-router-dom";
+import jwtDecode from "jwt-decode";
 import ExacteLocation from "../../components/addpropertiseComponents/ExacteLocation";
 import { AppLayout } from "../../layouts/appLayout";
+import { BeatLoader } from "react-spinners";
 
 export default function AddPropertise() {
   const navigate = useNavigate();
@@ -44,12 +45,11 @@ export default function AddPropertise() {
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
 
   const dataSubmitServer = async () => {
-    const authUserInfo = localStorage.getItem('user')
+    const authUserInfo = localStorage.getItem("user");
     const user = authUserInfo ? JSON.parse(authUserInfo) : null;
     const token = user.token;
     const decodedToken = jwtDecode(token);
     const userId = decodedToken.userInfo._id;
-
 
     const data = {
       userId: userId,
@@ -67,7 +67,7 @@ export default function AddPropertise() {
       discounts: stepValues.discounts,
     };
     try {
-      await postApi("/add-property", data);  
+      await postApi("/add-property", data);
       localStorage.removeItem(localStorageKey);
       navigate("/hosting");
     } catch (error) {
@@ -246,7 +246,13 @@ export default function AddPropertise() {
             onClick={handleNext}
             disabled={activeStep === 13 || isNextButtonDisabled}
           >
-            {activeStep === 12 ? "Finish" : "Next"}
+            {activeStep === 13 || isNextButtonDisabled ? (
+              <BeatLoader color="#ff0000" />
+            ) : activeStep === 12 ? (
+              "Finish" 
+            ) : (
+              "Next"
+            )}
           </Button>
         }
         backButton={

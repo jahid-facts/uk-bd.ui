@@ -12,7 +12,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import assets from "../../assets";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/features/AuthSlice";
-import { useIsAuthenticated } from "../../helpers/Authenticated";
+import { useIsAuthenticated } from "../../helpers/AuthCheck";
 
 export const Avater = () => {
   const [anchorEl, setAnchorEl] = useState(null);

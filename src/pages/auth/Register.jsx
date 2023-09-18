@@ -22,6 +22,7 @@ import { useFormik } from "formik";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { clearMessage, registerUser } from "../../redux/features/AuthSlice";
+import { BeatLoader } from "react-spinners";
 
 const RegisterScreen = () => {
   const dispatch = useDispatch();
@@ -341,9 +342,9 @@ const RegisterScreen = () => {
                     color="primary"
                     sx={{ textTransform: "capitalize" }}
                   >
-                    Resigter
+                    {isSubmitting ? <BeatLoader color="#ff0000" /> : "Resigter"}
                   </Button>
-                </Box>
+                </Box> 
               </form>
             </Box>
           </Grid>
