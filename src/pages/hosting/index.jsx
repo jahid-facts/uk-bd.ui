@@ -1,8 +1,4 @@
-import {
-  Box,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 import {
   ApartmentOutlined,
@@ -15,175 +11,180 @@ import DashboardLayout from "../../layouts/dashboard";
 
 const Hosting = () => {
   return (
-    <DashboardLayout title={'Hosting'}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={4}>
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            p={3}
-            boxShadow={theme.palette.boxShadow}
-            bgcolor={"#ffffff"}
-            borderRadius={"20px"}
-          >
+    <DashboardLayout title={"Hosting"}>
+      <div>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={4}>
             <Box
-              p={1}
-              mr={2}
-              width={"40px"}
-              height={"40px"}
-              borderRadius={"50px"}
-              bgcolor={"#e0eeff"}
               display={"flex"}
-              textAlign={"center"}
               alignItems={"center"}
-              justifyContent={"center"}
+              p={3}
+              boxShadow={theme.palette.boxShadow}
+              bgcolor={"#ffffff"}
+              borderRadius={"20px"}
             >
-              <BarChart sx={{ fontSize: "30px", color: "#2980b9" }} />
-            </Box>
-            <Box>
-              <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
-                Total
-              </Typography>
-              <Typography variant="h5" fontWeight={"bold"}>
-                $350.4
-              </Typography>
-              <Typography
-                variant="body1"
-                fontWeight={"600"}
-                fontSize={"14px"}
-                color={"#7f7f7f"}
+              <Box
+                p={1}
+                mr={2}
+                width={"40px"}
+                height={"40px"}
+                borderRadius={"50px"}
+                bgcolor={"#e0eeff"}
+                display={"flex"}
+                textAlign={"center"}
+                alignItems={"center"}
+                justifyContent={"center"}
               >
-                Earnings
-              </Typography>
+                <BarChart sx={{ fontSize: "30px", color: "#2980b9" }} />
+              </Box>
+              <Box>
+                <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
+                  Total
+                </Typography>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  $350.4
+                </Typography>
+                <Typography
+                  variant="body1"
+                  fontWeight={"600"}
+                  fontSize={"14px"}
+                  color={"#7f7f7f"}
+                >
+                  Earnings
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            p={3}
-            boxShadow={theme.palette.boxShadow}
-            bgcolor={"#ffffff"}
-            borderRadius={"20px"}
-          >
+          </Grid>
+          <Grid item xs={12} md={4}>
             <Box
-              p={1}
-              mr={2}
-              width={"40px"}
-              height={"40px"}
-              borderRadius={"50px"}
-              bgcolor={"#e0eeff"}
               display={"flex"}
-              textAlign={"center"}
               alignItems={"center"}
-              justifyContent={"center"}
+              p={3}
+              boxShadow={theme.palette.boxShadow}
+              bgcolor={"#ffffff"}
+              borderRadius={"20px"}
             >
-              <AttachMoney sx={{ fontSize: "30px", color: "#27ae60" }} />
-            </Box>
-            <Box>
-              <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
-                Total
-              </Typography>
-              <Typography variant="h5" fontWeight={"bold"}>
-                $642.39
-              </Typography>
-              <Typography
-                variant="body1"
-                fontWeight={"600"}
-                fontSize={"14px"}
-                color={"#7f7f7f"}
+              <Box
+                p={1}
+                mr={2}
+                width={"40px"}
+                height={"40px"}
+                borderRadius={"50px"}
+                bgcolor={"#e0eeff"}
+                display={"flex"}
+                textAlign={"center"}
+                alignItems={"center"}
+                justifyContent={"center"}
               >
-                Spend this month
-              </Typography>
+                <AttachMoney sx={{ fontSize: "30px", color: "#27ae60" }} />
+              </Box>
+              <Box>
+                <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
+                  Total
+                </Typography>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  $642.39
+                </Typography>
+                <Typography
+                  variant="body1"
+                  fontWeight={"600"}
+                  fontSize={"14px"}
+                  color={"#7f7f7f"}
+                >
+                  Spend this month
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            p={3}
-            boxShadow={theme.palette.boxShadow}
-            bgcolor={"#ffffff"}
-            borderRadius={"20px"}
-          >
+          </Grid>
+          <Grid item xs={12} md={4}>
             <Box
-              p={1}
-              mr={2}
-              width={"40px"}
-              height={"40px"}
-              borderRadius={"50px"}
-              bgcolor={"#e0eeff"}
               display={"flex"}
-              textAlign={"center"}
               alignItems={"center"}
-              justifyContent={"center"}
+              p={3}
+              boxShadow={theme.palette.boxShadow}
+              bgcolor={"#ffffff"}
+              borderRadius={"20px"}
             >
-              <MonetizationOnOutlined
-                sx={{ fontSize: "30px", color: "#8e44ad" }}
-              />
-            </Box>
-            <Box>
-              <Typography
-                variant="body1"
-                fontSize={"14px"}
-                color={"#7f7f7f"}
-                fontWeight={"600"}
+              <Box
+                p={1}
+                mr={2}
+                width={"40px"}
+                height={"40px"}
+                borderRadius={"50px"}
+                bgcolor={"#e0eeff"}
+                display={"flex"}
+                textAlign={"center"}
+                alignItems={"center"}
+                justifyContent={"center"}
               >
-                Sales
-              </Typography>
-              <Typography variant="h5" fontWeight={"bold"}>
-                $574.34
-              </Typography>
-              <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
-                <span style={{ color: "#27ae60" }}> +23%</span> since last month
-              </Typography>
+                <MonetizationOnOutlined
+                  sx={{ fontSize: "30px", color: "#8e44ad" }}
+                />
+              </Box>
+              <Box>
+                <Typography
+                  variant="body1"
+                  fontSize={"14px"}
+                  color={"#7f7f7f"}
+                  fontWeight={"600"}
+                >
+                  Sales
+                </Typography>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  $574.34
+                </Typography>
+                <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
+                  <span style={{ color: "#27ae60" }}> +23%</span> since last
+                  month
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            p={3}
-            boxShadow={theme.palette.boxShadow}
-            bgcolor={"#ffffff"}
-            borderRadius={"20px"}
-          >
+          </Grid>
+          <Grid item xs={12} md={4}>
             <Box
-              p={1}
-              mr={2}
-              width={"40px"}
-              height={"40px"}
-              borderRadius={"50px"}
-              bgcolor={"#e0eeff"}
               display={"flex"}
-              textAlign={"center"}
               alignItems={"center"}
-              justifyContent={"center"}
+              p={3}
+              boxShadow={theme.palette.boxShadow}
+              bgcolor={"#ffffff"}
+              borderRadius={"20px"}
             >
-              <ApartmentOutlined sx={{ fontSize: "30px", color: "#f1c40f" }} />
-            </Box>
-            <Box>
-              <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
-                Total
-              </Typography>
-              <Typography variant="h5" fontWeight={"bold"}>
-                4
-              </Typography>
-              <Typography
-                variant="body1"
-                fontSize={"14px"}
-                color={"#7f7f7f"}
-                fontWeight={"600"}
+              <Box
+                p={1}
+                mr={2}
+                width={"40px"}
+                height={"40px"}
+                borderRadius={"50px"}
+                bgcolor={"#e0eeff"}
+                display={"flex"}
+                textAlign={"center"}
+                alignItems={"center"}
+                justifyContent={"center"}
               >
-                Active property
-              </Typography>
+                <ApartmentOutlined
+                  sx={{ fontSize: "30px", color: "#f1c40f" }}
+                />
+              </Box>
+              <Box>
+                <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
+                  Total
+                </Typography>
+                <Typography variant="h5" fontWeight={"bold"}>
+                  4
+                </Typography>
+                <Typography
+                  variant="body1"
+                  fontSize={"14px"}
+                  color={"#7f7f7f"}
+                  fontWeight={"600"}
+                >
+                  Active property
+                </Typography>
+              </Box>
             </Box>
-          </Box>
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </DashboardLayout>
   );
 };

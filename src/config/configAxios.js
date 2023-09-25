@@ -19,6 +19,13 @@ export const getApi = async (url) => {
   return handleRequest(() => axios.get(url));
 };
 
+// get data use id
+export const getApiById = async (url, id) => {
+  const urlWithUserId = `${url}?id=${id}`;
+
+  return handleRequest(() => axios.get(urlWithUserId));
+};
+
 // POST request
 export const postApi = async (url, data) => {
   return handleRequest(() => axios.post(url, data));
@@ -30,6 +37,8 @@ export const putApi = async (url, data) => {
 };
 
 // DELETE request
-export const deleteApi = async (url) => {
-  return handleRequest(() => axios.delete(url));
+export const deleteApi = async (url, id) => {
+  const urlWithUserId = `${url}?id=${id}`;
+
+  return handleRequest(() => axios.delete(urlWithUserId));
 };

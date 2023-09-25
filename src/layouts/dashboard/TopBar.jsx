@@ -12,9 +12,9 @@ import {
   Grid,
 } from "@mui/material";
 import React from "react";
-import { Avater } from "../../components/avater";
 import { Link } from "react-router-dom";
 import { theme } from "../../theme";
+import AvatarMenu from "../../components/avater";
 
 const TopBar = ({ setOpen, open, title }) => {
   const isMdScreen = useMediaQuery((theme) => theme.breakpoints.up("md"));
@@ -107,7 +107,7 @@ const TopBar = ({ setOpen, open, title }) => {
                       <EmailOutlined color="action" />
                     </Badge>
                   </Link>
-                  <Avater />
+                  <AvatarMenu />
                 </Box>
               </Box>
             </Box>

@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { Box, IconButton, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import SideBar from "./SideBar";
 import TopBar from "./TopBar";
-import { theme } from "../../theme";
-import MenuIcon from "@mui/icons-material/Menu";
 import BottomBar from "../../components/bottom_bar/BottomBar";
 
 const DashboardLayout = ({ children, title }) => {

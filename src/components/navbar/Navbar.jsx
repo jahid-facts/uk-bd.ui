@@ -19,7 +19,7 @@ import SearchFilter from "../searchFilter";
 import PropTypes from "prop-types";
 import CssBaseline from "@mui/material/CssBaseline";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
-import { Avater } from "../avater";
+import AvatarMenu from "../avater";
 import SearchMobile from "../searchFilter/SearchMobile";
 import Logo from "./Logo";
 
@@ -68,7 +68,7 @@ export default function Navbar(props) {
     containerWidth = "xl";
     // containerWidth = "lg";
   }
- 
+
   return (
     <>
       <CssBaseline />
@@ -81,8 +81,7 @@ export default function Navbar(props) {
         >
           <Container maxWidth={containerWidth}>
             <StyledToolbar>
-
-            <Logo />
+              <Logo />
 
               <Box
                 sx={{
@@ -94,7 +93,7 @@ export default function Navbar(props) {
               >
                 {showSearchFilter}
               </Box>
-              <Box 
+              <Box
                 sx={{
                   width: "100%",
                   display: {
@@ -106,7 +105,7 @@ export default function Navbar(props) {
               </Box>
 
               <Stack direction={"row"} alignItems={"center"}>
-                <Link to={"/hosting"}> 
+                <Link to={"/hosting"}>
                   <Button
                     variant="text"
                     size="small"
@@ -125,7 +124,7 @@ export default function Navbar(props) {
                     Switch to hosting
                   </Button>
                 </Link>
-                
+
                 {/* <Link to={"/notifications"}> */}
                 <Badge
                   max={9}
@@ -139,27 +138,27 @@ export default function Navbar(props) {
                     },
                   }}
                 >
-                  <NotificationsOutlined color="action" /> 
+                  <NotificationsOutlined color="action" />
                 </Badge>
                 {/* </Link> */}
                 <Link to={"/profile"}>
-                <Badge
-                  max={9}
-                  badgeContent={10}
-                  color="secondary"
-                  sx={{
-                    marginRight: "30px",
-                    display: {
-                      xs: "none",
-                      md: "block",
-                    },
-                  }}
-                >
-                  <EmailOutlined color="action" /> 
-                </Badge>
+                  <Badge
+                    max={9}
+                    badgeContent={10}
+                    color="secondary"
+                    sx={{
+                      marginRight: "30px",
+                      display: {
+                        xs: "none",
+                        md: "block",
+                      },
+                    }}
+                  >
+                    <EmailOutlined color="action" />
+                  </Badge>
                 </Link>
 
-                <Avater />
+                <AvatarMenu />
               </Stack>
             </StyledToolbar>
             {showCategory}

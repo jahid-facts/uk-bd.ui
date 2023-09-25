@@ -11,7 +11,9 @@ import {
 import React, { useEffect, useState } from "react";
 
 const Decide = ({ setStepValue, values }) => {
-  const [activeBox, setActiveBox] = useState(parseInt(values.decide) || null);
+  const [activeBox, setActiveBox] = useState(
+    parseInt(values.decideReservations) || null
+  );
 
   useEffect(() => {
     setStepValue("decide", activeBox);
@@ -21,7 +23,7 @@ const Decide = ({ setStepValue, values }) => {
     setActiveBox(boxId === activeBox ? null : boxId);
   };
 
-  const boxStyles = { 
+  const boxStyles = {
     width: "100%",
     height: "100%",
     display: "flex",

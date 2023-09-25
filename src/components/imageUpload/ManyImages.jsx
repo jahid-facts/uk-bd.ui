@@ -1,25 +1,35 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./style.css";
 import { Icon } from "@iconify/react";
 import { Box } from "@mui/material";
+import { getApiById } from "../../config/configAxios";
+import { useParams } from "react-router-dom";
 
-const ImageUpload = ({ setStepValue, values }) => {
-  const [images, setImages] = useState(values.uploadPhoto || []);
-  const [isDroping, setIsDroping] = useState(false);
+const ManyImages = ({
+  setStepValue,
+  values,
+  oldStepValues,
+  setMultipleImages,
+}) => {
+  const [images, setImages] = useState([]);
+  const [isDropping, setIsDropping] = useState(false);
   const inputRef = useRef();
 
-  const setStepValueCallback = useCallback(setStepValue, []);
+  useEffect(() => {
+    if (oldStepValues && oldStepValues.images) {
+      setImages(oldStepValues.images);
+    }
+  }, []);
 
   useEffect(() => {
-    setStepValueCallback("uploadPhoto", images);
-  }, [images, setStepValueCallback]);
+    setMultipleImages(images);
+  }, [images, oldStepValues]);
 
-  function selectFiles() {
+  const selectFiles = () => {
     inputRef.current.click();
-  }
+  };
 
- 
-  function onFileSelect(e) {
+  const onFileSelect = (e) => {
     const files = e.target.files;
     if (files.length === 0) return;
 
@@ -38,63 +48,64 @@ const ImageUpload = ({ setStepValue, values }) => {
       };
       reader.readAsDataURL(files[i]);
     }
-  }
+  };
 
-  function onDragOver(e) {
+  const onDragOver = (e) => {
     e.preventDefault();
-    setIsDroping(true);
+    setIsDropping(true);
     e.dataTransfer.dropEffect = "copy";
-  }
+  };
 
-  function onDragLeave(e) {
+  const onDragLeave = (e) => {
     e.preventDefault();
-    setIsDroping(false);
-  }
+    setIsDropping(false);
+  };
 
-  function onDrop(e) {
+  const onDrop = (e) => {
     e.preventDefault();
-    setIsDroping(false);
+    setIsDropping(false);
     const files = e.dataTransfer.files;
     onFileSelect({ target: { files } });
-  }
+  };
 
-  function deleteImage(index) {
+  const deleteImage = (index) => {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
-  }
+  };
 
   return (
     <div className="card">
       <div className="top">
-        <p>
-          Upload and showcase your images with uniqueness ensured - no
-          duplicates allowed.
-        </p>
+        <p>Upload and showcase your images with uniqueness ensured.</p>
       </div>
       <div
-        className={`drag-area ${isDroping ? "active" : ""}`}
+        className={`drag-area ${isDropping ? "active" : ""}`}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
-        onDrop={onDrop} // Changed from onDrag to onDrop
+        onDrop={onDrop}
       >
-        <Box textAlign={"center"}>
-          <Icon icon={"ion:image-outline"} style={{ fontSize: "50px" }} />
+        <Box
+          textAlign={"center"}
+          role="button"
+          sx={{ cursor: "pointer" }}
+          onClick={selectFiles}
+        >
+          <Icon icon={"ic:twotone-cloud-upload"} style={{ fontSize: "50px" }} />
 
           <Box display={"flex"} alignItems={"center"} textAlign={"center"}>
-            {isDroping ? (
+            {isDropping ? (
               <span className="select">Drop image here</span>
             ) : (
               <>
-                Drag & drop image here or{" "}
-                <span className="select" role="button" onClick={selectFiles}>
-                  Browse
-                </span>
+                Drag &amp; drop image here or{" "}
+                <span className="select">Browse</span>
                 <input
                   type="file"
                   name="file"
                   className="file"
                   ref={inputRef}
                   onChange={onFileSelect}
-                  accept="image/*" 
+                  accept="image/*"
+                  multiple
                 />
               </>
             )}
@@ -107,10 +118,7 @@ const ImageUpload = ({ setStepValue, values }) => {
             <span className="delete" onClick={() => deleteImage(index)}>
               &times;
             </span>
-            <img
-              src={img.url}
-              alt={img.name}
-            />
+            <img src={img.url} alt={img.name} />
           </div>
         ))}
       </div>
@@ -118,4 +126,4 @@ const ImageUpload = ({ setStepValue, values }) => {
   );
 };
 
-export default ImageUpload;
+export default ManyImages;

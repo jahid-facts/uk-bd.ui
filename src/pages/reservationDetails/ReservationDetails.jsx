@@ -442,7 +442,7 @@ export default function ReservationDetails() {
                       }}
                     >
                       Communication
-                      <Rating name="read-only" value={"4"} readOnly />
+                      <Rating name="read-only" value={4} readOnly />
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
@@ -456,7 +456,7 @@ export default function ReservationDetails() {
                       }}
                     >
                       Recommend
-                      <Rating name="read-only" value={"5"} readOnly />
+                      <Rating name="read-only" value={5} readOnly />
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
@@ -470,7 +470,7 @@ export default function ReservationDetails() {
                       }}
                     >
                       Services
-                      <Rating name="read-only" value={"2"} readOnly />
+                      <Rating name="read-only" value={2} readOnly />
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
@@ -484,7 +484,7 @@ export default function ReservationDetails() {
                       }}
                     >
                       Cleanliness
-                      <Rating name="read-only" value={"3"} readOnly />
+                      <Rating name="read-only" value={3} readOnly />
                     </Typography>
                   </Grid>
                   <Grid item xs={12} md={6} style={{ paddingTop: "8px" }}>
@@ -498,7 +498,7 @@ export default function ReservationDetails() {
                       }}
                     >
                       Location
-                      <Rating name="read-only" value={"5"} readOnly />
+                      <Rating name="read-only" value={5} readOnly />
                     </Typography>
                   </Grid>
                   <Grid item xs={12} my={1}>

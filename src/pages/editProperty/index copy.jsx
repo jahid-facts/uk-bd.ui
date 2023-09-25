@@ -1,48 +1,64 @@
 import React, { useEffect, useState } from "react";
 import MobileStepper from "@mui/material/MobileStepper";
 import { Button } from "@mui/material";
-import StartPropertise from "../../components/addpropertiseComponents/StartPropertise";
-import PlaceDescibe from "../../components/addpropertiseComponents/PlaceDescibe";
-import AddAdrress from "../../components/addpropertiseComponents/AddAddress";
-import TypeOfPlace from "../../components/addpropertiseComponents/TypeOfPlace";
-import LocatedPlace from "../../components/addpropertiseComponents/LocatedPlace";
-import Guests from "../../components/addpropertiseComponents/Guests";
-import Offer from "../../components/addpropertiseComponents/Offer";
-import Description from "../../components/addpropertiseComponents/Description";
-import ShortTitle from "../../components/addpropertiseComponents/ShortTitle";
-import UploadPhoto from "../../components/addpropertiseComponents/UploadPhoto";
-import Prices from "../../components/addpropertiseComponents/Prices";
-import Decide from "../../components/addpropertiseComponents/Decide";
-import Discounts from "../../components/addpropertiseComponents/Discounts";
-import { postApi } from "../../config/configAxios";
-import { useNavigate } from "react-router-dom";
+import StartPropertise from "../../components/editPropertiseComponents/StartPropertise";
+import PlaceDescibe from "../../components/editPropertiseComponents/PlaceDescibe";
+import AddAdrress from "../../components/editPropertiseComponents/AddAddress";
+import TypeOfPlace from "../../components/editPropertiseComponents/TypeOfPlace";
+import LocatedPlace from "../../components/editPropertiseComponents/LocatedPlace";
+import Guests from "../../components/editPropertiseComponents/Guests";
+import Offer from "../../components/editPropertiseComponents/Offer";
+import Description from "../../components/editPropertiseComponents/Description";
+import ShortTitle from "../../components/editPropertiseComponents/ShortTitle";
+import UploadPhoto from "../../components/editPropertiseComponents/UploadPhoto";
+import Prices from "../../components/editPropertiseComponents/Prices";
+import Decide from "../../components/editPropertiseComponents/Decide";
+import Discounts from "../../components/editPropertiseComponents/Discounts";
+import { getApiById, postApi, putApi } from "../../config/configAxios";
+import { useNavigate, useParams } from "react-router-dom";
 import jwtDecode from "jwt-decode";
-import ExacteLocation from "../../components/addpropertiseComponents/ExacteLocation";
 import { AppLayout } from "../../layouts/appLayout";
 import { BeatLoader } from "react-spinners";
 
-export default function AddPropertise() {
+const EditProperty = () => {
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
   const [localStorageKey] = useState("propertyValues");
-  const [stepValues, setStepValues] = useState(
-    JSON.parse(localStorage.getItem(localStorageKey)) || {
-      start: "start",
-      placeDescibe: null,
-      typeOfPlace: null,
-      locatedPlace: null,
-      addAddress: null,
-      guests: null,
-      offer: null,
-      uploadPhoto: null,
-      shortTitle: null,
-      description: null,
-      decide: null,
-      prices: null,
-      discounts: null,
-    }
-  );
+  const [stepValues, setStepValues] = useState({
+    start: "start",
+    placeDescribes: null,
+    typeOfPlace: null,
+    locatedPlace: null,
+    addAddress: null,
+    guests: null,
+    offer: null,
+    uploadPhoto: null,
+    shortTitle: null,
+    description: null,
+    decide: null,
+    price: null,
+    discounts: null,
+  });
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
+  const { propertyId } = useParams();
+
+  // fetch data
+  const fetchDataServer = async () => {
+    try {
+      const response = await getApiById(
+        `/edit/property/${propertyId}`,
+        propertyId
+      );
+      console.log(response);
+      setStepValues(response.data.property);
+    } catch (error) {
+      console.error("Internal server error:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataServer();
+  }, []);
 
   const dataSubmitServer = async () => {
     const authUserInfo = localStorage.getItem("user");
@@ -67,23 +83,23 @@ export default function AddPropertise() {
       discounts: stepValues.discounts,
     };
     try {
-      await postApi("/add-property", data);
+      await putApi(`/properties/${stepValues._id}`, data);
       localStorage.removeItem(localStorageKey);
-      navigate("/property/list");
+      // navigate("/property/list");
     } catch (error) {
       console.error("Error submitting data:", error);
     }
   };
 
   const handleNext = () => {
-    if (activeStep === 12) {
-      console.log(stepValues);
-      dataSubmitServer();
-    }
+    console.log(stepValues);
+    // if (activeStep === 12) {
+    // }
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   useEffect(() => {
+    dataSubmitServer();
     localStorage.setItem(localStorageKey, JSON.stringify(stepValues));
 
     const currentStepValue = stepValues[Object.keys(stepValues)[activeStep]];
@@ -100,12 +116,7 @@ export default function AddPropertise() {
     setIsNextButtonDisabled(false);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  // get data from localStorage
-  const savedStepValues = localStorage.getItem(localStorageKey);
-  const parsedSavedStepValues = savedStepValues
-    ? JSON.parse(savedStepValues)
-    : null;
+  const parsedSavedStepValues = stepValues;
 
   const getStepContent = (step, handleStepChange, parsedSavedStepValues) => {
     switch (step) {
@@ -140,14 +151,6 @@ export default function AddPropertise() {
             handleNext={handleNext}
           />
         );
-      // case 5:
-      //   return (
-      //     <ExacteLocation
-      //       setStepValue={handleStepChange}
-      //       values={parsedSavedStepValues}
-      //       handleNext={handleNext}
-      //     />
-      //   );
       case 5:
         return (
           <Guests
@@ -205,7 +208,7 @@ export default function AddPropertise() {
           />
         );
       default:
-        return navigate("/property/list");
+        return "Unknown step";
     }
   };
 
@@ -276,4 +279,6 @@ export default function AddPropertise() {
       />
     </AppLayout>
   );
-}
+};
+
+export default EditProperty;

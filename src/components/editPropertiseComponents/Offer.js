@@ -13,7 +13,7 @@ import { getApi } from "../../config/configAxios";
 import CustomHashLoader from "../customLoader/CustomHashLoader";
 
 const Offer = ({ setStepValue, values }) => {
-  const [activeBoxes, setActiveBoxes] = useState(values.offer || []);
+  const [activeBoxes, setActiveBoxes] = useState(values.amenitiesIds || []);
   const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,9 +22,7 @@ const Offer = ({ setStepValue, values }) => {
     getApi("/amenities")
       .then((response) => setAmenities(response.data.amenities))
       .catch((error) => console.log("error", error.message))
-      .finally(() => {
-        setLoading(false);
-      });
+      .finally(() => setLoading(false));
   }, []);
 
   const handleBoxClick = (boxId) => {

@@ -35,7 +35,6 @@ const SearchBar = (props) => {
       fetch(`${NOMINATIM_BASE_URL}${queryString}`, requestOption)
         .then((response) => response.json())
         .then((result) => {
-          console.log("API Response:", result); // Log the API response
           setPlaceList(result);
         })
         .catch((error) => {

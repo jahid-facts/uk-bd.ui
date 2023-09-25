@@ -13,11 +13,11 @@ import { getApi } from "../../config/configAxios";
 import CustomHashLoader from "../customLoader/CustomHashLoader";
 
 const PlaceDescibe = ({ setStepValue, values }) => {
-  const [activeBox, setActiveBox] = useState(values.placeDescibe || null);
+  const [activeBox, setActiveBox] = useState(values.placeDescribesId || null);
   const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() => { 
     setLoading(true);
     getApi("/amenities")
       .then((response) => setAmenities(response.data.amenities))
@@ -34,7 +34,7 @@ const PlaceDescibe = ({ setStepValue, values }) => {
   };
 
   useEffect(() => {
-    setStepValue("placeDescibe", activeBox);
+    setStepValue("placeDescribes", activeBox);
   }, [activeBox, setStepValue]);
 
   const boxStyles = {

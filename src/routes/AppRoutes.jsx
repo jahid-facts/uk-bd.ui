@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import ProtectedRoute from "../helpers/ProtectedRoute";
 import Hosting from "../pages/hosting";
 import PropertyList from "../pages/propertyList";
+import EditProperty from "../pages/editProperty";
 
 export const AppRoutes = () => {
   const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
@@ -40,6 +41,7 @@ export const AppRoutes = () => {
           path="/property/list"
           element={<ProtectedRoute children={<PropertyList />} />}
         />
+        <Route path="/edit/property/:propertyId" element={<EditProperty />} />
         <Route
           path="/profile"
           element={<ProtectedRoute children={<Profile />} />}

@@ -1,33 +1,34 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Divider,
-  ListItemIcon,
-  Menu,
-  MenuItem,
-} from "@mui/material";
-import { AddHome, ArrowDropDownCircle, Logout, PersonAdd, Settings } from "@mui/icons-material";
+import { Avatar, Box, Divider, Menu, MenuItem } from "@mui/material";
+import { ArrowDropDownCircle, Logout } from "@mui/icons-material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import assets from "../../assets";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "../../redux/features/AuthSlice";
 import { useIsAuthenticated } from "../../helpers/AuthCheck";
 
-export const Avater = () => {
+const AvatarMenu = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const isAuthenticated = useIsAuthenticated();
 
   const location = useLocation();
   const isHomePage = location.pathname === "/";
 
-  //logout
+  // Logout
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logoutUser());
     navigate("/login");
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -44,7 +45,7 @@ export const Avater = () => {
           sx={{
             cursor: "pointer",
           }}
-          onClick={(event) => setAnchorEl(event.currentTarget)}
+          onClick={handleMenuOpen}
           display={"flex"}
           alignItems={"center"}
           border={"1px solid #f1f1f1"}
@@ -52,8 +53,8 @@ export const Avater = () => {
           py={"5px"}
           borderRadius={"50px"}
         >
-          <ArrowDropDownCircle  />
-          <Avatar 
+          <ArrowDropDownCircle />
+          <Avatar
             alt="Remy Sharp"
             src={assets.images.avatar}
             sx={{ width: 30, height: 30, marginLeft: "10px" }}
@@ -63,7 +64,7 @@ export const Avater = () => {
       <Menu
         id="account-menu"
         open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
+        onClose={handleMenuClose}
         anchorEl={anchorEl}
         PaperProps={{
           elevation: 0,
@@ -94,71 +95,72 @@ export const Avater = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {isAuthenticated ? (
-          // Menu items for authenticated user
-          <>
-            <Link
-              to={"/profile"}
-              style={{ textDecoration: "none", color: "MenuText" }}
-            >
-              <MenuItem
-                sx={{ minWidth: "250px", textDecoration: "none" }}
-                onClick={() => setAnchorEl(null)}
+        {isAuthenticated
+          ? // Menu items for authenticated user
+            [
+              <Link
+                to="/profile"
+                style={{ textDecoration: "none", color: "inherit" }}
+                key="profile-link"
               >
-                <Avatar /> Profile
-              </MenuItem>
-            </Link>
-            <MenuItem sx={{ minWidth: "250px" }}>
-              <Avatar /> My account
-            </MenuItem>
-            <Divider />
-            <MenuItem sx={{ minWidth: "250px" }}>
-              <ListItemIcon>
-                <PersonAdd fontSize="small" />
-              </ListItemIcon> 
-              Add another account
-            </MenuItem>
-            <MenuItem sx={{ minWidth: "250px" }}>
-              <ListItemIcon>
-                <Settings fontSize="small" />
-              </ListItemIcon>
-              Settings
-            </MenuItem>
-            <MenuItem onClick={handleLogout} sx={{ minWidth: "250px" }}>
-              <ListItemIcon>
-                <Logout fontSize="small" />
-              </ListItemIcon>
-              Logout
-            </MenuItem>
-          </>
-        ) : (
-          // Menu items for non-authenticated user
-          <>
-            <Link
-              to="/login"
-              style={{ textDecoration: "none", color: "MenuText" }}
-            >
-              <MenuItem sx={{ minWidth: "250px" }}>
-                <ListItemIcon>
-                  <Logout fontSize="small" />
-                </ListItemIcon>
-                Login
-              </MenuItem>
-            </Link>
-            <Link
-              to="/register"
-              style={{ textDecoration: "none", color: "MenuText" }}
-            >
-              <MenuItem sx={{ minWidth: "250px" }}>
-                <ListItemIcon>
-                  <Logout fontSize="small" />
-                </ListItemIcon>
-                Register
-              </MenuItem>
-            </Link>
-          </>
-        )}
+                <MenuItem sx={{ minWidth: "250px" }} onClick={handleMenuClose}>
+                  <Avatar /> Profile
+                </MenuItem>
+              </Link>,
+              <MenuItem
+                sx={{ minWidth: "250px" }}
+                onClick={handleMenuClose}
+                key="my-account"
+              >
+                <Avatar /> My account
+              </MenuItem>,
+              <Divider key="divider" />,
+              <MenuItem
+                sx={{ minWidth: "250px" }}
+                onClick={handleMenuClose}
+                key="add-account"
+              >
+                Add another account
+              </MenuItem>,
+              <MenuItem
+                sx={{ minWidth: "250px" }}
+                onClick={handleMenuClose}
+                key="settings"
+              >
+                Settings
+              </MenuItem>,
+              <MenuItem
+                onClick={handleLogout}
+                sx={{ minWidth: "250px" }}
+                key="logout"
+              >
+                Logout
+              </MenuItem>,
+            ]
+          : // Menu items for non-authenticated user
+            [
+              <Link
+                to="/login"
+                style={{ textDecoration: "none", color: "inherit" }}
+                key="login-link"
+              >
+                <MenuItem sx={{ minWidth: "250px" }} onClick={handleMenuClose}>
+                  Login
+                </MenuItem>
+              </Link>,
+              <Link
+                to="/register"
+                style={{ textDecoration: "none", color: "inherit" }}
+                key="register-link"
+              >
+                <MenuItem sx={{ minWidth: "250px" }} onClick={handleMenuClose}>
+                  Register
+                </MenuItem>
+              </Link>,
+            ]}
       </Menu>
     </>
   );
 };
+
+export default AvatarMenu;

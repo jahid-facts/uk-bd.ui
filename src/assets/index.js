@@ -20,6 +20,7 @@ import hotel15 from './images/hotels/i2.jpg';
 import hotel16 from './images/hotels/i3.jpg';
 import hotel17 from './images/hotels/i4.jpg';
 import location from './images/location.png';
+import noRecord from './images/no-record.png';
 
 const assets = {
     images: {
@@ -28,6 +29,7 @@ const assets = {
         bdMap,
         ukMap,
         location,
+        noRecord,
 
         hotelImage:{
             hotel1,

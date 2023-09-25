@@ -74,6 +74,7 @@ const SideBar = ({ setOpen, open }) => {
         ))}
       <Drawer
         sx={{
+          zIndex:1000,
           position: "absolute",
           width: "270px",
           flexShrink: 0,

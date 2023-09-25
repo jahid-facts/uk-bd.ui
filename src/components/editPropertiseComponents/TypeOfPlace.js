@@ -13,7 +13,7 @@ import React, { useState, useEffect } from "react";
 import CustomHashLoader from "../customLoader/CustomHashLoader";
  
 const TypeOfPlace = ({ setStepValue, values }) => {
-  const [activeBox, setActiveBox] = useState(values.typeOfPlace || null);
+  const [activeBox, setActiveBox] = useState(values.typeOfPlaceId || null);
   const [typeOfPlace, setTypeOfPlace] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -22,7 +22,8 @@ const TypeOfPlace = ({ setStepValue, values }) => {
     getApi("/typeOfPlace")
       .then((response) => setTypeOfPlace(response.data.typeOfPlace))
       .catch((error) => console.log("error", error.message))
-      .finally(() => setLoading(false));
+      .finally(() => setLoading(false)); 
+      console.log(values.typeOfPlaceId)
   }, []);
   const handleBoxClick = (boxId) => {
     setActiveBox(boxId === activeBox ? null : boxId);

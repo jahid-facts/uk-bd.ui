@@ -10,56 +10,80 @@ import Guests from "../../components/addpropertiseComponents/Guests";
 import Offer from "../../components/addpropertiseComponents/Offer";
 import Description from "../../components/addpropertiseComponents/Description";
 import ShortTitle from "../../components/addpropertiseComponents/ShortTitle";
-import UploadPhoto from "../../components/addpropertiseComponents/UploadPhoto";
 import Prices from "../../components/addpropertiseComponents/Prices";
 import Decide from "../../components/addpropertiseComponents/Decide";
 import Discounts from "../../components/addpropertiseComponents/Discounts";
-import { postApi } from "../../config/configAxios";
-import { useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
-import ExacteLocation from "../../components/addpropertiseComponents/ExacteLocation";
+import { getApiById, putApi } from "../../config/configAxios";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppLayout } from "../../layouts/appLayout";
 import { BeatLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import MultipleImages from "../../components/addpropertiseComponents/MultipleImages";
+import { useAuthInfo } from "../../helpers/AuthCheck";
 
-export default function AddPropertise() {
+export default function EditProperty() {
+  const userInfo = useAuthInfo();
   const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(0);
-  const [localStorageKey] = useState("propertyValues");
-  const [stepValues, setStepValues] = useState(
-    JSON.parse(localStorage.getItem(localStorageKey)) || {
-      start: "start",
-      placeDescibe: null,
-      typeOfPlace: null,
-      locatedPlace: null,
-      addAddress: null,
-      guests: null,
-      offer: null,
-      uploadPhoto: null,
-      shortTitle: null,
-      description: null,
-      decide: null,
-      prices: null,
-      discounts: null,
+  const [localStorageKey] = useState("editPropertyValues");
+  const [oldStepValues, setOldStepValues] = useState(null);
+  const [multipleImages, setMultipleImages] = useState(null);
+  const [stepValues, setStepValues] = useState({});
+
+  // Use useEffect to populate stepValues when oldStepValues is available
+  useEffect(() => {
+    if (oldStepValues) {
+      setStepValues({
+        start: "start",
+        placeDescibe: oldStepValues.placeDescribesId || null,
+        typeOfPlace: oldStepValues.typeOfPlaceId || null,
+        locatedPlace: oldStepValues.located || null,
+        addAddress: oldStepValues.address || null,
+        guests: oldStepValues.guests || null,
+        offer: oldStepValues.amenitiesIds || null,
+        UploadPhoto: "start",
+        shortTitle: oldStepValues.title || null,
+        description: oldStepValues.description || null,
+        decide: oldStepValues.decideReservations || null,
+        prices: oldStepValues.price || null,
+        discounts: oldStepValues.discounts || null,
+      });
     }
-  );
+  }, [oldStepValues, activeStep]);
+
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
+  const { propertyId } = useParams();
+
+  // fetch data
+  const fetchDataServer = async () => {
+    try {
+      const response = await getApiById(
+        `/edit/property/${propertyId}`,
+        propertyId
+      );
+      if (response.data.property.userId === userInfo._id) {
+        setOldStepValues(response.data.property);
+      } else {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Internal server error:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataServer();
+  }, [activeStep]);
 
   const dataSubmitServer = async () => {
-    const authUserInfo = localStorage.getItem("user");
-    const user = authUserInfo ? JSON.parse(authUserInfo) : null;
-    const token = user.token;
-    const decodedToken = jwtDecode(token);
-    const userId = decodedToken.userInfo._id;
-
     const data = {
-      userId: userId,
       placeDescribesId: stepValues.placeDescibe,
       typeOfPlaceId: stepValues.typeOfPlace,
       located: stepValues.locatedPlace,
       address: stepValues.addAddress,
       guests: stepValues.guests,
       amenitiesIds: stepValues.offer,
-      images: stepValues.uploadPhoto,
+      images: multipleImages || oldStepValues?.images,
       title: stepValues.shortTitle,
       description: stepValues.description,
       decideReservations: stepValues.decide,
@@ -67,19 +91,15 @@ export default function AddPropertise() {
       discounts: stepValues.discounts,
     };
     try {
-      await postApi("/add-property", data);
-      localStorage.removeItem(localStorageKey);
-      navigate("/property/list");
+      await putApi(`/properties/${propertyId}`, data);
     } catch (error) {
       console.error("Error submitting data:", error);
     }
   };
 
   const handleNext = () => {
-    if (activeStep === 12) {
-      console.log(stepValues);
-      dataSubmitServer();
-    }
+    dataSubmitServer();
+    toast.success("Successfully saved");
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -87,7 +107,10 @@ export default function AddPropertise() {
     localStorage.setItem(localStorageKey, JSON.stringify(stepValues));
 
     const currentStepValue = stepValues[Object.keys(stepValues)[activeStep]];
-
+    if (activeStep === 7) {
+      setIsNextButtonDisabled(false);
+      return;
+    }
     if (currentStepValue === null || currentStepValue === "") {
       setIsNextButtonDisabled(true);
       return;
@@ -105,9 +128,15 @@ export default function AddPropertise() {
   const savedStepValues = localStorage.getItem(localStorageKey);
   const parsedSavedStepValues = savedStepValues
     ? JSON.parse(savedStepValues)
-    : null;
+    : {};
 
-  const getStepContent = (step, handleStepChange, parsedSavedStepValues) => {
+  const getStepContent = (
+    step,
+    handleStepChange,
+    parsedSavedStepValues,
+    oldStepValues,
+    setMultipleImages
+  ) => {
     switch (step) {
       case 0:
         return <StartPropertise />;
@@ -140,14 +169,6 @@ export default function AddPropertise() {
             handleNext={handleNext}
           />
         );
-      // case 5:
-      //   return (
-      //     <ExacteLocation
-      //       setStepValue={handleStepChange}
-      //       values={parsedSavedStepValues}
-      //       handleNext={handleNext}
-      //     />
-      //   );
       case 5:
         return (
           <Guests
@@ -164,9 +185,11 @@ export default function AddPropertise() {
         );
       case 7:
         return (
-          <UploadPhoto
+          <MultipleImages
             setStepValue={handleStepChange}
             values={parsedSavedStepValues}
+            oldStepValues={oldStepValues}
+            setMultipleImages={setMultipleImages}
           />
         );
       case 8:
@@ -218,7 +241,13 @@ export default function AddPropertise() {
 
   return (
     <AppLayout>
-      {getStepContent(activeStep, handleStepChange, parsedSavedStepValues)}
+      {getStepContent(
+        activeStep,
+        handleStepChange,
+        parsedSavedStepValues,
+        oldStepValues,
+        setMultipleImages
+      )}
       <MobileStepper
         variant="progress"
         steps={13} // Number of steps (excluding progress bar)
@@ -245,14 +274,15 @@ export default function AddPropertise() {
             variant="contained"
             color={"secondary"}
             onClick={handleNext}
+            sx={{ textTransform: "capitalize" }}
             disabled={activeStep === 12 ? false : isNextButtonDisabled}
           >
-            {activeStep != 12 && isNextButtonDisabled ? (
+            {activeStep !== 12 && isNextButtonDisabled ? (
               <BeatLoader color="#ff0000" />
             ) : activeStep === 12 ? (
-              "Finish"
+              "Save & Next"
             ) : (
-              "Next"
+              "Save & Next"
             )}
           </Button>
         }
@@ -266,6 +296,7 @@ export default function AddPropertise() {
                 background: "#eaeaea",
                 color: "#c0c0c0",
               },
+              textTransform: "capitalize",
             }}
             onClick={handleBack}
             disabled={activeStep === 0}
