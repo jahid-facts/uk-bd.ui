@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Button,
@@ -16,9 +16,16 @@ import WhenDate from "../searchFilter/WhenDate";
 import Who from "../searchFilter/Who";
 import { Link } from "react-router-dom";
 
-const Reserve = () => {
+const Reserve = ({
+  price,
+  listingDiscountPercentage,
+  weeklyDiscountPercentage,
+  monthlyDiscountPercentage,
+}) => {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
+  const [discountedPrices, setDiscountedPrices] = useState(0);
+  const [activeDiscount, setActiveDiscount] = useState(0);
 
   const prevOpen = React.useRef(open);
   React.useEffect(() => {
@@ -48,6 +55,89 @@ const Reserve = () => {
     endDate: null,
     key: "selection",
   });
+  
+
+  // date diffarance calculate
+  const startDate = new Date(selectedRange.startDate);
+  const endDate = new Date(selectedRange.endDate);
+  const timeDifference = endDate.getTime() - startDate.getTime();
+  // Calculate the number of days
+  const daysDifference = timeDifference / (1000 * 3600 * 24);
+
+  // price calculate
+  const totalNightPrice = (price * daysDifference).toFixed(2);
+  const serviceFee = (price * daysDifference) / 10;
+  const userGetDiscountPrices =
+    totalNightPrice - discountedPrices * daysDifference;
+
+  const totalPrice =
+    parseFloat(totalNightPrice) + serviceFee - userGetDiscountPrices;
+
+  // discount calculate
+  const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
+    // Calculate the discounted price
+    const discountedPrice =
+      originalPrice - (originalPrice * discountPercentage) / 100;
+
+    // Ensure that the result has exactly two decimal places
+    const formattedDiscountedPrice = parseFloat(discountedPrice.toFixed(2));
+
+    return formattedDiscountedPrice;
+  };
+
+  // Define the original price
+  const originalPrice = price;
+
+  const discountedPriceListing = calculateDiscountedPrice(
+    originalPrice,
+    listingDiscountPercentage
+  );
+  const discountedPriceWeekly = calculateDiscountedPrice(
+    originalPrice,
+    weeklyDiscountPercentage
+  );
+  const discountedPriceMonthly = calculateDiscountedPrice(
+    originalPrice,
+    monthlyDiscountPercentage
+  );
+
+  useEffect(() => {
+    // if (daysDifference > 30) {
+    //   setDiscountedPrices(discountedPriceMonthly);
+    // } else if (daysDifference > 7) {
+    //   setDiscountedPrices(discountedPriceWeekly);
+    // } else if (
+    //   discountedPriceListing !== null &&
+    //   discountedPriceListing !== ""
+    // ) {
+    //   setDiscountedPrices(discountedPriceListing);
+    // } else {
+    //   setDiscountedPrices(originalPrice);
+    // }setDiscountedPrices(
+    setActiveDiscount(
+      daysDifference > 30
+        ? "monthly"
+        : daysDifference > 7
+        ? "weekly"
+        : discountedPriceListing != null && discountedPriceListing !== ""
+        ? "listing"
+        : ""
+    );
+
+    setDiscountedPrices(
+      daysDifference > 30
+        ? discountedPriceMonthly
+        : daysDifference > 7
+        ? discountedPriceWeekly
+        : discountedPriceListing || originalPrice
+    );
+  }, [
+    daysDifference,
+    discountedPriceMonthly,
+    discountedPriceWeekly,
+    discountedPriceListing,
+    originalPrice,
+  ]);
 
   const handleDateSelect = (newRange) => {
     setSelectedRange(newRange);
@@ -83,16 +173,21 @@ const Reserve = () => {
           justifyContent={"space-between"}
           alignItems={"center"}
         >
-          <Typography variant="h4" fontSize={"18px"}>
-            $21 night
-          </Typography>
+          {discountedPrices && (
+            <Typography variant="h4" fontSize={"18px"}>
+              ${discountedPrices} Night
+            </Typography>
+          )}
           <Box display={"flex"} alignItems={"center"}>
-            <Typography variant="h4" fontSize={"13px"} fontWeight={"700"}>
-              <Star fontSize={"13px"} /> 4.80 .
-            </Typography>
-            <Typography variant="h4" fontSize={"13px"}>
-              50 reviews
-            </Typography>
+            {discountedPrices === price ? (
+              " "
+            ) : (
+              <span
+                style={{ textDecoration: "line-through", fontSize: "16px" }}
+              >
+                ${price} Night
+              </span>
+            )}
           </Box>
         </Box>
         <Box border={"1px solid #06283D"} borderRadius={"10px"} my={"25px"}>
@@ -187,7 +282,6 @@ const Reserve = () => {
             value="2"
             ref={box2Ref}
             onClick={() => {
-              // handleBoxClick("2");
               handleTogglePopper("2");
             }}
           >
@@ -284,8 +378,47 @@ const Reserve = () => {
             Reserve
           </Button>
         </Link>
+
         <Box textAlign={"center"} fontSize={"13px"} my={2}>
-          <Typography variant="text">You won't be charged yet</Typography>
+          <Typography variant="text" color={"primary"}>
+            {!isNaN(listingDiscountPercentage) && (
+              <span
+                style={
+                  activeDiscount === "listing"
+                    ? { fontWeight: "bold", color: "#25af1e" }
+                    : {}
+                }
+              >
+                Listing {listingDiscountPercentage}%,
+              </span>
+            )}{" "}
+            {!isNaN(weeklyDiscountPercentage) && (
+              <span
+                style={
+                  activeDiscount === "weekly"
+                    ? { fontWeight: "bold", color: "#25af1e" }
+                    : {}
+                }
+              >
+                Weekly {weeklyDiscountPercentage}%,
+              </span>
+            )}{" "}
+            {!isNaN(monthlyDiscountPercentage) && (
+              <span
+                style={
+                  activeDiscount === "monthly"
+                    ? { fontWeight: "bold", color: "#25af1e" }
+                    : {}
+                }
+              >
+                Monthly {monthlyDiscountPercentage}%
+              </span>
+            )}{" "}
+            {(!isNaN(listingDiscountPercentage) ||
+              !isNaN(weeklyDiscountPercentage) ||
+              !isNaN(monthlyDiscountPercentage)) &&
+              "discounted"}
+          </Typography>
         </Box>
         <Box
           display={"flex"}
@@ -294,12 +427,36 @@ const Reserve = () => {
           my={2}
         >
           <Typography variant="h4" fontSize={"15px"}>
-            $40 x 3 nights
+            $({price} * {daysDifference}) Nights
           </Typography>
           <Typography variant="h4" fontSize={"15px"}>
-            $ 120
+            ${totalNightPrice}
           </Typography>
         </Box>
+        <Box
+          display={"flex"}
+          justifyContent={"space-between"}
+          alignItems={"center"}
+          my={2}
+        >
+          <Typography
+            variant="h4"
+            fontSize={"15px"}
+            color={"#25af1e"}
+            fontWeight={600}
+          >
+            Long stay discount
+          </Typography>
+          <Typography
+            variant="h4"
+            fontSize={"15px"}
+            color={"#25af1e"}
+            fontWeight={600}
+          >
+            - ${userGetDiscountPrices.toFixed(2)}
+          </Typography>
+        </Box>
+
         <Box
           display={"flex"}
           justifyContent={"space-between"}
@@ -310,7 +467,7 @@ const Reserve = () => {
             UK-BD service fee
           </Typography>
           <Typography variant="h4" fontSize={"15px"}>
-            $ 17
+            ${serviceFee}
           </Typography>
         </Box>
         <Divider />
@@ -324,7 +481,7 @@ const Reserve = () => {
             Total
           </Typography>
           <Typography variant="h4" fontSize={"15px"} fontWeight={"700"}>
-            $ 137
+            ${totalPrice.toFixed(2)}
           </Typography>
         </Box>
       </Box>

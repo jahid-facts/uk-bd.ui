@@ -11,6 +11,7 @@ import ProtectedRoute from "../helpers/ProtectedRoute";
 import Hosting from "../pages/hosting";
 import PropertyList from "../pages/propertyList";
 import EditProperty from "../pages/editProperty";
+import ReservationDetailsCopy from "../pages/reservationDetails/ReservationDetails copy";
 
 export const AppRoutes = () => {
   const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
@@ -47,8 +48,12 @@ export const AppRoutes = () => {
           element={<ProtectedRoute children={<Profile />} />}
         />
         <Route
-          path="/reservation-details"
+          path="/reservation-details/:propertyId"
           element={<ProtectedRoute children={<ReservationDetails />} />}
+        />
+        <Route
+          path="/reservation-details"
+          element={<ProtectedRoute children={<ReservationDetailsCopy />} />}
         />
         <Route
           path="/payments"

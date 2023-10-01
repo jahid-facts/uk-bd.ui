@@ -1,0 +1,21 @@
+/* Apply styles to the entire ImageList component */
+.image-list-item {
+  position: relative; /* Set position to relative for the container */
+  transition: transform 0.2s ease; /* Add a smooth transition for hover */
+}
+
+.image-list-item:hover::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Black overlay with 50% opacity */
+  pointer-events: none; /* Prevent overlay from blocking interactions with the image */
+}
+
+/* Move the image slightly upwards on hover */
+.image-list-item:hover {
+  transform: translateY(-5px);
+}

@@ -11,11 +11,10 @@ import {
   ImageListItem,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
-import images from "../home/Images";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 
-const OpenImageList = ({ open, onClose }) => {
+const OpenImageList = ({ open, onClose, itemDataImages }) => {
   const closeDrawer = () => {
     onClose();
   };
@@ -62,11 +61,13 @@ const OpenImageList = ({ open, onClose }) => {
                       gap={8}
                       sx={{ p: { xs: 3, md: 0 } }}
                     >
-                      {images.map((item, index) => (
+                      {itemDataImages.map((item, index) => (
                         <ImageListItem key={index}>
                           <img
-                            src={`${item.image1}?w=248&fit=crop&auto=format`}
-                            srcSet={`${item.image1}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                            // src={`${item.img}?w=248&fit=crop&auto=format`}
+                            // srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                            src={`${item.img}`}
+                            srcSet={`${item.img}`}
                             alt={item.title}
                             loading="lazy"
                             style={{ borderRadius: "15px", cursor: "pointer" }}
@@ -116,10 +117,11 @@ const OpenImageList = ({ open, onClose }) => {
                 infiniteLoop
                 showIndicators={false}
               >
-                {images.map((item, index) => (
+                {itemDataImages.map((item, index) => (
                   <div key={index}>
                     <img
-                      src={`${item.image1}?w=600&fit=crop&auto=format`}
+                      // src={`${item.img}?w=600&fit=crop&auto=format`}
+                      src={`${item.img}`}
                       alt={item.title}
                       style={{
                         width: "100%",

@@ -4,8 +4,8 @@ import { Star, Favorite, FavoriteTwoTone } from "@mui/icons-material";
 import SlideImage from "../slide";
 import { Link } from "react-router-dom";
 
-export default function ReservationCard(props) {
-  const { image1, image2, image3, title, subtitle, price, review , propertyId} = props;
+export default function ReservationCardCopy(props) {
+  const { image1, image2, image3, title, subtitle, price, review } = props;
 
   return (
     <Card
@@ -31,7 +31,7 @@ export default function ReservationCard(props) {
         />
       </Box>
 
-      <Link to={`/reservation-details/${propertyId}`}>
+      <Link to={`/reservation-details`}>
         <Box
           display={"flex"}
           justifyContent={"space-between"}
