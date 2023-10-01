@@ -42,15 +42,11 @@ export default function Home() {
                       image1={data.images[0]?.url}
                       image2={data.images[1]?.url}
                       image3={data.images[2]?.url}
-                      title={
-                        data.title.length > 27
-                          ? `${data.title.substring(0, 27)}...`
+                      title={`${data.located.address.city}, ${data.located.address.country}`}
+                      subtitle={ 
+                        data.title.length > 60
+                          ? `${data.title.substring(0, 60)}...`
                           : data.title
-                      }
-                      subtitle={
-                        data.description.length > 60
-                          ? `${data.description.substring(0, 60)}...`
-                          : data.description
                       }
                       price={data.price}
                       review={"4.9"}
