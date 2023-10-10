@@ -1,22 +1,40 @@
 import * as React from "react";
-import { Apple, ArrowBackIos, Facebook, Google, Star } from "@mui/icons-material";
-import { Button, Container, Divider, Grid, Link, Stack, TextField, Typography } from "@mui/material";
-import DiamondIcon from '@mui/icons-material/Diamond'
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import {
+  Apple,
+  ArrowBackIos,
+  Facebook,
+  Google,
+  Star,
+} from "@mui/icons-material";
+import {
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Link,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
+import DiamondIcon from "@mui/icons-material/Diamond";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { AppLayout } from "../../layouts/appLayout";
+
 
 const PaymentForm = (prop) => {
   const { basePrice, totalNights, extra } = prop;
-
+ 
   return (
-    <AppLayout>
-      <Container maxWidth="lg">
+    <AppLayout> 
+      <Container maxWidth="lg"> 
         <Grid container spacing={2}>
           <Grid item xs={12}>
+           
+
             <Typography
               variant="h2"
               fontSize={"32px"}
@@ -59,7 +77,10 @@ const PaymentForm = (prop) => {
                         </Typography>
                       </Grid>
                       <Grid xs={4} container justifyContent="flex-end">
-                        <DiamondIcon fontSize={"large"} sx={{ color: "#ff0047" }} />
+                        <DiamondIcon
+                          fontSize={"large"}
+                          sx={{ color: "#ff0047" }}
+                        />
                       </Grid>
                     </Grid>
                   </Box>
@@ -69,16 +90,16 @@ const PaymentForm = (prop) => {
                     </Box>
                     <Box my={2}>
                       <Box>
-                        <Typography variant="h6" fontSize={"17px"}>Dates</Typography>
+                        <Typography variant="h6" fontSize={"17px"}>
+                          Dates
+                        </Typography>
                       </Box>
                       <Box
                         display={"flex"}
                         justifyContent={"space-between"}
                         alignItems={"center"}
                       >
-                        <Typography variant="subtitle1" >
-                          Aug 19 – 24
-                        </Typography>
+                        <Typography variant="subtitle1">Aug 19 – 24</Typography>
                         <Typography variant="h6" fontSize={"17px"}>
                           Edit
                         </Typography>
@@ -86,16 +107,16 @@ const PaymentForm = (prop) => {
                     </Box>
                     <Box my={2}>
                       <Box>
-                        <Typography variant="h6" fontSize={"17px"}>Guests</Typography>
+                        <Typography variant="h6" fontSize={"17px"}>
+                          Guests
+                        </Typography>
                       </Box>
                       <Box
                         display={"flex"}
                         justifyContent={"space-between"}
                         alignItems={"center"}
                       >
-                        <Typography variant="subtitle1" >
-                          1 guest
-                        </Typography>
+                        <Typography variant="subtitle1">1 guest</Typography>
                         <Typography variant="h6" fontSize={"17px"}>
                           Edit
                         </Typography>
@@ -108,13 +129,13 @@ const PaymentForm = (prop) => {
                 {/* Log in part start */}
                 <Grid item xs={12}>
                   <Box my={2}>
-                    <Typography variant="h6">Log in or sign up to book</Typography>
+                    <Typography variant="h6">
+                      Log in or sign up to book
+                    </Typography>
                   </Box>
                   <FormControl fullWidth>
                     <InputLabel>Country/Region</InputLabel>
-                    <Select
-                      id="demo-simple-select"
-                    >
+                    <Select id="demo-simple-select">
                       <MenuItem value={10}>Bangladesh</MenuItem>
                       <MenuItem value={20}>Saudi Arab</MenuItem>
                       <MenuItem value={30}>Dubai</MenuItem>
@@ -125,10 +146,20 @@ const PaymentForm = (prop) => {
                       placeholder="+880"
                       multiline
                     />
-                    <Typography variant="caption" display="block" gutterBottom my={2} s>
-                      We’ll call or text you to confirm your number. Standard message and data rates apply. <Link href="#" underline="always" color="inherit">{'Privacy Policy'}</Link>
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      gutterBottom
+                      my={2}
+                      s
+                    >
+                      We’ll call or text you to confirm your number. Standard
+                      message and data rates apply.{" "}
+                      <Link href="#" underline="always" color="inherit">
+                        {"Privacy Policy"}
+                      </Link>
                     </Typography>
-                    <Link to={'#'}>
+                    <Link to={"#"}>
                       <Button
                         variant="contained"
                         fullWidth
@@ -153,13 +184,8 @@ const PaymentForm = (prop) => {
                         <Apple />
                       </Button>
                     </Stack>
-                    <Link to={'#'}>
-                      <Button
-                        variant="outlined"
-                        fullWidth
-                        size="large"
-                        my={2}
-                      >
+                    <Link to={"#"}>
+                      <Button variant="outlined" fullWidth size="large" my={2}>
                         Continue with email
                       </Button>
                     </Link>
@@ -198,16 +224,25 @@ const PaymentForm = (prop) => {
                       <Grid item xs={12} sm container>
                         <Grid item xs container direction="column" spacing={5}>
                           <Grid item>
-                            <Typography variant="body2" fontSize={"12px"} sx={{ color: "#808283" }}>
+                            <Typography
+                              variant="body2"
+                              fontSize={"12px"}
+                              sx={{ color: "#808283" }}
+                            >
                               Room in condo
                             </Typography>
-                            <Typography variant="subtitle1" component="div" fontSize={"14px"} >
+                            <Typography
+                              variant="subtitle1"
+                              component="div"
+                              fontSize={"14px"}
+                            >
                               Noble room into the historical Torino
                             </Typography>
                           </Grid>
                           <Grid item>
                             <Typography variant="body2" fontSize={"12px"}>
-                              <Star fontSize={"10px"} /><strong>4.80 </strong> (50 reviews)
+                              <Star fontSize={"10px"} />
+                              <strong>4.80 </strong> (50 reviews)
                             </Typography>
                           </Grid>
                         </Grid>
@@ -239,7 +274,6 @@ const PaymentForm = (prop) => {
                   >
                     <Typography variant="h4" fontSize={"15px"}>
                       Cleaning fee
-
                     </Typography>
                     <Typography variant="h4" fontSize={"15px"}>
                       $21.85
@@ -278,10 +312,18 @@ const PaymentForm = (prop) => {
                     alignItems={"center"}
                     my={2}
                   >
-                    <Typography variant="h4" fontSize={"16px"} fontWeight={"700"}>
+                    <Typography
+                      variant="h4"
+                      fontSize={"16px"}
+                      fontWeight={"700"}
+                    >
                       Total (USD)
                     </Typography>
-                    <Typography variant="h4" fontSize={"15px"} fontWeight={"700"}>
+                    <Typography
+                      variant="h4"
+                      fontSize={"15px"}
+                      fontWeight={"700"}
+                    >
                       $289.34
                     </Typography>
                   </Box>
@@ -291,7 +333,7 @@ const PaymentForm = (prop) => {
             </Grid>
           </Grid>
         </Grid>
-      </Container >
+      </Container>
     </AppLayout>
   );
 };

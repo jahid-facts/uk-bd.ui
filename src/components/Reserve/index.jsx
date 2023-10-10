@@ -14,7 +14,7 @@ import {
 import { Close, KeyboardArrowDown, Star } from "@mui/icons-material";
 import WhenDate from "../searchFilter/WhenDate";
 import Who from "../searchFilter/Who";
-import { Link } from "react-router-dom";
+import ReservationModal from "../stripePayments/ReservationModal";
 
 const Reserve = ({
   price,
@@ -55,7 +55,6 @@ const Reserve = ({
     endDate: null,
     key: "selection",
   });
-  
 
   // date diffarance calculate
   const startDate = new Date(selectedRange.startDate);
@@ -159,6 +158,17 @@ const Reserve = ({
     childrenCount === 0 &&
     infantsCount === 0 &&
     petsCount === 0;
+
+  // for payment modal
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
 
   return (
     <div>
@@ -367,17 +377,19 @@ const Reserve = ({
           </Popper>
         </Box>
 
-        <Link to={"/payments"}>
-          <Button
-            variant="contained"
-            fullWidth
-            color="secondary"
-            size="large"
-            sx={{ fontWeight: "600", cursor: "pointer" }}
-          >
-            Reserve
-          </Button>
-        </Link>
+        <Button
+          variant="contained"
+          fullWidth
+          color="secondary"
+          size="large"
+          sx={{ fontWeight: "600", cursor: "pointer" }}
+          onClick={openModal}
+        >
+          Reserve
+        </Button>
+       
+          <ReservationModal isOpen={modalOpen} onClose={closeModal} />
+       
 
         <Box textAlign={"center"} fontSize={"13px"} my={2}>
           <Typography variant="text" color={"primary"}>

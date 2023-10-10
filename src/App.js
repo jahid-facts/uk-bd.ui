@@ -11,10 +11,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { AppRoutes } from "./routes/AppRoutes";
 import { AdminRoutes } from "./routes/AdminRoutes";
+import AdminCheck from "./helpers/userRoles";
+import Success from "./pages/status/Success";
+import Cancel from "./pages/status/Cancel";
 
 export default function App() {
   const isAuthenticated = useSelector((state) => state.auth.isLoggedIn);
   const isEmailVerified = useSelector((state) => state.auth.isEmailVerified);
+  const isAdmin = AdminCheck();
 
   return (
     <ThemeProvider theme={theme}>
@@ -49,11 +53,14 @@ export default function App() {
           />
 
           {/* app all routes  */}
-          <Route path="/*" element={<AppRoutes />} />
+          <Route path="/*" element={<AppRoutes />} /> 
 
-          {/* admin all routes  */}
-          <Route path="/admin" element={<AdminRoutes />} />
+          {/* admin all routes {isAdmin && */}
+          {/* {isAdmin && <Route path="/admin/*" element={<AdminRoutes />} />} */}
+          <Route path="/admin/*" element={<AdminRoutes />} />
 
+          <Route path="/success" element={<Success />} />
+          <Route path="/cancel" element={<Cancel />} /> 
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>

@@ -4,7 +4,7 @@ import Home from "../pages/home/Home";
 import Profile from "../pages/profile/Profile";
 import { PageNotFound } from "../pages/404";
 import ReservationDetails from "../pages/reservationDetails/ReservationDetails";
-import AddPropertise from "../pages/addPropertise";
+import AddProperties from "../pages/addProperties";
 import PaymentForm from "../pages/payments";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "../helpers/ProtectedRoute";
@@ -60,8 +60,8 @@ export const AppRoutes = () => {
           element={<ProtectedRoute children={<PaymentForm />} />}
         />
         <Route
-          path="/add-propertise"
-          element={<ProtectedRoute children={<AddPropertise />} />}
+          path="/add-properties"
+          element={<ProtectedRoute children={<AddProperties />} />}
         />
         <Route path="/*" element={<PageNotFound />} />
       </Routes>

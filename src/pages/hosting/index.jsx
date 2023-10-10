@@ -1,4 +1,4 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Card, Grid, Typography } from "@mui/material";
 import React from "react";
 import {
   ApartmentOutlined,
@@ -7,7 +7,8 @@ import {
   MonetizationOnOutlined,
 } from "@mui/icons-material";
 import { theme } from "../../theme";
-import DashboardLayout from "../../layouts/dashboard";
+import DashboardLayout from "../../layouts/userDashboard";
+import DashboardCard from "../../components/dashboardCard/DashboardCard";
 
 const Hosting = () => {
   return (
@@ -15,173 +16,99 @@ const Hosting = () => {
       <div>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              p={3}
-              boxShadow={theme.palette.boxShadow}
-              bgcolor={"#ffffff"}
-              borderRadius={"20px"}
-            >
-              <Box
-                p={1}
-                mr={2}
-                width={"40px"}
-                height={"40px"}
-                borderRadius={"50px"}
-                bgcolor={"#e0eeff"}
-                display={"flex"}
-                textAlign={"center"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <BarChart sx={{ fontSize: "30px", color: "#2980b9" }} />
-              </Box>
-              <Box>
-                <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
-                  Total
-                </Typography>
-                <Typography variant="h5" fontWeight={"bold"}>
-                  $350.4
-                </Typography>
-                <Typography
-                  variant="body1"
-                  fontWeight={"600"}
-                  fontSize={"14px"}
-                  color={"#7f7f7f"}
-                >
-                  Earnings
-                </Typography>
-              </Box>
-            </Box>
+            <DashboardCard
+              icon={"clarity:dashboard-line"}
+              title={"Spend this month"}
+              subTitle={"Total"}
+              countNumber={"$654"}
+              color={"#2980b9"}
+            />
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              p={3}
-              boxShadow={theme.palette.boxShadow}
-              bgcolor={"#ffffff"}
-              borderRadius={"20px"}
-            >
-              <Box
-                p={1}
-                mr={2}
-                width={"40px"}
-                height={"40px"}
-                borderRadius={"50px"}
-                bgcolor={"#e0eeff"}
-                display={"flex"}
-                textAlign={"center"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <AttachMoney sx={{ fontSize: "30px", color: "#27ae60" }} />
-              </Box>
-              <Box>
-                <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
-                  Total
-                </Typography>
-                <Typography variant="h5" fontWeight={"bold"}>
-                  $642.39
-                </Typography>
-                <Typography
-                  variant="body1"
-                  fontWeight={"600"}
-                  fontSize={"14px"}
-                  color={"#7f7f7f"}
-                >
-                  Spend this month
-                </Typography>
-              </Box>
-            </Box>
+            <DashboardCard
+              icon={"mdi:dollar"}
+              title={"Earnings"}
+              subTitle={"Total"}
+              countNumber={"$642.39"}
+              color={"#27ae60"}
+            />
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              p={3}
-              boxShadow={theme.palette.boxShadow}
-              bgcolor={"#ffffff"}
-              borderRadius={"20px"}
+            <Card
+              sx={{
+                boxShadow: theme.palette.boxShadow,
+                borderRadius: "20px",
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                bgcolor: "#ffffff",
+              }}
             >
               <Box
-                p={1}
-                mr={2}
-                width={"40px"}
-                height={"40px"}
-                borderRadius={"50px"}
-                bgcolor={"#e0eeff"}
                 display={"flex"}
-                textAlign={"center"}
                 alignItems={"center"}
-                justifyContent={"center"}
+                p={3}
+                boxShadow={theme.palette.boxShadow}
+                bgcolor={"#ffffff"}
+                borderRadius={"20px"}
               >
-                <MonetizationOnOutlined
-                  sx={{ fontSize: "30px", color: "#8e44ad" }}
-                />
-              </Box>
-              <Box>
-                <Typography
-                  variant="body1"
-                  fontSize={"14px"}
-                  color={"#7f7f7f"}
-                  fontWeight={"600"}
+                <Box
+                  p={1}
+                  mr={2}
+                  width={"40px"}
+                  height={"40px"}
+                  borderRadius={"50px"}
+                  bgcolor={"#e0eeff"}
+                  display={"flex"}
+                  textAlign={"center"}
+                  alignItems={"center"}
+                  justifyContent={"center"}
                 >
-                  Sales
-                </Typography>
-                <Typography variant="h5" fontWeight={"bold"}>
-                  $574.34
-                </Typography>
-                <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
-                  <span style={{ color: "#27ae60" }}> +23%</span> since last
-                  month
-                </Typography>
+                  <MonetizationOnOutlined
+                    sx={{ fontSize: "30px", color: "#8e44ad" }}
+                  />
+                </Box>
+                <Box>
+                  <Typography
+                    variant="body1"
+                    fontSize={"14px"}
+                    color={"#7f7f7f"}
+                    fontWeight={"600"}
+                  >
+                    Sales
+                  </Typography>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    $574.34
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    fontSize={"14px"}
+                    color={"#7f7f7f"}
+                  >
+                    <span style={{ color: "#27ae60" }}> +23%</span> since last
+                    month
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
+            </Card>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box
-              display={"flex"}
-              alignItems={"center"}
-              p={3}
-              boxShadow={theme.palette.boxShadow}
-              bgcolor={"#ffffff"}
-              borderRadius={"20px"}
-            >
-              <Box
-                p={1}
-                mr={2}
-                width={"40px"}
-                height={"40px"}
-                borderRadius={"50px"}
-                bgcolor={"#e0eeff"}
-                display={"flex"}
-                textAlign={"center"}
-                alignItems={"center"}
-                justifyContent={"center"}
-              >
-                <ApartmentOutlined
-                  sx={{ fontSize: "30px", color: "#f1c40f" }}
-                />
-              </Box>
-              <Box>
-                <Typography variant="body1" fontSize={"14px"} color={"#7f7f7f"}>
-                  Total
-                </Typography>
-                <Typography variant="h5" fontWeight={"bold"}>
-                  4
-                </Typography>
-                <Typography
-                  variant="body1"
-                  fontSize={"14px"}
-                  color={"#7f7f7f"}
-                  fontWeight={"600"}
-                >
-                  Active property
-                </Typography>
-              </Box>
-            </Box>
+            <DashboardCard
+              icon={"tdesign:building"}
+              title={"Active property"}
+              subTitle={"Total"}
+              countNumber={"65"}
+              color={"#FF6AC2"}
+            />
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <DashboardCard
+              icon={"clarity:building-line"}
+              title={"Active property renting"}
+              subTitle={"Total"}
+              countNumber={"30"}
+              color={"#ff0000"}
+            />
           </Grid>
         </Grid>
       </div>

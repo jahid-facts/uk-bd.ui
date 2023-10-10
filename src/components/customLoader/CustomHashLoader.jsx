@@ -11,7 +11,7 @@ const CustomHashLoader = () => {
       minHeight="60vh"
       width={"100%"}
     >
-      <HashLoader color="#ff0000" />
+      <HashLoader color="#ff0000" size={'40px'} />
     </Box>
   );
 };

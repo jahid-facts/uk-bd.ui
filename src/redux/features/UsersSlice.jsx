@@ -1,13 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getApi } from "../../config/configAxios";
 
-// Async action to get active properties
-export const getActiveProperties = createAsyncThunk(
-  "properties/getActiveProperties",
+// Get all users for admin
+export const getAllUsers = createAsyncThunk(
+  "users/getAllUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getApi("/getActiveProperties");
-      return response.data.activeProperties;
+      const response = await getApi("/users");
+      return response.data.users;
     } catch (error) {
       return rejectWithValue(error.response.data.error);
     }
@@ -15,30 +15,30 @@ export const getActiveProperties = createAsyncThunk(
 );
 
 const initialState = {
-  properties: [],
+  users: [],
   status: "idle",
   error: null,
 };
 
-const propertySlice = createSlice({
-  name: "properties",
+const usersSlice = createSlice({
+  name: "users",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getActiveProperties.pending, (state) => {
+      .addCase(getAllUsers.pending, (state) => {
         state.status = "loading";
         state.error = null;
       })
-      .addCase(getActiveProperties.fulfilled, (state, action) => {
+      .addCase(getAllUsers.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.properties = action.payload;
+        state.users = action.payload;
       })
-      .addCase(getActiveProperties.rejected, (state, action) => {
+      .addCase(getAllUsers.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload;
       });
   },
 });
 
-export default propertySlice.reducer;
+export default usersSlice.reducer;

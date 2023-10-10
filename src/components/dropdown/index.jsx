@@ -1,14 +1,13 @@
-import { Close } from "@mui/icons-material";
 import { Box, Button, Popover } from "@mui/material";
 import React from "react";
+import Capitalize from "../capitalize/Capitalize";
 
 export const DropdownMenu = ({
-  handleMenuClose,
   anchorEl,
-  handleDeleteProperty,
-  propertyId,
-  handleActivProperty,
-  handleDeActivProperty,
+  handleMenuClose,
+  handleAction,
+  actionItems,
+  id,
 }) => {
   return (
     <Popover
@@ -25,39 +24,28 @@ export const DropdownMenu = ({
       }}
     >
       <Box display={"flex"} flexDirection={"column"} p={1}>
-        <Button
-          sx={{ textTransform: "capitalize" }}
-          onClick={() => {
-            handleMenuClose();
-            handleActivProperty(propertyId);
-          }}
-        >
-          Active
-        </Button>
-        <Button
-          sx={{ textTransform: "capitalize" }}
-          onClick={() => {
-            handleMenuClose();
-            handleDeActivProperty(propertyId);
-          }}
-        >
-          De-active
-        </Button>
-        <Button
-          sx={{ textTransform: "capitalize" }}
-          onClick={() => {
-            handleMenuClose();
-            handleDeleteProperty(propertyId);
-          }}
-        >
-          Delete
-        </Button>
+        {actionItems.map((item, index) => (
+          <Button
+            key={index}
+            sx={{ textTransform: "capitalize" }}
+            onClick={() => {
+              handleMenuClose();
+              handleAction(item.type, id);
+            }}
+          >
+            {/* // use their  Capitalize() */}
+            {Capitalize(item.type)}
+          </Button>
+        ))}
         <Button
           key="2"
-          sx={{ textTransform: "capitalize" }}
+          variant="contained"
+          color="secondary"
+          size="small"
+          sx={{ textTransform: "capitalize", mt: 1.5 }}
           onClick={handleMenuClose}
         >
-          <Close sx={{ color: "#ff0000", fontSize: "14px" }} />
+          close
         </Button>
       </Box>
     </Popover>

@@ -1,11 +1,22 @@
 import { configureStore } from "@reduxjs/toolkit";
-import AuthSlice from "./features/AuthSlice";
+import UserPropertiesSlice from "./features/UserPropertiesSlice";
+import AllPropertyForAdminSlice from "./features/AllPropertyForAdminSlice";
 import PropertySlice from "./features/PropertySlice";
+import AuthSlice from "./features/AuthSlice";
+import UsersSlice from "./features/UsersSlice";
+// import AuthSlice from "./features/AuthSlice";
+// import PropertySlice from "./features/PropertySlice";
+// import AllPropertyForAdminSlice from "./features/AllPropertyForAdminSlice"; 
+// import UserPropertiesSlice from "./features/UserPropertiesSlice";
+// import UsersSlice from "./features/UsersSlice";
 
 const store = configureStore({
   reducer: {
     auth: AuthSlice,
-    propertise: PropertySlice,
+    users: UsersSlice,
+    properties: PropertySlice,
+    allPropertyForAdmin: AllPropertyForAdminSlice,
+    userProperties: UserPropertiesSlice,
   },
 });
 

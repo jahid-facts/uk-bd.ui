@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
 import MobileStepper from "@mui/material/MobileStepper";
 import { Button } from "@mui/material";
-import StartPropertise from "../../components/addpropertiseComponents/StartPropertise";
-import PlaceDescibe from "../../components/addpropertiseComponents/PlaceDescibe";
-import AddAdrress from "../../components/addpropertiseComponents/AddAddress";
-import TypeOfPlace from "../../components/addpropertiseComponents/TypeOfPlace";
-import LocatedPlace from "../../components/addpropertiseComponents/LocatedPlace";
-import Guests from "../../components/addpropertiseComponents/Guests";
-import Offer from "../../components/addpropertiseComponents/Offer";
-import Description from "../../components/addpropertiseComponents/Description";
-import ShortTitle from "../../components/addpropertiseComponents/ShortTitle";
-import Prices from "../../components/addpropertiseComponents/Prices";
-import Decide from "../../components/addpropertiseComponents/Decide";
-import Discounts from "../../components/addpropertiseComponents/Discounts";
+import StartProperties from "../../components/addpropertiesComponents/StartProperties";
+import PlaceDescibe from "../../components/addpropertiesComponents/PlaceDescibe";
+import AddAdrress from "../../components/addpropertiesComponents/AddAddress";
+import TypeOfPlace from "../../components/addpropertiesComponents/TypeOfPlace";
+import LocatedPlace from "../../components/addpropertiesComponents/LocatedPlace";
+import Guests from "../../components/addpropertiesComponents/Guests";
+import Offer from "../../components/addpropertiesComponents/Offer";
+import Description from "../../components/addpropertiesComponents/Description";
+import ShortTitle from "../../components/addpropertiesComponents/ShortTitle";
+import Prices from "../../components/addpropertiesComponents/Prices";
+import Decide from "../../components/addpropertiesComponents/Decide";
+import Discounts from "../../components/addpropertiesComponents/Discounts";
 import { getApiById, putApi } from "../../config/configAxios";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppLayout } from "../../layouts/appLayout";
 import { BeatLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import MultipleImages from "../../components/addpropertiseComponents/MultipleImages";
+import MultipleImages from "../../components/addpropertiesComponents/MultipleImages";
 import { useAuthInfo } from "../../helpers/AuthCheck";
 
 export default function EditProperty() {
@@ -139,7 +139,7 @@ export default function EditProperty() {
   ) => {
     switch (step) {
       case 0:
-        return <StartPropertise />;
+        return <StartProperties />;
       case 1:
         return (
           <PlaceDescibe

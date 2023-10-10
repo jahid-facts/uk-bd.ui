@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
 
-const StartPropertise = () => {
+const StartProperties = () => {
   return (
     <>
       <Box
@@ -51,4 +51,4 @@ const StartPropertise = () => {
   );
 };
 
-export default StartPropertise;
+export default StartProperties;
