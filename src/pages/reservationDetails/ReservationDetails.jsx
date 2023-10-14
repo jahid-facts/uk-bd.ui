@@ -32,15 +32,6 @@ import CustomHashLoader from "../../components/customLoader/CustomHashLoader";
 import { Icon } from "@iconify/react";
 import OpenAmenitiseList from "./AmenitiseList";
 
-function srcset(image, size, rows = 1, cols = 1) {
-  return {
-    src: `${image}?w=${size * cols}&h=${size * rows}&fit=crop&auto=format`,
-    srcSet: `${image}?w=${size * cols}&h=${
-      size * rows
-    }&fit=crop&auto=format&dpr=2 2x`,
-  };
-}
-
 export default function ReservationDetails() {
   const [selectPosition, setSelectPosition] = React.useState(null);
   const [propertyValues, setPropertyValues] = React.useState(null);
@@ -55,7 +46,10 @@ export default function ReservationDetails() {
     const fetchDataServer = async () => {
       try {
         setLoading(true);
-        const response = await getApiById(`/property/details/${propertyId}`, propertyId);
+        const response = await getApiById(
+          `/property/details/${propertyId}`,
+          propertyId
+        );
         setPropertyValues(response.data.property);
 
         const newItems = response.data.property.images.map((data) => ({
@@ -75,8 +69,6 @@ export default function ReservationDetails() {
 
     fetchDataServer();
   }, [propertyId]);
-
-
 
   const handleImageLIst = () => {
     setOpenImageList(!openImageList);
@@ -702,7 +694,19 @@ export default function ReservationDetails() {
                         },
                       }}
                     >
-                      <Reserve price={parseInt(propertyValues?.price)} listingDiscountPercentage={parseInt(propertyValues?.discounts?.listingValue)} weeklyDiscountPercentage={parseInt(propertyValues?.discounts?.weeklyValue)} monthlyDiscountPercentage={parseInt(propertyValues?.discounts?.monthlyValue)} />
+                      <Reserve
+                        propertyId={propertyId}
+                        price={parseInt(propertyValues?.price)}
+                        listingDiscountPercentage={parseInt(
+                          propertyValues?.discounts?.listingValue
+                        )}
+                        weeklyDiscountPercentage={parseInt(
+                          propertyValues?.discounts?.weeklyValue
+                        )}
+                        monthlyDiscountPercentage={parseInt(
+                          propertyValues?.discounts?.monthlyValue
+                        )}
+                      />
                     </Box>
                   </Grid>
                 </Grid>
@@ -726,28 +730,3 @@ export default function ReservationDetails() {
     </AppLayout>
   );
 }
-
-// const itemDataImages = [
-//   {
-//     img: `${propertyValues.images.url[0]}`,
-//     title: "Breakfast",
-//     rows: 2,
-//     cols: 2,
-//   },
-//   {
-//     img: `${propertyValues.images.url[1]}`,
-//     title: "Burger",
-//   },
-//   {
-//     img: `${propertyValues.images.url[2]}`,
-//     title: "Camera",
-//   },
-//   {
-//     img: `${propertyValues.images.url[3]}`,
-//     title: "Coffee",
-//   },
-//   {
-//     img: `${propertyValues.images.url[4]}`,
-//     title: "Coffee",
-//   },
-// ];

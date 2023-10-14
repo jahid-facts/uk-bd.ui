@@ -5,18 +5,28 @@ import CheckoutForm from "./CheckoutForm";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import { postApi } from "../../config/configAxios";
-import "./ReservationModal.css"; // Import a CSS file for styling
+import "./ReservationModal.css";
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
-const ReservationModal = ({ isOpen, onClose }) => {
-  const [clientSecret, setClientSecret] = useState(""); 
+const ReservationModal = ({
+  isOpen,
+  onClose,
+  propertyInfo,
+}) => {
+  const [clientSecret, setClientSecret] = useState("");
+
+  const handlePaymentIntent = () => {
+    postApi("/create-payment-intent", propertyInfo)
+      .then((res) => setClientSecret(res.data.clientSecret))
+      .catch((error) => console.error(error));
+  };
 
   useEffect(() => {
-    postApi("/create-payment-intent", { items: [{ id: "xl-tshirt" }] })
-      .then((res) => setClientSecret(res.data.clientSecret))
-      .catch((error) => console.log(error));
-  }, []);
+    if (isOpen) {
+      handlePaymentIntent();
+    }
+  }, [isOpen]);
 
   const appearance = {
     theme: "stripe",
@@ -31,7 +41,7 @@ const ReservationModal = ({ isOpen, onClose }) => {
       <Paper>
         <div className="modal-content">
           <div>
-            <Box 
+            <Box
               mb={2}
               display={"flex"}
               justifyContent={"space-between"}
@@ -52,11 +62,11 @@ const ReservationModal = ({ isOpen, onClose }) => {
           </div>
           {clientSecret && (
             <Elements stripe={stripePromise} options={options}>
-              <CheckoutForm closeModal={onClose} />
+              <CheckoutForm closeModal={onClose} propertyInfo={propertyInfo} />
             </Elements>
           )}
         </div>
-      </Paper> 
+      </Paper>
     </Modal>
   );
 };

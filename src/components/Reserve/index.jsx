@@ -15,20 +15,24 @@ import { Close, KeyboardArrowDown, Star } from "@mui/icons-material";
 import WhenDate from "../searchFilter/WhenDate";
 import Who from "../searchFilter/Who";
 import ReservationModal from "../stripePayments/ReservationModal";
+import { useAuthInfo } from "../../helpers/AuthCheck";
 
 const Reserve = ({
+  propertyId,
   price,
   listingDiscountPercentage,
   weeklyDiscountPercentage,
   monthlyDiscountPercentage,
 }) => {
-  const [open, setOpen] = React.useState(false);
-  const anchorRef = React.useRef(null);
+  const [open, setOpen] = useState(false);
+  const anchorRef = useRef(null);
   const [discountedPrices, setDiscountedPrices] = useState(0);
   const [activeDiscount, setActiveDiscount] = useState(0);
+  const [applyDiscountPercentage, setApplyDiscountPercentage] = useState(0);
+  const userInfo = useAuthInfo();
 
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
+  const prevOpen = useRef(open);
+  useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
@@ -36,7 +40,7 @@ const Reserve = ({
     prevOpen.current = open;
   }, [open]);
 
-  const [openPopper, setOpenPopper] = React.useState({
+  const [openPopper, setOpenPopper] = useState({
     1: false,
     2: false,
     3: false,
@@ -56,14 +60,19 @@ const Reserve = ({
     key: "selection",
   });
 
-  // date diffarance calculate
-  const startDate = new Date(selectedRange.startDate);
-  const endDate = new Date(selectedRange.endDate);
-  const timeDifference = endDate.getTime() - startDate.getTime();
+  // date difference calculation
+  const startDate = selectedRange.startDate
+    ? new Date(selectedRange.startDate)
+    : null;
+  const endDate = selectedRange.endDate
+    ? new Date(selectedRange.endDate)
+    : null;
+  const timeDifference =
+    startDate && endDate ? endDate.getTime() - startDate.getTime() : 0;
   // Calculate the number of days
   const daysDifference = timeDifference / (1000 * 3600 * 24);
 
-  // price calculate
+  // price calculation
   const totalNightPrice = (price * daysDifference).toFixed(2);
   const serviceFee = (price * daysDifference) / 10;
   const userGetDiscountPrices =
@@ -72,7 +81,7 @@ const Reserve = ({
   const totalPrice =
     parseFloat(totalNightPrice) + serviceFee - userGetDiscountPrices;
 
-  // discount calculate
+  // discount calculation
   const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
     // Calculate the discounted price
     const discountedPrice =
@@ -101,37 +110,42 @@ const Reserve = ({
   );
 
   useEffect(() => {
-    // if (daysDifference > 30) {
-    //   setDiscountedPrices(discountedPriceMonthly);
-    // } else if (daysDifference > 7) {
-    //   setDiscountedPrices(discountedPriceWeekly);
-    // } else if (
-    //   discountedPriceListing !== null &&
-    //   discountedPriceListing !== ""
-    // ) {
-    //   setDiscountedPrices(discountedPriceListing);
-    // } else {
-    //   setDiscountedPrices(originalPrice);
-    // }setDiscountedPrices(
-    setActiveDiscount(
-      daysDifference > 30
-        ? "monthly"
-        : daysDifference > 7
-        ? "weekly"
-        : discountedPriceListing != null && discountedPriceListing !== ""
-        ? "listing"
-        : ""
-    );
+    const calculateDiscount = () => {
+      setApplyDiscountPercentage(
+        daysDifference > 30
+          ? monthlyDiscountPercentage
+          : daysDifference > 7
+          ? weeklyDiscountPercentage
+          : discountedPriceListing != null && discountedPriceListing !== ""
+          ? listingDiscountPercentage
+          : 0
+      );
 
-    setDiscountedPrices(
-      daysDifference > 30
-        ? discountedPriceMonthly
-        : daysDifference > 7
-        ? discountedPriceWeekly
-        : discountedPriceListing || originalPrice
-    );
+      setActiveDiscount(
+        daysDifference > 30
+          ? "monthly"
+          : daysDifference > 7
+          ? "weekly"
+          : discountedPriceListing != null && discountedPriceListing !== ""
+          ? "listing"
+          : ""
+      );
+
+      setDiscountedPrices(
+        daysDifference > 30
+          ? discountedPriceMonthly
+          : daysDifference > 7
+          ? discountedPriceWeekly
+          : discountedPriceListing || originalPrice
+      );
+    };
+
+    calculateDiscount();
   }, [
     daysDifference,
+    listingDiscountPercentage,
+    weeklyDiscountPercentage,
+    monthlyDiscountPercentage,
     discountedPriceMonthly,
     discountedPriceWeekly,
     discountedPriceListing,
@@ -159,7 +173,7 @@ const Reserve = ({
     infantsCount === 0 &&
     petsCount === 0;
 
-  // for payment modal
+  // for the payment modal
   const [modalOpen, setModalOpen] = useState(false);
 
   const openModal = () => {
@@ -168,6 +182,26 @@ const Reserve = ({
 
   const closeModal = () => {
     setModalOpen(false);
+  };
+
+  const propertyInfo = {
+    userId: userInfo._id,
+    name: userInfo.name,
+    email: userInfo.email,
+    propertyId: propertyId,
+    originalPrice: originalPrice,
+    actualPrice: totalPrice,
+    discountAmount: userGetDiscountPrices,
+    serviceFee: serviceFee,
+    discountPercentage: listingDiscountPercentage,
+    startDate: startDate,
+    endDate: endDate,
+    guests:{
+      adults: adultsCount,
+      children: childrenCount,
+      infants: infantsCount,
+      pets: petsCount,
+    },
   };
 
   return (
@@ -207,7 +241,6 @@ const Reserve = ({
               value="1"
               ref={box1Ref}
               onClick={() => {
-                // handleBoxClick("1");
                 handleTogglePopper("1");
               }}
               sx={{ cursor: "pointer" }}
@@ -217,9 +250,9 @@ const Reserve = ({
                   Check in
                 </Typography>
                 <Typography variant="h4" fontSize={"14px"} mt={"5px"}>
-                  {selectedRange.startDate?.toLocaleDateString() == null
+                  {startDate == null
                     ? "Add dates"
-                    : selectedRange.startDate?.toLocaleDateString("en-GB")}
+                    : startDate.toLocaleDateString("en-GB")}
                 </Typography>
               </Grid>
               <Grid item xs={6} p={"15px"}>
@@ -227,9 +260,9 @@ const Reserve = ({
                   Check out
                 </Typography>
                 <Typography variant="h4" fontSize={"14px"} mt={"5px"}>
-                  {selectedRange.endDate?.toLocaleDateString() == null
+                  {endDate == null
                     ? "Add dates"
-                    : selectedRange.endDate?.toLocaleDateString("en-GB")}
+                    : endDate.toLocaleDateString("en-GB")}
                 </Typography>
               </Grid>
             </Grid>
@@ -382,14 +415,18 @@ const Reserve = ({
           fullWidth
           color="secondary"
           size="large"
-          sx={{ fontWeight: "600", cursor: "pointer" }}
+          sx={{ fontWeight: "600", cursor: "pointer" }} 
+          // disabled={totalPrice < 1} 
           onClick={openModal}
         >
           Reserve
         </Button>
-       
-          <ReservationModal isOpen={modalOpen} onClose={closeModal} />
-       
+
+        <ReservationModal 
+          isOpen={modalOpen}
+          onClose={closeModal}
+          propertyInfo={propertyInfo}
+        />
 
         <Box textAlign={"center"} fontSize={"13px"} my={2}>
           <Typography variant="text" color={"primary"}>
