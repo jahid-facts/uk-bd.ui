@@ -7,7 +7,6 @@ export const DropdownMenu = ({
   handleMenuClose,
   handleAction,
   actionItems,
-  id,
 }) => {
   return (
     <Popover
@@ -30,10 +29,9 @@ export const DropdownMenu = ({
             sx={{ textTransform: "capitalize" }}
             onClick={() => {
               handleMenuClose();
-              handleAction(item.type, id);
+              handleAction(item.type);
             }}
           >
-            {/* // use their  Capitalize() */}
             {Capitalize(item.type)}
           </Button>
         ))}

@@ -39,7 +39,7 @@ export default function ReservationDetails() {
   const [openImageList, setOpenImageList] = React.useState(false);
   const [openAmenitiseList, setOpenAmenitiseList] = React.useState(false);
   const [itemDataImages, setItemDataImages] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const { propertyId } = useParams();
 
   React.useEffect(() => {
@@ -60,10 +60,11 @@ export default function ReservationDetails() {
         }));
         setItemDataImages(newItems);
         setAmenitiseItem(response.data.property?.amenitiesIds);
-        setLoading(false);
+        setLoading(false); // Set loading to false after data is fetched
       } catch (error) {
         console.error("Internal server error:", error);
         // You can add error handling here, such as displaying an error message
+        setLoading(false); // Ensure to set loading to false even in case of an error
       }
     };
 
@@ -81,12 +82,19 @@ export default function ReservationDetails() {
   React.useEffect(() => {
     const defaultValueForLat = "23.8041";
     const defaultValueForLon = "90.4152";
-    const location = {
-      lat: loading ? defaultValueForLat : propertyValues?.located?.lat,
-      lon: loading ? defaultValueForLon : propertyValues?.located?.lon,
-    };
-
-    setSelectPosition(location);
+    if (propertyValues?.located) {
+      const location = {
+        lat: propertyValues.located.lat || defaultValueForLat,
+        lon: propertyValues.located.lon || defaultValueForLon,
+      };
+      setSelectPosition(location);
+    } else {
+      const location = {
+        lat: defaultValueForLat,
+        lon: defaultValueForLon,
+      };
+      setSelectPosition(location);
+    }
   }, [propertyValues?.located, loading]);
 
   // date
@@ -403,7 +411,7 @@ export default function ReservationDetails() {
                     </Grid>
                     <Divider sx={{ my: 4 }} />
                     <Grid container spacing={3}>
-                      <Grid item xs={12}>
+                      <Grid item xs={12} sx={{ zIndex: 0 }}>
                         <Typography
                           variant="h6"
                           fontSize={"18px"}
@@ -416,7 +424,7 @@ export default function ReservationDetails() {
                           {propertyValues?.located.address?.state}{" "}
                           {propertyValues?.located.address?.country}
                         </Typography>
-                        <Box mt={2} mb={3} height={"300px"} zIndex={-1}>
+                        <Box mt={2} mb={3} height={"300px"}>
                           <Maps selectPosition={selectPosition} />
                         </Box>
                       </Grid>
@@ -694,19 +702,7 @@ export default function ReservationDetails() {
                         },
                       }}
                     >
-                      <Reserve
-                        propertyId={propertyId}
-                        price={parseInt(propertyValues?.price)}
-                        listingDiscountPercentage={parseInt(
-                          propertyValues?.discounts?.listingValue
-                        )}
-                        weeklyDiscountPercentage={parseInt(
-                          propertyValues?.discounts?.weeklyValue
-                        )}
-                        monthlyDiscountPercentage={parseInt(
-                          propertyValues?.discounts?.monthlyValue
-                        )}
-                      />
+                      <Reserve propertyValues={propertyValues} />
                     </Box>
                   </Grid>
                 </Grid>

@@ -17,18 +17,18 @@ import { toast } from "react-toastify";
 const Properties = () => {
   const dispatch = useDispatch();
   const { properties } = useSelector((state) => state?.allPropertyForAdmin);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // if (properties.length > 0) {
+    //   setTimeout(() => {
+    //     setLoading(false);
+    //   }, 1000);
+    // }
     setLoading(true);
-    if (properties.length > 0) {
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    }
     dispatch(getAllProperties())
       .then(() => {
         setLoading(false);
@@ -44,9 +44,9 @@ const Properties = () => {
       itemId: property._id,
       id: index + 1,
       image: property.images[0]?.url || "",
-      placeDescribes: property.placeDescribesId?.title || "", 
+      placeDescribes: property.placeDescribesId?.title || "",
       status: property.status || "",
-      price: property.price + '$' || "",
+      price: property.price + "$" || "",
       located:
         (property.located?.address?.state || "") +
         ", " +
@@ -65,79 +65,87 @@ const Properties = () => {
 
   const updatedStatus = async (propertyId, data) => {
     try {
-      await putApi(`/properties/${propertyId}`, data);
-      toast.success("Successfully status updated");
+      setLoading(true);
+      await putApi(`/properties/${propertyId}`, data).then((res) => {
+        if (res.status === 200) {
+          dispatch(getAllProperties()).then(() => {
+            setLoading(false);
+            toast.success("Successfully status updated");
+          });
+        }
+      });
     } catch (error) {
       console.error("Error submitting data:", error);
       toast.error(error.data.message);
     }
   };
 
-  const handleAction = async (actionType, id) => {
-    switch (actionType) {
-      case "de-active":
-        Swal.fire({
-          title: "Confirm De-active",
-          text: "Are you sure you want to de-active this item?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, de-active it!",
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            try {
-              const data = { status: "de-active" };
-              updatedStatus(id, data);
-            } catch (error) {
-              console.error("Error deleting property:", error);
-              Swal.fire(
-                "Error",
-                "An error occurred while de-active the item.",
-                "error"
-              );
-            }
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire("Cancelled", "The item was not disabled.", "info");
-          }
-        });
-        break;
-      case "view":
-        navigate(`/reservation-details/${id}`);
-        break;
-      case "disabled":
-        Swal.fire({
-          title: "Confirm Disable",
-          text: "Are you sure you want to disable this item?",
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Yes, disable it!",
-        }).then(async (result) => {
-          if (result.isConfirmed) {
-            try {
-              const data = { status: "disabled" };
-              updatedStatus(id, data);
-            } catch (error) {
-              console.error("Error deleting property:", error);
-              Swal.fire(
-                "Error",
-                "An error occurred while deleting the item.",
-                "error"
-              );
-            }
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire("Cancelled", "The item was not disabled.", "info");
-          }
-        });
-        break;
-      // Add more cases for other actions as needed
-      default:
-        break;
-    }
+  const handleAction = (itemId, actionType) => {
+    console.log(itemId);
+    // switch (actionType) {
+    //   case "de-active":
+    //     Swal.fire({
+    //       title: "Confirm De-active",
+    //       text: "Are you sure you want to de-active this item?",
+    //       icon: "question",
+    //       showCancelButton: true,
+    //       confirmButtonColor: "#3085d6",
+    //       cancelButtonColor: "#d33",
+    //       confirmButtonText: "Yes, de-active it!",
+    //     }).then(async (result) => {
+    //       if (result.isConfirmed) {
+    //         try {
+    //           const data = { status: "de-active" };
+    //           updatedStatus(id, data);
+    //         } catch (error) {
+    //           console.error("Error deleting property:", error);
+    //           Swal.fire(
+    //             "Error",
+    //             "An error occurred while de-active the item.",
+    //             "error"
+    //           );
+    //         }
+    //       } else if (result.dismiss === Swal.DismissReason.cancel) {
+    //         Swal.fire("Cancelled", "The item was not disabled.", "info");
+    //       }
+    //     });
+    //     break;
+    //   case "view":
+    //     navigate(`/reservation-details/${id}`);
+    //     break;
+    //   case "disabled":
+    //     Swal.fire({
+    //       title: "Confirm Disable",
+    //       text: "Are you sure you want to disable this item?",
+    //       icon: "question",
+    //       showCancelButton: true,
+    //       confirmButtonColor: "#3085d6",
+    //       cancelButtonColor: "#d33",
+    //       confirmButtonText: "Yes, disable it!",
+    //     }).then(async (result) => {
+    //       if (result.isConfirmed) {
+    //         try {
+    //           const data = { status: "disabled" };
+    //           updatedStatus(id, data);
+    //         } catch (error) {
+    //           console.error("Error deleting property:", error);
+    //           Swal.fire(
+    //             "Error",
+    //             "An error occurred while deleting the item.",
+    //             "error"
+    //           );
+    //         }
+    //       } else if (result.dismiss === Swal.DismissReason.cancel) {
+    //         Swal.fire("Cancelled", "The item was not disabled.", "info");
+    //       }
+    //     });
+    //     break;
+    //   // Add more cases for other actions as needed
+    //   default:
+    //     break;
+    // }
 
-    handleMenuClose();
+    // handleMenuClose();
   };
 
   // Define an array of action items
@@ -232,9 +240,10 @@ const Properties = () => {
           <DropdownMenu
             anchorEl={anchorEl}
             handleMenuClose={handleMenuClose}
-            handleAction={handleAction}
+            handleAction={(actionType) =>
+              handleAction(params.row.itemId, actionType)
+            }
             actionItems={actionItems}
-            id={params.row.itemId}
           />
         </Box>
       ),

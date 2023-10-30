@@ -57,17 +57,11 @@ export default function Navbar(props) {
   let showCategory;
   let showSearchFilter;
   let showSearchMobile;
-  let containerWidth;
-
   if (location.pathname === "/") {
     showCategory = <Category />;
     showSearchFilter = <SearchFilter />;
     showSearchMobile = <SearchMobile />;
-    containerWidth = "xl";
-  } else {
-    containerWidth = "xl";
-    // containerWidth = "lg";
-  }
+  } 
 
   return (
     <>
@@ -79,7 +73,7 @@ export default function Navbar(props) {
             padding: "0px",
           }}
         >
-          <Container maxWidth={containerWidth}>
+          <Container maxWidth={'xl'}>
             <StyledToolbar>
               <Logo />
 

@@ -15,7 +15,7 @@ import { DropdownMenu } from "../../../components/dropdown";
 import { useNavigate } from "react-router-dom";
 
 const RenterUsers = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);
@@ -69,7 +69,6 @@ const RenterUsers = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     dispatch(getAllUsers())
       .then(() => {
         setLoading(false);
@@ -151,6 +150,7 @@ const RenterUsers = () => {
     try {
       await putApi(`/properties/${propertyId}`, data);
       toast.success("Successfully status updated");
+      setLoading(false);
     } catch (error) {
       console.error("Error submitting data:", error);
       toast.error(error.data.message);

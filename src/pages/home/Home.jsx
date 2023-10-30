@@ -8,7 +8,6 @@ import { getActiveProperties } from "../../redux/features/PropertySlice";
 import { useDispatch, useSelector } from "react-redux";
 import CustomHashLoader from "../../components/customLoader/CustomHashLoader";
 import ReservationCardCopy from "../../components/reservationCard/index copy";
-import { NoRecord } from "../../components/noRecord";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -54,7 +53,7 @@ export default function Home() {
                     </Grid>
                   ))
               ) : (
-                <NoRecord />
+                <CustomHashLoader />
               )}
             </>
           )}

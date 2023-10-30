@@ -35,7 +35,7 @@ import { DropdownMenu } from "../../components/dropdown";
 import Swal from "sweetalert2";
 import { NoRecord } from "../../components/noRecord";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getUserProperties } from "../../redux/features/UserPropertiesSlice";
 
 const PropertyList = () => {
@@ -44,12 +44,9 @@ const PropertyList = () => {
   const [userProperties, setUserProperties] = useState([]);
   const [originalProperties, setOriginalProperties] = useState([]);
   const userInfo = useAuthInfo();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState([]);
   const dispatch = useDispatch();
-  const userPropertiesRedux = useSelector(
-    (state) => state.userProperties.properties
-  );
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -60,9 +57,13 @@ const PropertyList = () => {
   };
 
   const updatedStatus = async (propertyId, data) => {
+    setLoading(true);
     try {
-      await putApi(`/properties/${propertyId}`, data);
-      toast.success("Successfully status updated");
+      await putApi(`/properties/${propertyId}`, data).then((res)=>{
+        propertiesData();
+        toast.success("Successfully status updated");
+      });
+      // setLoading(false);
     } catch (error) {
       console.error("Error submitting data:", error);
       toast.error(error.data.message);
@@ -76,10 +77,9 @@ const PropertyList = () => {
         try {
           const response = await getApiById(`/edit/property/${id}`, id);
           if (response.data.property.images.length > 4) {
-            setLoading(true);
             const data = { status: "active" };
             updatedStatus(id, data);
-            setLoading(false);
+           
           } else {
             Swal.fire({
               icon: "error",
@@ -177,22 +177,25 @@ const PropertyList = () => {
 
       setUserProperties(filteredProperties);
     }
-
     setLoading(false);
   }, [selectedFilters, originalProperties]);
 
-  useEffect(() => {
+  // get properties data
+  const propertiesData = () => {
     setLoading(true);
-
     dispatch(getUserProperties(userInfo._id))
-      .then(() => {
-        setUserProperties(userPropertiesRedux);
-        setOriginalProperties(userPropertiesRedux);
+      .then((res) => {
+        setUserProperties(res.payload);
+        setOriginalProperties(res.payload);
         setLoading(false);
       })
       .catch((error) => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    propertiesData();
   }, [dispatch, userInfo._id]);
 
   function capitalizeFirstLetter(str) {

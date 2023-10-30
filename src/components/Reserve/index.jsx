@@ -17,19 +17,23 @@ import Who from "../searchFilter/Who";
 import ReservationModal from "../stripePayments/ReservationModal";
 import { useAuthInfo } from "../../helpers/AuthCheck";
 
-const Reserve = ({
-  propertyId,
-  price,
-  listingDiscountPercentage,
-  weeklyDiscountPercentage,
-  monthlyDiscountPercentage,
-}) => {
+const Reserve = ({ propertyValues }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const [discountedPrices, setDiscountedPrices] = useState(0);
   const [activeDiscount, setActiveDiscount] = useState(0);
   const [applyDiscountPercentage, setApplyDiscountPercentage] = useState(0);
   const userInfo = useAuthInfo();
+  const price = parseInt(propertyValues?.price);
+  const listingDiscountPercentage = parseInt(
+    propertyValues?.discounts?.listingValue
+  );
+  const weeklyDiscountPercentage = parseInt(
+    propertyValues?.discounts?.weeklyValue
+  );
+  const monthlyDiscountPercentage = parseInt(
+    propertyValues?.discounts?.monthlyValue
+  );
 
   const prevOpen = useRef(open);
   useEffect(() => {
@@ -78,8 +82,11 @@ const Reserve = ({
   const userGetDiscountPrices =
     totalNightPrice - discountedPrices * daysDifference;
 
-  const totalPrice =
-    parseFloat(totalNightPrice) + serviceFee - userGetDiscountPrices;
+  const totalPrice = (
+    parseFloat(totalNightPrice) +
+    serviceFee -
+    userGetDiscountPrices
+  ).toFixed(2); 
 
   // discount calculation
   const calculateDiscountedPrice = (originalPrice, discountPercentage) => {
@@ -184,24 +191,42 @@ const Reserve = ({
     setModalOpen(false);
   };
 
+  const address = {
+    country: propertyValues?.address?.country,
+    addressLine1:
+      propertyValues?.address?.addressLine1 +
+      ", " +
+      propertyValues?.address?.addressLine2 +
+      ", " +
+      propertyValues?.address?.addressLine3,
+    city: propertyValues?.address?.city,
+    state: propertyValues?.address?.state,
+    postalCode: propertyValues?.address?.postalCode,
+  };
+
   const propertyInfo = {
-    userId: userInfo._id,
-    name: userInfo.name,
-    email: userInfo.email,
-    propertyId: propertyId,
+    renterUserId: userInfo._id,
+    renterName: userInfo.name,
+    renterEmail: userInfo.email,
+    renterPhoneNumber: userInfo?.phoneNumber,
+    hostUserId: propertyValues.userId._id,
+    hostName: propertyValues.userId.name,
+    hostEmail: propertyValues.userId.email,
+    hostPhoneNumber: propertyValues.userId?.phoneNumber,
+    propertyId: propertyValues._id,
     originalPrice: originalPrice,
     actualPrice: totalPrice,
     discountAmount: userGetDiscountPrices,
     serviceFee: serviceFee,
-    discountPercentage: listingDiscountPercentage,
-    startDate: startDate,
-    endDate: endDate,
-    guests:{
-      adults: adultsCount,
-      children: childrenCount,
-      infants: infantsCount,
-      pets: petsCount,
-    },
+    discountPercentage: applyDiscountPercentage,
+    startDate: new Date(startDate),
+    endDate: new Date(endDate),
+    stayDays: daysDifference,
+    adults: parseInt(adultsCount),
+    children: parseInt(childrenCount),
+    infants: parseInt(infantsCount),
+    pets: parseInt(petsCount),
+    ...address,
   };
 
   return (
@@ -288,8 +313,8 @@ const Reserve = ({
                     sx={{
                       borderRadius: "25px",
                       boxShadow: "0px 0px 18px 0px #6363633b",
-                      marginTop: "15px",
-                      marginLeft: "-10px",
+                      marginTop: "-70px",
+                      marginLeft: "-25px",
                     }}
                   >
                     <ClickAwayListener
@@ -298,18 +323,23 @@ const Reserve = ({
                       }
                     >
                       <Box p={"15px"}>
-                        <Button
-                          onClick={() =>
-                            setOpenPopper((prev) => ({ ...prev, 1: false }))
-                          }
-                          sx={{ textTransform: "capitalize", mb: 1 }}
-                        >
-                          <Close sx={{ color: "#ff0000", fontSize: "16px" }} />
-                        </Button>
                         <WhenDate
                           onSelect={handleDateSelect}
                           disabledDates={disabledDates}
                         />
+                        <Box textAlign={"center"}>
+                          <Button
+                            onClick={() =>
+                              setOpenPopper((prev) => ({ ...prev, 1: false }))
+                            }
+                            variant="contained"
+                            sx={{ textTransform: "capitalize", mt: 1 }}
+                            color="secondary"
+                            size="small"
+                          >
+                            <Close sx={{ fontSize: "16px" }} /> close
+                          </Button>
+                        </Box>
                       </Box>
                     </ClickAwayListener>
                   </Paper>
@@ -373,8 +403,8 @@ const Reserve = ({
                   sx={{
                     borderRadius: "25px",
                     boxShadow: "0px 0px 18px 0px #6363633b",
-                    marginTop: "15px",
-                    marginLeft: "-10px",
+                    marginTop: "-145px",
+                    marginLeft: "-20px",
                     p: "20px",
                   }}
                 >
@@ -384,14 +414,6 @@ const Reserve = ({
                     }
                   >
                     <Box>
-                      <Button
-                        onClick={() =>
-                          setOpenPopper((prev) => ({ ...prev, 2: false }))
-                        }
-                        sx={{ textTransform: "capitalize" }}
-                      >
-                        <Close sx={{ color: "#ff0000", fontSize: "16px" }} />
-                      </Button>
                       <Who
                         adultsCount={adultsCount}
                         setAdultsCount={setAdultsCount}
@@ -402,6 +424,19 @@ const Reserve = ({
                         petsCount={petsCount}
                         setPetsCount={setPetsCount}
                       />
+                      <Box textAlign={"center"}>
+                        <Button
+                          onClick={() =>
+                            setOpenPopper((prev) => ({ ...prev, 2: false }))
+                          }
+                          variant="contained"
+                          sx={{ textTransform: "capitalize", mt: 1 }}
+                          color="secondary"
+                          size="small"
+                        >
+                          <Close sx={{ fontSize: "16px" }} /> close
+                        </Button>
+                      </Box>
                     </Box>
                   </ClickAwayListener>
                 </Paper>
@@ -415,14 +450,14 @@ const Reserve = ({
           fullWidth
           color="secondary"
           size="large"
-          sx={{ fontWeight: "600", cursor: "pointer" }} 
-          // disabled={totalPrice < 1} 
+          sx={{ fontWeight: "600", cursor: "pointer" }}
+          // disabled={totalPrice < 1}
           onClick={openModal}
         >
           Reserve
         </Button>
 
-        <ReservationModal 
+        <ReservationModal
           isOpen={modalOpen}
           onClose={closeModal}
           propertyInfo={propertyInfo}
@@ -476,7 +511,7 @@ const Reserve = ({
           my={2}
         >
           <Typography variant="h4" fontSize={"15px"}>
-            $({price} * {daysDifference}) Nights
+            (${price} * {daysDifference}) Nights
           </Typography>
           <Typography variant="h4" fontSize={"15px"}>
             ${totalNightPrice}
@@ -530,7 +565,7 @@ const Reserve = ({
             Total
           </Typography>
           <Typography variant="h4" fontSize={"15px"} fontWeight={"700"}>
-            ${totalPrice.toFixed(2)}
+            ${totalPrice}
           </Typography>
         </Box>
       </Box>

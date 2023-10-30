@@ -15,7 +15,7 @@ import { putApi } from "../../../config/configAxios";
 import { toast } from "react-toastify"; 
 
 const HostUsers = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true); 
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);
@@ -47,7 +47,6 @@ const HostUsers = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     if (users?.length > 0) {
       setTimeout(() => {
         setLoading(false);
@@ -135,6 +134,7 @@ const HostUsers = () => {
     try {
       await putApi(`/properties/${propertyId}`, data);
       toast.success("Successfully status updated");
+      setLoading(false);
     } catch (error) {
       console.error("Error submitting data:", error);
       toast.error(error.data.message);
@@ -215,7 +215,7 @@ const HostUsers = () => {
     { type: "active" },
   ];
   return (
-    <AdminLayout title={"Renter users"}>
+    <AdminLayout title={"Host users"}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           {loading ? (

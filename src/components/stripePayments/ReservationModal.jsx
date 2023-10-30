@@ -13,17 +13,17 @@ const ReservationModal = ({
   isOpen,
   onClose,
   propertyInfo,
-}) => {
+}) => { 
   const [clientSecret, setClientSecret] = useState("");
 
   const handlePaymentIntent = () => {
-    postApi("/create-payment-intent", propertyInfo)
+    postApi("/create-payment-intent", {propertyInfo})
       .then((res) => setClientSecret(res.data.clientSecret))
-      .catch((error) => console.error(error));
+      .catch((error) => console.error(error.response.data.error));
   };
 
-  useEffect(() => {
-    if (isOpen) {
+  useEffect(() => { 
+    if (isOpen) {  
       handlePaymentIntent();
     }
   }, [isOpen]);
@@ -62,7 +62,7 @@ const ReservationModal = ({
           </div>
           {clientSecret && (
             <Elements stripe={stripePromise} options={options}>
-              <CheckoutForm closeModal={onClose} propertyInfo={propertyInfo} />
+              <CheckoutForm closeModal={onClose} propertyInfo={propertyInfo} clientSecret={clientSecret} />
             </Elements>
           )}
         </div>
