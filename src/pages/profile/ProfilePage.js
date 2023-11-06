@@ -46,7 +46,7 @@ function ProfilePage() {
                 }}
               >
                 <Avatar
-                  alt="User Avatar"
+                  alt="User Avatar" 
                   src="/src/assets/images/avatar.png"
                   sx={{
                     width: 180,

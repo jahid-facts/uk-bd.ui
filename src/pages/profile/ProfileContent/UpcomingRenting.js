@@ -1,142 +1,137 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import FormControl from '@mui/material/FormControl';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import StarIcon from '@mui/icons-material/Star';
-import { Divider, Grid, TextField } from '@mui/material';
+import * as React from "react";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import StarIcon from "@mui/icons-material/Star";
+import { Divider, Grid, TextField } from "@mui/material";
+import CustomDialog from "../../../components/customDialog/CustomDialog";
 
 export default function UpcomingRenting() {
-    const [open, setOpen] = React.useState(false);
+  const [openEmail, setOpenEmail] = React.useState(false);
+  const [openPhoneNumber, setOpenPhoneNumber] = React.useState(false);
+  const [openAddress, setOpenAddress] = React.useState(false);
+  const [selectedDialog, setSelectedDialog] = React.useState("");
 
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+  const handleDialogOpen = (dialogType) => {
+    setSelectedDialog(dialogType);
+    if (dialogType === "email") {
+      setOpenEmail(true);
+    } else if (dialogType === "phoneNumber") {
+      setOpenPhoneNumber(true);
+    } else if (dialogType === "address") {
+      setOpenAddress(true);
+    }
+  };
 
-    const handleClose = (event, reason) => {
-        if (reason !== 'backdropClick') {
-            setOpen(false);
-        }
-    };
+  const handleDialogClose = (event, reason) => {
+    if (reason !== "backdropClick") {
+      if (selectedDialog === "email") {
+        setOpenEmail(false);
+      } else if (selectedDialog === "phoneNumber") {
+        setOpenPhoneNumber(false);
+      } else if (selectedDialog === "address") {
+        setOpenAddress(false);
+      }
+    }
+  };
 
-    return (
-        <div>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                <Grid item xs={6}>
-                    <List
-                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        aria-label="contacts"
-                    >
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <StarIcon />
-                                </ListItemIcon>
-                                <ListItemText onClick={handleClickOpen} primary="Email" />
-                            </ListItemButton>
-                        </ListItem>
-                        <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-                            <DialogTitle>Your Email</DialogTitle>
-                            <DialogContent>
-                                <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                                    <FormControl sx={{ m: 1 }}>
-                                        <TextField id="standard-basic" label="Email" variant="standard" />
-                                    </FormControl>
-                                </Box>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={handleClose}>Ok</Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Divider variant="inset" component="li" />
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <StarIcon />
-                                </ListItemIcon>
-                                <ListItemText onClick={handleClickOpen} primary="Phone Number" />
-                            </ListItemButton>
-                        </ListItem>
-                        <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-                            <DialogTitle>Phone Number</DialogTitle>
-                            <DialogContent>
-                                <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                        <TextField id="standard-basic" label="Phone Number" variant="standard" />
-                                    </FormControl>
-                                </Box>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={handleClose}>Ok</Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Divider variant="inset" component="li" />
-                    </List>
-                </Grid>
-                <Grid item xs={6}>
-                    <List
-                        sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-                        aria-label="contacts"
-                    >
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <StarIcon />
-                                </ListItemIcon>
-                                <ListItemText onClick={handleClickOpen} primary="Mobile" />
-                            </ListItemButton>
-                        </ListItem>
-                        <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-                            <DialogTitle>Your Mobile</DialogTitle>
-                            <DialogContent>
-                                <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                                    <FormControl sx={{ m: 1 }}>
-                                        <TextField id="standard-basic" label="Mobile" variant="standard" />
-                                    </FormControl>
-                                </Box>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={handleClose}>Ok</Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Divider variant="inset" component="li" />
-                        <ListItem disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    <StarIcon />
-                                </ListItemIcon>
-                                <ListItemText onClick={handleClickOpen} primary="Phone Number" />
-                            </ListItemButton>
-                        </ListItem>
-                        <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-                            <DialogTitle>Phone</DialogTitle>
-                            <DialogContent>
-                                <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                                    <FormControl sx={{ m: 1, minWidth: 120 }}>
-                                        <TextField id="standard-basic" label="Phone" variant="standard" />
-                                    </FormControl>
-                                </Box>
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={handleClose}>Ok</Button>
-                            </DialogActions>
-                        </Dialog>
-                        <Divider variant="inset" component="li" />
-                    </List>
-                </Grid>
-            </Grid>
-        </div>
-    )
+  return (
+    <div>
+      <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid item xs={6}>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            aria-label="contacts"
+          >
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleDialogOpen("email")}>
+                <ListItemIcon>
+                  <StarIcon />
+                </ListItemIcon>
+                <ListItemText primary="Email" />
+              </ListItemButton>
+            </ListItem>
+            <CustomDialog
+              handleClose={handleDialogClose}
+              open={openEmail}
+              title={"Email"}
+              input={
+                <TextField
+                  id="standard-basic"
+                  label="Email"
+                  value={"jahid@gmail.com"}
+                  variant="standard"
+                />
+              }
+            />
+            <Divider variant="inset" component="li" />
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleDialogOpen("phoneNumber")}>
+                <ListItemIcon>
+                  <StarIcon />
+                </ListItemIcon>
+                <ListItemText primary="Phone Number" />
+              </ListItemButton>
+            </ListItem>
+            <CustomDialog
+              handleClose={handleDialogClose}
+              open={openPhoneNumber}
+              title={"Phone Number"}
+              input={
+                <TextField
+                  id="standard-basic"
+                  label="Phone Number"
+                  value={"017388363873"}
+                  variant="standard"
+                />
+              }
+            />
+            <Divider variant="inset" component="li" />
+          </List>
+        </Grid>
+        <Grid item xs={6}>
+          <List
+            sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            aria-label="contacts"
+          >
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleDialogOpen("address")}>
+                <ListItemIcon>
+                  <StarIcon />
+                </ListItemIcon>
+                <ListItemText primary="Address" />
+              </ListItemButton>
+            </ListItem>
+
+            <CustomDialog 
+              handleClose={handleDialogClose}
+              open={openAddress}
+              title={"Address"}
+              input={
+                <TextField
+                  id="standard-basic"
+                  label="Address"
+                  value={"dhanmondi, dhaka"}
+                  variant="standard"
+                />
+              }
+            />
+
+            <Divider variant="inset" component="li" />
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => handleDialogOpen("phoneNumber")}>
+                <ListItemIcon>
+                  <StarIcon />
+                </ListItemIcon>
+                <ListItemText primary="Phone Number" />
+              </ListItemButton>
+            </ListItem>
+            <Divider variant="inset" component="li" />
+          </List>
+        </Grid>
+      </Grid>
+    </div>
+  );
 }

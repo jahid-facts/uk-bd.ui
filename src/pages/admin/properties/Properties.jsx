@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import DataTable from "../../../components/dataTable/DataTable";
 import AdminLayout from "../../../layouts/adminLayout";
-import { Box, Button, Chip, Grid, IconButton } from "@mui/material";
+import { Box, Chip, Grid, IconButton } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Icon } from "@iconify/react";
 import CustomHashLoader from "../../../components/customLoader/CustomHashLoader";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Capitalize from "../../../components/capitalize/Capitalize";
 import { getAllProperties } from "../../../redux/features/AllPropertyForAdminSlice";
 import { MoreHoriz } from "@mui/icons-material";
@@ -55,8 +54,10 @@ const Properties = () => {
     setData(newData);
   }, [properties]);
 
-  const handleMenuOpen = (event) => {
+  const [itemId, setItemId] = useState();
+  const handleMenuOpen = (event, itemId) => {
     setAnchorEl(event.currentTarget);
+    setItemId(itemId);
   };
 
   const handleMenuClose = () => {
@@ -80,72 +81,71 @@ const Properties = () => {
     }
   };
 
-  const handleAction = (itemId, actionType) => {
-    console.log(itemId);
-    // switch (actionType) {
-    //   case "de-active":
-    //     Swal.fire({
-    //       title: "Confirm De-active",
-    //       text: "Are you sure you want to de-active this item?",
-    //       icon: "question",
-    //       showCancelButton: true,
-    //       confirmButtonColor: "#3085d6",
-    //       cancelButtonColor: "#d33",
-    //       confirmButtonText: "Yes, de-active it!",
-    //     }).then(async (result) => {
-    //       if (result.isConfirmed) {
-    //         try {
-    //           const data = { status: "de-active" };
-    //           updatedStatus(id, data);
-    //         } catch (error) {
-    //           console.error("Error deleting property:", error);
-    //           Swal.fire(
-    //             "Error",
-    //             "An error occurred while de-active the item.",
-    //             "error"
-    //           );
-    //         }
-    //       } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //         Swal.fire("Cancelled", "The item was not disabled.", "info");
-    //       }
-    //     });
-    //     break;
-    //   case "view":
-    //     navigate(`/reservation-details/${id}`);
-    //     break;
-    //   case "disabled":
-    //     Swal.fire({
-    //       title: "Confirm Disable",
-    //       text: "Are you sure you want to disable this item?",
-    //       icon: "question",
-    //       showCancelButton: true,
-    //       confirmButtonColor: "#3085d6",
-    //       cancelButtonColor: "#d33",
-    //       confirmButtonText: "Yes, disable it!",
-    //     }).then(async (result) => {
-    //       if (result.isConfirmed) {
-    //         try {
-    //           const data = { status: "disabled" };
-    //           updatedStatus(id, data);
-    //         } catch (error) {
-    //           console.error("Error deleting property:", error);
-    //           Swal.fire(
-    //             "Error",
-    //             "An error occurred while deleting the item.",
-    //             "error"
-    //           );
-    //         }
-    //       } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //         Swal.fire("Cancelled", "The item was not disabled.", "info");
-    //       }
-    //     });
-    //     break;
-    //   // Add more cases for other actions as needed
-    //   default:
-    //     break;
-    // }
+  const handleAction = (id, actionType) => {
+    switch (actionType) {
+      case "de-active":
+        Swal.fire({
+          title: "Confirm De-active",
+          text: "Are you sure you want to de-active this item?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, de-active it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              const data = { status: "de-active" };
+              updatedStatus(id, data);
+            } catch (error) {
+              console.error("Error deleting property:", error);
+              Swal.fire(
+                "Error",
+                "An error occurred while de-active the item.",
+                "error"
+              );
+            }
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire("Cancelled", "The item was not disabled.", "info");
+          }
+        });
+        break;
+      case "view":
+        navigate(`/reservation-details/${id}`);
+        break;
+      case "disabled":
+        Swal.fire({
+          title: "Confirm Disable",
+          text: "Are you sure you want to disable this item?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Yes, disable it!",
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              const data = { status: "disabled" };
+              updatedStatus(id, data);
+            } catch (error) {
+              console.error("Error deleting property:", error);
+              Swal.fire(
+                "Error",
+                "An error occurred while deleting the item.",
+                "error"
+              );
+            }
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire("Cancelled", "The item was not disabled.", "info");
+          }
+        });
+        break;
+      // Add more cases for other actions as needed
+      default:
+        break;
+    }
 
-    // handleMenuClose();
+    handleMenuClose();
   };
 
   // Define an array of action items
@@ -234,15 +234,15 @@ const Properties = () => {
       sortable: false,
       renderCell: (params) => (
         <Box display="flex">
-          <IconButton onClick={(event) => handleMenuOpen(event)}>
+          <IconButton
+            onClick={(event) => handleMenuOpen(event, params.row.itemId)}
+          >
             <MoreHoriz />
           </IconButton>
           <DropdownMenu
             anchorEl={anchorEl}
             handleMenuClose={handleMenuClose}
-            handleAction={(actionType) =>
-              handleAction(params.row.itemId, actionType)
-            }
+            handleAction={(actionType) => handleAction(itemId, actionType)}
             actionItems={actionItems}
           />
         </Box>
