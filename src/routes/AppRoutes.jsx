@@ -10,7 +10,6 @@ import ProtectedRoute from "../helpers/ProtectedRoute";
 import Hosting from "../pages/hosting";
 import PropertyList from "../pages/propertyList";
 import EditProperty from "../pages/editProperty";
-import ReservationDetailsCopy from "../pages/reservationDetails/ReservationDetails copy";
 import ProfilePage from "../pages/profile/ProfilePage";
 
 export const AppRoutes = () => {
@@ -50,10 +49,6 @@ export const AppRoutes = () => {
         <Route
           path="/reservation-details/:propertyId"
           element={<ProtectedRoute children={<ReservationDetails />} />}
-        />
-        <Route
-          path="/reservation-details"
-          element={<ProtectedRoute children={<ReservationDetailsCopy />} />}
         />
         <Route
           path="/payments"

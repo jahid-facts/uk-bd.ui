@@ -29,7 +29,7 @@ export const DropdownMenu = ({
             sx={{ textTransform: "capitalize" }}
             onClick={() => {
               handleMenuClose();
-              handleAction(item.type);
+              handleAction(item.type); 
             }}
           >
             {Capitalize(item.type)}
