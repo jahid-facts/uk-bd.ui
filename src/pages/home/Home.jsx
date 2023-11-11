@@ -57,11 +57,14 @@ export default function Home() {
               )}
             </>
           )}
+          <Grid item xs={12}>
+            <h3 style={{marginTop:'10px'}}>Suggeste property</h3>
+          </Grid>
 
           {images.map((card, index) => (
             <Grid key={index} item xs={12} sm={6} md={4} lg={3}>
               <ReservationCardCopy
-                image1={card.image1}
+                image1={card.image1} 
                 image2={card.image2}
                 image3={card.image3}
                 title={"Chaing Rai, Thailand"}

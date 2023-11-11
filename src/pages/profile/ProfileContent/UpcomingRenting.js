@@ -33,7 +33,7 @@ export default function UpcomingRenting() {
         setOpenPhoneNumber(false);
       } else if (selectedDialog === "address") {
         setOpenAddress(false);
-      }
+      } 
     }
   };
 

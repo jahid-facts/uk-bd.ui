@@ -23,31 +23,44 @@ const Students = () => {
   const [age, setAge] = useState("");
   const [city, setCity] = useState("");
 
-  let studentInfoForSumbut = {
-    name: name,
-    age: age,
-    city: city,
-  };
-
-  // handleSubmit for submit all data in database
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    axios
-      .post(`${process.env.REACT_APP_BASE_URL}/add`, studentInfoForSumbut)
-      .then((response) => {
-        setMessage(response.data.message);
-        fetchStudents();
-        setName("");
-        setAge("");
-        setCity("");
-      })
-      .catch((err) => console.log(err.message));
-  };
+  const [images, setImages] = useState([]);
 
   useEffect(() => {
     fetchStudents();
   }, []);
+
+  const handleImageChange = (e) => {
+    const fileList = e.target.files;
+    setImages([...images, ...fileList]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    images.forEach((image, index) => {
+      formData.append(`images`, image);
+    });
+
+    formData.append("name", name);
+    formData.append("age", age);
+    formData.append("city", city);
+
+    try {
+      await axios
+        .post("http://localhost:5050/api/add", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => setMessage(res.message));
+      fetchStudents();
+      console.log("Data uploaded successfully");
+    } catch (error) {
+      console.error("Error uploading data:", error);
+    }
+  };
 
   const fetchStudents = () => {
     // fetch data use api endpoint 'api/students' use axios
@@ -61,10 +74,11 @@ const Students = () => {
 
   // handle delete
   const handleDelete = (id) => {
-    axios.delete(`${process.env.REACT_APP_BASE_URL}/delete/${id}`,)
+    axios
+      .delete(`${process.env.REACT_APP_BASE_URL}/delete/${id}`)
       .then((response) => {
         setMessage(response.data.message);
-        fetchStudents(); 
+        fetchStudents();
       })
       .catch((err) => console.log(err));
   };
@@ -72,9 +86,8 @@ const Students = () => {
   // handle edit
   const handleEdit = (id) => {
     navigate(`/edit/${id}`);
-    
-  }
-  
+  };
+
   return (
     <AppLayout>
       <Container maxWidth={"xl"}>
@@ -104,6 +117,16 @@ const Students = () => {
                 value={age}
                 onChange={(e) => setAge(e.target.value)}
               />
+              <input type="file" multiple onChange={handleImageChange} />
+              {images.map((image, index) => (
+                <img
+                  style={{ width: "100px" }}
+                  src={URL.createObjectURL(image)}
+                  alt="Preview"
+                  key={index}
+                />
+              ))}
+
               <TextField
                 id="outlined-basic"
                 fullWidth
@@ -135,15 +158,23 @@ const Students = () => {
                   <th style={{ padding: "10px" }}>Name</th>
                   <th style={{ padding: "10px" }}>Age</th>
                   <th style={{ padding: "10px" }}>City</th>
+                  <th style={{ padding: "10px" }}>image</th>
                   <th style={{ padding: "10px" }}>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {students.map((student, index ) => (
+                {students.map((student, index) => (
                   <tr key={index}>
                     <td style={{ padding: "10px" }}>{student.name}</td>
                     <td style={{ padding: "10px" }}>{student.age}</td>
                     <td style={{ padding: "10px" }}>{student.city}</td>
+                    <td style={{ padding: "10px" }}>
+                      <img
+                        style={{ width: "100px" }}
+                        src={`${process.env.REACT_APP_BASE_URL}/${student.images[0]}`}
+                        alt="Preview"
+                      />
+                    </td>
                     <td style={{ padding: "10px" }}>
                       <Button
                         onClick={() => handleEdit(student._id)}
