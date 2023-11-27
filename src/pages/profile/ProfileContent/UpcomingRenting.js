@@ -7,12 +7,15 @@ import ListItemText from "@mui/material/ListItemText";
 import StarIcon from "@mui/icons-material/Star";
 import { Divider, Grid, TextField } from "@mui/material";
 import CustomDialog from "../../../components/customDialog/CustomDialog";
+import { useAuthInfo } from "../../../helpers/AuthCheck";
 
 export default function UpcomingRenting() {
   const [openEmail, setOpenEmail] = React.useState(false);
   const [openPhoneNumber, setOpenPhoneNumber] = React.useState(false);
   const [openAddress, setOpenAddress] = React.useState(false);
   const [selectedDialog, setSelectedDialog] = React.useState("");
+
+  const userInfo = useAuthInfo();
 
   const handleDialogOpen = (dialogType) => {
     setSelectedDialog(dialogType);
@@ -33,7 +36,7 @@ export default function UpcomingRenting() {
         setOpenPhoneNumber(false);
       } else if (selectedDialog === "address") {
         setOpenAddress(false);
-      } 
+      }
     }
   };
 
@@ -61,7 +64,7 @@ export default function UpcomingRenting() {
                 <TextField
                   id="standard-basic"
                   label="Email"
-                  value={"jahid@gmail.com"}
+                  value={userInfo.email}
                   variant="standard"
                 />
               }
@@ -105,15 +108,15 @@ export default function UpcomingRenting() {
               </ListItemButton>
             </ListItem>
 
-            <CustomDialog 
+            <CustomDialog
               handleClose={handleDialogClose}
               open={openAddress}
               title={"Address"}
               input={
                 <TextField
                   id="standard-basic"
-                  label="Address"
-                  value={"dhanmondi, dhaka"}
+                  label="Name"
+                  value={userInfo.name}
                   variant="standard"
                 />
               }

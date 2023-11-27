@@ -70,6 +70,7 @@ const LoginScreen = () => {
         const loginData = { email: values.email, password: values.password };
         // Dispatch the loginUser action
         await dispatch(loginUser(loginData));
+        
         setSubmitting(false);
       } catch {
         setSubmitting(false);

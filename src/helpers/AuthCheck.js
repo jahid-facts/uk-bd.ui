@@ -21,18 +21,18 @@ export const useIsEmailVerified = () => {
 };
 
 // auth info export const useAuthInfo = () => {
-  export const useAuthInfo = () => {
-    const authUserInfo = localStorage.getItem("user");
-    const user = authUserInfo ? JSON.parse(authUserInfo) : null;
-  
-    // Ensure that user is not null before accessing the token
-    const token = user ? user.token : null;
-  
-    // Check if token is not null before decoding it
-    const decodedToken = token ? jwtDecode(token) : null;
-  
-    // Ensure that decodedToken is not null before accessing userInfo
-    const userInfo = decodedToken ? decodedToken.userInfo : null;
-  
-    return userInfo;
-  };
+export const useAuthInfo = () => {
+  const authUserInfo = localStorage.getItem("user");
+  const user = authUserInfo ? JSON.parse(authUserInfo) : null;
+
+  // Ensure that user is not null before accessing the token
+  const token = user ? user.token : null;
+
+  // Check if token is not null before decoding it
+  const decodedToken = token ? jwtDecode(token) : null;
+
+  // Ensure that decodedToken is not null before accessing userInfo
+  const userInfo = decodedToken ? decodedToken.userInfo : null;
+
+  return userInfo;
+};
