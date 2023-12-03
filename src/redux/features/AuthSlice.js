@@ -1,4 +1,4 @@
-// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"; 
+// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import { postApi } from "../../config/configAxios";
 
 // export const registerUser = createAsyncThunk(
@@ -48,7 +48,7 @@
 
 // const authSlice = createSlice({
 //   name: "auth",
-//   initialState, 
+//   initialState,
 //   reducers: {
 //     logoutUser(state) {
 //       state.status = "idle";
@@ -156,7 +156,7 @@ export const verifyOTP = createAsyncThunk(
       const response = await postApi("/verify-otp", otpData);
       return fulfillWithValue(response.data);
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error?.response?.data[0] || "unauthorized");
     }
   }
 );
@@ -172,7 +172,7 @@ const initialState = {
 
 const authSlice = createSlice({
   name: "auth",
-  initialState, 
+  initialState,
   reducers: {
     logoutUser(state) {
       state.status = "idle";

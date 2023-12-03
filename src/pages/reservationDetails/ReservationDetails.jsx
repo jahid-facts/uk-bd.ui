@@ -331,7 +331,7 @@ export default function ReservationDetails() {
                         {propertyValues?.amenitiesIds
                           .slice(0, 8)
                           .map((item) => (
-                            <Grid item xs={12} sm={6} key={item._id}>
+                            <Grid item xs={12} sm={6} key={item?._id}>
                               <Box display={"flex"} flexDirection={"row"}>
                                 <Box mr={3}>
                                   <Icon icon={item.icon} fontSize={"22px"} />
@@ -726,3 +726,7 @@ export default function ReservationDetails() {
     </AppLayout>
   );
 }
+
+
+
+
